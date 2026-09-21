@@ -10,24 +10,23 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif; }
-    .apple-glass { background: rgba(22, 22, 23, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-    .smooth-scroll { scroll-behavior: smooth; }
+    .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
   </style>
 </head>
-<body class="bg-[#000000] text-[#f5f5f7] min-h-screen smooth-scroll selection:bg-amber-500 selection:text-black">
+<body class="bg-[#000000] text-[#f5f5f7] min-h-screen selection:bg-amber-500 selection:text-black">
 
-  <!-- 1. Apple 頂部導覽列 (Apple Sub-nav Bar) -->
+  <!-- 1. Apple 頂部獨立分頁導覽列 -->
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
-    <div class="max-w-5xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] font-normal overflow-x-auto">
-      <div class="flex items-center gap-6 min-w-max">
-        <a href="#hero" class="text-white hover:text-amber-400 font-semibold transition-colors flex items-center gap-1">
+    <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] font-normal overflow-x-auto">
+      <div class="flex items-center gap-5 min-w-max">
+        <button onclick="switchTab('hero')" class="text-white hover:text-amber-400 font-semibold transition-colors flex items-center gap-1">
           <span></span> <span>Hazel</span>
-        </a>
-        <a href="#potty" class="hover:text-white transition-colors">散步打卡</a>
-        <a href="#medical" class="hover:text-white transition-colors">醫療紀錄</a>
-        <a href="#allergies" class="hover:text-white transition-colors">過敏報告</a>
-        <a href="#weight" class="hover:text-white transition-colors">體重追蹤</a>
-        <a href="#milestones" class="hover:text-white transition-colors">里程碑</a>
+        </button>
+        <button onclick="switchTab('potty')" class="tab-btn hover:text-white transition-colors" id="btn-potty">散步打卡</button>
+        <button onclick="switchTab('medical')" class="tab-btn hover:text-white transition-colors" id="btn-medical">醫療紀錄</button>
+        <button onclick="switchTab('allergies')" class="tab-btn hover:text-white transition-colors" id="btn-allergies">過敏報告</button>
+        <button onclick="switchTab('weight')" class="tab-btn hover:text-white transition-colors" id="btn-weight">體重追蹤</button>
+        <button onclick="switchTab('milestones')" class="tab-btn hover:text-white transition-colors" id="btn-milestones">里程碑</button>
       </div>
       
       <!-- Dad / Mum 身份切換 -->
@@ -38,183 +37,246 @@
     </div>
   </nav>
 
-  <!-- 2. Apple Hero 區塊 (Apple at Work 風格) -->
-  <section id="hero" class="pt-28 pb-16 px-4 max-w-4xl mx-auto border-b border-[#333336]">
-    <div class="mb-8 overflow-hidden rounded-3xl bg-[#161617] p-1 border border-[#333336] shadow-2xl">
-      <div class="w-full h-64 md:h-80 bg-gradient-to-tr from-amber-500/20 via-slate-900 to-black rounded-2xl flex items-center justify-center relative overflow-hidden">
-        <div class="text-center p-6">
-          <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-amber-500/20 border-2 border-amber-400/50 flex items-center justify-center text-5xl shadow-[0_0_30px_rgba(251,191,36,0.3)]">
-            🐶
+  <!-- 頁面容器 -->
+  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto">
+
+    <!-- 頁面 A: 獨立主頁 (Hero) -->
+    <section id="page-hero" class="tab-page space-y-8">
+      <!-- 可自訂相片的 Hero 區塊 -->
+      <div class="relative overflow-hidden rounded-3xl bg-[#161617] border border-[#333336] shadow-2xl group">
+        <div id="photo-container" class="w-full h-72 md:h-96 bg-gradient-to-tr from-amber-500/20 via-slate-900 to-black flex items-center justify-center bg-cover bg-center transition-all duration-500">
+          <div id="default-avatar" class="text-center p-6">
+            <div class="w-24 h-24 mx-auto mb-3 rounded-full bg-amber-500/20 border-2 border-amber-400/50 flex items-center justify-center text-5xl shadow-[0_0_30px_rgba(251,191,36,0.3)]">
+              🐶
+            </div>
+            <span class="text-xs uppercase tracking-widest text-amber-400 font-semibold">Macau Labrador Retriever</span>
           </div>
-          <span class="text-xs uppercase tracking-widest text-amber-400 font-semibold">Macau Labrador Retriever</span>
         </div>
-      </div>
-    </div>
 
-    <!-- 巨幅蘋果風格大字標題 -->
-    <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 text-white leading-tight">
-      Hazel’s Website
-    </h1>
-    
-    <!-- 你的專屬文案 -->
-    <p class="text-lg md:text-xl text-[#86868b] leading-relaxed max-w-3xl font-normal">
-      這裡是一個充滿愛心的小角落，專屬於我們的狗狗 Hazel 🐶。[span_0](start_span)[span_0](end_span)她在 2025 年正式加入我們的家庭[span_1](start_span)[span_1](end_span)，本來以為是一隻金毛，結果卻是可愛的拉布拉多[span_2](start_span)[span_2](end_span)，帶來了更多驚喜與歡笑。在這個網站，你可以找到 Hazel 的所有生活點滴：她的故事、照片、健康記錄，還有我們每天的溫馨分享[span_3](start_span)[span_3](end_span)[span_4](start_span)[span_4](end_span)。希望大家能一起陪伴她、喜歡她，送上滿滿的祝福，願 Hazel 永遠健康快樂 💖。
-    </p>
-
-    <div class="mt-8 p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] inline-block">
-      <p class="text-xs text-amber-300 font-medium flex items-center gap-2">
-        <span>✨ 開場標語：</span> 「歡迎來到 Hazel 的小天地～一起感受她的笑容與搖尾巴的幸福！」
-      </p>
-    </div>
-  </section>
-
-  <!-- 3. 功能區塊（五大核心模組） -->
-  <main class="max-w-4xl mx-auto px-4 py-12 space-y-16">
-
-    <!-- 散步與排泄打卡 -->
-    <section id="potty" class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
-      <div class="flex justify-between items-center mb-6">
-        <div>
-          <h2 class="text-2xl font-bold text-white">💩 散步與排泄打卡</h2>
-          <p class="text-xs text-[#86868b] mt-1">7-Day Rolling 自動滾動覆蓋機制</p>
-        </div>
-        <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20">即時同步</span>
+        <!-- 自訂上載照片按鈕 -->
+        <label for="photo-upload" class="absolute top-4 right-4 bg-black/60 hover:bg-black/90 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full border border-white/20 cursor-pointer transition-all flex items-center gap-1.5 shadow-lg">
+          📷 <span>更換相片</span>
+          <input type="file" id="photo-upload" accept="image/*" class="hidden">
+        </label>
       </div>
 
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <button id="add-pee" class="py-5 bg-[#1c1c1e] hover:bg-[#2c2c2e] active:scale-98 border border-[#38383a] rounded-2xl text-blue-400 text-sm font-medium transition-all flex flex-col items-center gap-1">
-          <span class="text-xs text-[#86868b]">💧 小便計數</span>
-          <span class="text-3xl font-bold"><span id="pee-count">0</span> 次</span>
-        </button>
-        <button id="add-poop" class="py-5 bg-[#1c1c1e] hover:bg-[#2c2c2e] active:scale-98 border border-[#38383a] rounded-2xl text-amber-400 text-sm font-medium transition-all flex flex-col items-center gap-1">
-          <span class="text-xs text-[#86868b]">💩 便便計數</span>
-          <span class="text-3xl font-bold"><span id="poop-count">0</span> 次</span>
-        </button>
+      <div>
+        <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-4 text-white">
+          Hazel’s Website
+        </h1>
+        <p class="text-base md:text-lg text-[#86868b] leading-relaxed font-normal">
+          這裡是一個充滿愛心的小角落，專屬於我們的狗狗 Hazel 🐶。[span_0](start_span)[span_0](end_span)她在 2025 年正式加入我們的家庭[span_1](start_span)[span_1](end_span)，本來以為是一隻金毛，結果卻是可愛的拉布拉多[span_2](start_span)[span_2](end_span)，帶來了更多驚喜與歡笑。在這個網站，你可以找到 Hazel 的所有生活點滴：她的故事、照片、健康記錄，還有我們每天的溫馨分享[span_3](start_span)[span_3](end_span)[span_4](start_span)[span_4](end_span)。希望大家能一起陪伴她、喜歡她，送上滿滿的祝福，願 Hazel 永遠健康快樂 💖。
+        </p>
       </div>
 
-      <div class="mb-4">
-        <label class="text-xs text-[#86868b] mb-1 block">便便狀態備註：</label>
-        <select id="poop-status" class="w-full bg-[#1c1c1e] border border-[#38383a] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-400">
-          <option value="🟢 正常條狀">🟢 正常條狀</option>
-          <option value="🟡 偏軟便">🟡 偏軟便</option>
-          <option value="🔴 拉稀/帶血">🔴 拉稀 / 帶血</option>
-        </select>
-      </div>
-
-      <button id="save-log" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-lg shadow-amber-500/10">
-        儲存本次散步紀錄
-      </button>
-
-      <div class="mt-6 pt-4 border-t border-[#333336]">
-        <div class="flex justify-between items-center mb-3">
-          <p class="text-xs text-[#86868b]">📋 最近打卡動態：</p>
-          <button id="clear-logs" class="text-xs text-[#86868b] hover:text-red-400">清空紀錄</button>
-        </div>
-        <div id="logs-list" class="space-y-2 text-xs">
-          <p id="empty-hint" class="text-[#86868b] text-center py-2">今天還沒有散步紀錄喔！</p>
-        </div>
+      <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a]">
+        <p class="text-xs text-amber-300 font-medium flex items-center gap-2">
+          <span>✨ 開場標語：</span> 「歡迎來到 Hazel 的小天地～一起感受她的笑容與搖尾巴的幸福！」
+        </p>
       </div>
     </section>
 
-    <!-- 醫療紀錄與急診名冊 -->
-    <section id="medical" class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
-      <h2 class="text-2xl font-bold text-white mb-6">🏥 看診紀錄與全澳急診診所[span_5](start_span)[span_5](end_span)</h2>
-      
-      <div class="space-y-3 text-xs mb-6">
-        <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_6](start_span)[span_6](end_span)
+    <!-- 頁面 B: 散步與排泄打卡 (Potty) -->
+    <section id="page-potty" class="tab-page hidden">
+      <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
+        <div class="flex justify-between items-center mb-6">
           <div>
-            <p class="font-semibold text-white">🦴 右腳跛、照 X-Ray 開止痛藥</p>[span_7](start_span)[span_7](end_span)
-            <p class="text-[10px] text-[#86868b] mt-1">2026.09.22</p>[span_8](start_span)[span_8](end_span)
+            <h2 class="text-2xl font-bold text-white">💩 散步與排泄打卡</h2>
+            <p class="text-xs text-[#86868b] mt-1">7-Day Rolling 自動滾動覆蓋機制</p>
           </div>
-          <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">1,400 MOP</span>[span_9](start_span)[span_9](end_span)
+          <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20">單獨頁面</span>
         </div>
-        <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_10](start_span)[span_10](end_span)
-          <div>
-            <p class="font-semibold text-white">✂️ 絕育加輕洗牙</p>[span_11](start_span)[span_11](end_span)
-            <p class="text-[10px] text-[#86868b] mt-1">2026.07.28</p>[span_12](start_span)[span_12](end_span)
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <button id="add-pee" class="py-6 bg-[#1c1c1e] hover:bg-[#2c2c2e] active:scale-98 border border-[#38383a] rounded-2xl text-blue-400 text-sm font-medium transition-all flex flex-col items-center gap-1">
+            <span class="text-xs text-[#86868b]">💧 小便計數</span>
+            <span class="text-4xl font-bold"><span id="pee-count">0</span> 次</span>
+          </button>
+          <button id="add-poop" class="py-6 bg-[#1c1c1e] hover:bg-[#2c2c2e] active:scale-98 border border-[#38383a] rounded-2xl text-amber-400 text-sm font-medium transition-all flex flex-col items-center gap-1">
+            <span class="text-xs text-[#86868b]">💩 便便計數</span>
+            <span class="text-4xl font-bold"><span id="poop-count">0</span> 次</span>
+          </button>
+        </div>
+
+        <div class="mb-4">
+          <label class="text-xs text-[#86868b] mb-1 block">便便狀態備註：</label>
+          <select id="poop-status" class="w-full bg-[#1c1c1e] border border-[#38383a] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-400">
+            <option value="🟢 正常條狀">🟢 正常條狀</option>
+            <option value="🟡 偏軟便">🟡 偏軟便</option>
+            <option value="🔴 拉稀/帶血">🔴 拉稀 / 帶血</option>
+          </select>
+        </div>
+
+        <button id="save-log" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-lg shadow-amber-500/10">
+          儲存本次散步紀錄
+        </button>
+
+        <div class="mt-6 pt-4 border-t border-[#333336]">
+          <div class="flex justify-between items-center mb-3">
+            <p class="text-xs text-[#86868b]">📋 最近打卡動態：</p>
+            <button id="clear-logs" class="text-xs text-[#86868b] hover:text-red-400">清空紀錄</button>
           </div>
-          <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">4,860 MOP</span>[span_13](start_span)[span_13](end_span)
-        </div>
-      </div>
-
-      <div class="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
-        <p class="text-xs font-semibold text-red-400 mb-3">🚨 澳門 24小時/緊急獸醫診所一鍵撥號：</p>
-        <div class="grid grid-cols-2 gap-3 text-xs">
-          <a href="tel:+85328832200" class="p-3 bg-[#1c1c1e] hover:bg-[#2c2c2e] rounded-xl border border-[#38383a] text-white block text-center font-medium">
-            📞 澳門獸醫醫院<br><span class="text-[10px] text-[#86868b]">2883 2200</span>
-          </a>
-          <a href="tel:+85328840228" class="p-3 bg-[#1c1c1e] hover:bg-[#2c2c2e] rounded-xl border border-[#38383a] text-white block text-center font-medium">
-            📞 氹仔動植物診所<br><span class="text-[10px] text-[#86868b]">2884 0228</span>
-          </a>
+          <div id="logs-list" class="space-y-2 text-xs">
+            <p id="empty-hint" class="text-[#86868b] text-center py-2">今天還沒有散步紀錄喔！</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 過敏報告 (FluffBio™ 權威數據) -->
-    <section id="allergies" class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-red-400">🚫 食物不耐受高危忌口[span_14](start_span)[span_14](end_span)</h2>
-        <span class="text-xs text-[#86868b]">FluffBio™ 300項檢測[span_15](start_span)[span_15](end_span)</span>
-      </div>
+    <!-- 頁面 C: 醫療紀錄 (Medical) -->
+    <section id="page-medical" class="tab-page hidden">
+      <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
+        <h2 class="text-2xl font-bold text-white mb-6">🏥 看診紀錄與全澳急診診所[span_5](start_span)[span_5](end_span)</h2>
+        <div class="space-y-3 text-xs mb-6">
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_6](start_span)[span_6](end_span)
+            <div>
+              <p class="font-semibold text-white text-sm">🦴 右腳跛、照 X-Ray 開止痛藥</p>[span_7](start_span)[span_7](end_span)
+              <p class="text-[10px] text-[#86868b] mt-1">2026.09.22</p>[span_8](start_span)[span_8](end_span)
+            </div>
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">1,400 MOP</span>[span_9](start_span)[span_9](end_span)
+          </div>
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_10](start_span)[span_10](end_span)
+            <div>
+              <p class="font-semibold text-white text-sm">✂️ 絕育加輕洗牙</p>[span_11](start_span)[span_11](end_span)
+              <p class="text-[10px] text-[#86868b] mt-1">2026.07.28</p>[span_12](start_span)[span_12](end_span)
+            </div>
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">4,860 MOP</span>[span_13](start_span)[span_13](end_span)
+          </div>
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_14](start_span)[span_14](end_span)
+            <div>
+              <p class="font-semibold text-white text-sm">👁️ 旅行接回後眼睛及全身腫脹打針</p>[span_15](start_span)[span_15](end_span)
+              <p class="text-[10px] text-[#86868b] mt-1">2026.04.25</p>[span_16](start_span)[span_16](end_span)
+            </div>
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">666 MOP</span>[span_17](start_span)[span_17](end_span)
+          </div>
+        </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-        <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_16](start_span)[span_16](end_span)
-          <span>🦆</span> 鴨肉 / 鴨血 / 鴨腸[span_17](start_span)[span_17](end_span)
-        </div>
-        <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_18](start_span)[span_18](end_span)
-          <span>🦃</span> 火雞肉 Turkey[span_19](start_span)[span_19](end_span)
-        </div>
-        <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_20](start_span)[span_20](end_span)
-          <span>🐷</span> 豬耳朵 Pig Ear[span_21](start_span)[span_21](end_span)
-        </div>
-        <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_22](start_span)[span_22](end_span)
-          <span>🥩</span> 生肉 Rawhide[span_23](start_span)[span_23](end_span)
-        </div>
-        <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_24](start_span)[span_24](end_span)
-          <span>🐟</span> 魚油 Fish Oil[span_25](start_span)[span_25](end_span)
-        </div>
-        <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_26](start_span)[span_26](end_span)
-          <span>🍍</span> 菠蘿 / 山楂[span_27](start_span)[span_27](end_span)
-        </div>
-        <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_28](start_span)[span_28](end_span)
-          <span>🥣</span> 燕麥 / 意大利麵[span_29](start_span)[span_29](end_span)
-        </div>
-        <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_30](start_span)[span_30](end_span)
-          <span>🥛</span> 希臘酸奶 / 鮮奶油[span_31](start_span)[span_31](end_span)
-        </div>
-      </div>
-    </section>
-
-    <!-- 體重追蹤表 -->
-    <section id="weight" class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
-      <h2 class="text-2xl font-bold text-white mb-6">⚖️ 體重追蹤 (Apple Health 風格)</h2>
-      <div class="bg-[#000000] p-4 rounded-2xl border border-[#333336]">
-        <canvas id="weightChart" height="180"></canvas>
-      </div>
-    </section>
-
-    <!-- 里程碑 Timeline -->
-    <section id="milestones" class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
-      <h2 class="text-2xl font-bold text-white mb-6">⏳ Hazel 重要里程碑</h2>
-      <div class="relative pl-6 border-l-2 border-amber-500/40 space-y-8 text-xs">
-        <div class="relative">[span_32](start_span)[span_32](end_span)
-          <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-[#161617]"></div>
-          <p class="font-bold text-amber-400 text-sm">2025.04.12 🎂</p>[span_33](start_span)[span_33](end_span)
-          <p class="text-white font-semibold text-sm mt-1">Hazel 誕生（白羊座小狗）</p>[span_34](start_span)[span_34](end_span)
-          <p class="text-[#86868b] mt-0.5">小女王來到這個世界的日子！</p>
-        </div>
-        <div class="relative">[span_35](start_span)[span_35](end_span)
-          <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-[#161617]"></div>
-          <p class="font-bold text-amber-400 text-sm">2025.10.25 🏡</p>[span_36](start_span)[span_36](end_span)
-          <p class="text-white font-semibold text-sm mt-1">正式加入我們的家庭</p>[span_37](start_span)[span_37](end_span)
-          <p class="text-[#86868b] mt-0.5">本來以為是一隻金毛，結果是可愛的拉布拉多！</p>[span_38](start_span)[span_38](end_span)
+        <div class="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
+          <p class="text-xs font-semibold text-red-400 mb-3">🚨 澳門 24小時/緊急獸醫診所一鍵撥號：</p>
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <a href="tel:+85328832200" class="p-3 bg-[#1c1c1e] hover:bg-[#2c2c2e] rounded-xl border border-[#38383a] text-white block text-center font-medium">
+              📞 澳門獸醫醫院<br><span class="text-[10px] text-[#86868b]">2883 2200</span>
+            </a>
+            <a href="tel:+85328840228" class="p-3 bg-[#1c1c1e] hover:bg-[#2c2c2e] rounded-xl border border-[#38383a] text-white block text-center font-medium">
+              📞 氹仔動植物診所<br><span class="text-[10px] text-[#86868b]">2884 0228</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
-  </main>
+    <!-- 頁面 D: 過敏報告 (Allergies) -->
+    <section id="page-allergies" class="tab-page hidden">
+      <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-red-400">🚫 食物不耐受高危忌口[span_18](start_span)[span_18](end_span)</h2>
+          <span class="text-xs text-[#86868b]">FluffBio™ 300項檢測[span_19](start_span)[span_19](end_span)</span>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs">
+          <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_20](start_span)[span_20](end_span)
+            <span>🦆</span> 鴨肉 / 鴨血 / 鴨腸[span_21](start_span)[span_21](end_span)
+          </div>
+          <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_22](start_span)[span_22](end_span)
+            <span>🦃</span> 火雞肉 Turkey[span_23](start_span)[span_23](end_span)
+          </div>
+          <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_24](start_span)[span_24](end_span)
+            <span>🐷</span> 豬耳朵 Pig Ear[span_25](start_span)[span_25](end_span)
+          </div>
+          <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_26](start_span)[span_26](end_span)
+            <span>🥩</span> 生肉 Rawhide[span_27](start_span)[span_27](end_span)
+          </div>
+          <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_28](start_span)[span_28](end_span)
+            <span>🐟</span> 魚油 Fish Oil[span_29](start_span)[span_29](end_span)
+          </div>
+          <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_30](start_span)[span_30](end_span)
+            <span>🍍</span> 菠蘿 / 山楂[span_31](start_span)[span_31](end_span)
+          </div>
+          <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_32](start_span)[span_32](end_span)
+            <span>🥣</span> 燕麥 / 意大利麵[span_33](start_span)[span_33](end_span)
+          </div>
+          <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">[span_34](start_span)[span_34](end_span)
+            <span>🥛</span> 希臘酸奶 / 鮮奶油[span_35](start_span)[span_35](end_span)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 頁面 E: 體重追蹤 (Weight) -->
+    <section id="page-weight" class="tab-page hidden">
+      <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
+        <h2 class="text-2xl font-bold text-white mb-6">⚖️ 體重追蹤 (Apple Health 風格)</h2>
+        <div class="bg-[#000000] p-4 rounded-2xl border border-[#333336] mb-3">
+          <canvas id="weightChart" height="200"></canvas>
+        </div>
+        <p class="text-xs text-[#86868b] text-center">理想體重區間：22 kg - 25 kg（拉布拉多標準）</p>
+      </div>
+    </section>
+
+    <!-- 頁面 F: 里程碑 (Milestones) -->
+    <section id="page-milestones" class="tab-page hidden">
+      <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
+        <h2 class="text-2xl font-bold text-white mb-6">⏳ Hazel 重要里程碑</h2>
+        <div class="relative pl-6 border-l-2 border-amber-500/40 space-y-8 text-xs">
+          <div class="relative">[span_36](start_span)[span_36](end_span)
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-[#161617]"></div>
+            <p class="font-bold text-amber-400 text-sm">2025.04.12 🎂</p>[span_37](start_span)[span_37](end_span)
+            <p class="text-white font-semibold text-sm mt-1">Hazel 誕生（白羊座小狗）</p>[span_38](start_span)[span_38](end_span)
+            <p class="text-[#86868b] mt-0.5">小女王來到這個世界的日子！</p>
+          </div>
+          <div class="relative">[span_39](start_span)[span_39](end_span)
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-[#161617]"></div>
+            <p class="font-bold text-amber-400 text-sm">2025.10.25 🏡</p>[span_40](start_span)[span_40](end_span)
+            <p class="text-white font-semibold text-sm mt-1">正式加入我們的家庭</p>[span_41](start_span)[span_41](end_span)
+            <p class="text-[#86868b] mt-0.5">本來以為是一隻金毛，結果是可愛的拉布拉多！</p>[span_42](start_span)[span_42](end_span)
+          </div>
+          <div class="relative">[span_43](start_span)[span_43](end_span)
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-[#161617]"></div>
+            <p class="font-bold text-amber-400 text-sm">2026.07.28 ✂️</p>[span_44](start_span)[span_44](end_span)
+            <p class="text-white font-semibold text-sm mt-1">順利完成絕育與洗牙手術</p>[span_45](start_span)[span_45](end_span)
+            <p class="text-[#86868b] mt-0.5">非常勇敢，康復速度驚人！</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
 
   <script>
+    // 獨立分頁切換邏輯
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
+      document.getElementById('page-' + tabName).classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 相片上載與 LocalStorage 本地儲存
+    const photoUpload = document.getElementById('photo-upload');
+    const photoContainer = document.getElementById('photo-container');
+    const defaultAvatar = document.getElementById('default-avatar');
+
+    // 載入預存的相片
+    const savedPhoto = localStorage.getItem('hazel_custom_photo');
+    if (savedPhoto) {
+      photoContainer.style.backgroundImage = `url(${savedPhoto})`;
+      defaultAvatar.classList.add('hidden');
+    }
+
+    photoUpload.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const imgData = event.target.result;
+          photoContainer.style.backgroundImage = `url(${imgData})`;
+          defaultAvatar.classList.add('hidden');
+          localStorage.setItem('hazel_custom_photo', imgData);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // 散步打卡邏輯
     let peeCount = 0;
     let poopCount = 0;
 
@@ -258,6 +320,7 @@
 
     document.getElementById('clear-logs').onclick = () => { localStorage.removeItem('hazel_walk_logs'); renderLogs(); };
 
+    // 體重圖表初始化
     const ctx = document.getElementById('weightChart').getContext('2d');
     new Chart(ctx, {
       type: 'line',
