@@ -8,6 +8,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js 畫圖工具庫 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Supabase JS 官方 SDK (雲端同步核心) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif; }
     .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
@@ -19,8 +21,8 @@
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
     <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] font-normal overflow-x-auto">
       <div class="flex items-center gap-5 min-w-max">
-        <button onclick="switchTab('hero')" class="text-white hover:text-amber-400 font-semibold transition-colors flex items-center gap-1">
-          <span></span> <span>Hazel</span>
+        <button onclick="switchTab('hero')" class="text-white hover:text-amber-400 font-semibold transition-colors flex items-center gap-1.5">
+          <span>🐾</span> <span>Hazel</span>
         </button>
         <button onclick="switchTab('potty')" class="tab-btn hover:text-white transition-colors" id="btn-potty">散步打卡</button>
         <button onclick="switchTab('medical')" class="tab-btn hover:text-white transition-colors" id="btn-medical">醫療紀錄</button>
@@ -53,7 +55,7 @@
         </div>
 
         <label for="photo-upload" class="absolute top-4 right-4 bg-black/60 hover:bg-black/90 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full border border-white/20 cursor-pointer transition-all flex items-center gap-1.5 shadow-lg">
-          📷 <span>更換相片</span>
+          📷 <span>更換相片 (雲端同步)</span>
           <input type="file" id="photo-upload" accept="image/*" class="hidden">
         </label>
       </div>
@@ -63,7 +65,7 @@
           Hazel’s Website
         </h1>
         <p class="text-base md:text-lg text-[#86868b] leading-relaxed font-normal">
-          這裡是一個充滿愛心的小角落，專屬於我們的狗狗 Hazel 🐶。她在 2025 年正式加入我們的家庭，本來以為是一隻金毛，結果卻是可愛的拉布拉多，帶來了更多驚喜與歡笑。在這個網站，你可以找到 Hazel 的所有生活點滴：她的故事、照片、健康記錄，還有我們每天的溫馨分享[span_0](start_span)[span_0](end_span)。希望大家能一起陪伴她、喜歡她，送上滿滿的祝福，願 Hazel 永遠健康快樂 💖。
+          這裡是一個充滿愛心的小角落，專屬於我們的狗狗 Hazel 🐶。她在 2025 年正式加入我們的家庭，本來以為是一隻金毛，結果卻是可愛的拉布拉多，帶來了更多驚喜與歡笑。在這個網站，你可以找到 Hazel 的所有生活點滴：她的故事、照片、健康記錄，還有我們每天的溫馨分享。希望大家能一起陪伴她、喜歡她，送上滿滿的祝福，願 Hazel 永遠健康快樂 💖。
         </p>
       </div>
 
@@ -80,9 +82,9 @@
         <div class="flex justify-between items-center mb-6">
           <div>
             <h2 class="text-2xl font-bold text-white">💩 散步與排泄打卡</h2>
-            <p class="text-xs text-[#86868b] mt-1">7-Day Rolling 自動滾動覆蓋機制</p>
+            <p class="text-xs text-[#86868b] mt-1">雙人雲端即時同步機制</p>
           </div>
-          <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20">單獨頁面</span>
+          <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20">Supabase 雲端</span>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-4">
@@ -106,16 +108,15 @@
         </div>
 
         <button id="save-log" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-lg shadow-amber-500/10">
-          儲存本次散步紀錄
+          上傳並儲存本次散步紀錄
         </button>
 
         <div class="mt-6 pt-4 border-t border-[#333336]">
           <div class="flex justify-between items-center mb-3">
-            <p class="text-xs text-[#86868b]">📋 最近打卡動態：</p>
-            <button id="clear-logs" class="text-xs text-[#86868b] hover:text-red-400">清空紀錄</button>
+            <p class="text-xs text-[#86868b]">📋 最近雲端打卡動態：</p>
           </div>
           <div id="logs-list" class="space-y-2 text-xs">
-            <p id="empty-hint" class="text-[#86868b] text-center py-2">今天還沒有散步紀錄喔！</p>
+            <p id="empty-hint" class="text-[#86868b] text-center py-2">載入雲端紀錄中...</p>
           </div>
         </div>
       </div>
@@ -124,28 +125,28 @@
     <!-- 頁面 C: 醫療紀錄 (Medical) -->
     <section id="page-medical" class="tab-page hidden">
       <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
-        <h2 class="text-2xl font-bold text-white mb-6">🏥 看診紀錄與全澳急診診所[span_1](start_span)[span_1](end_span)</h2>
+        <h2 class="text-2xl font-bold text-white mb-6">🏥 看診紀錄與全澳急診診所</h2>
         <div class="space-y-3 text-xs mb-6">
-          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_2](start_span)[span_2](end_span)
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
             <div>
-              <p class="font-semibold text-white text-sm">🦴 右腳跛、照 X-Ray 開止痛藥</p>[span_3](start_span)[span_3](end_span)
-              <p class="text-[10px] text-[#86868b] mt-1">2026.09.22</p>[span_4](start_span)[span_4](end_span)
+              <p class="font-semibold text-white text-sm">🦴 右腳跛、照 X-Ray 開止痛藥</p>
+              <p class="text-[10px] text-[#86868b] mt-1">2026.09.22</p>
             </div>
-            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">1,400 MOP</span>[span_5](start_span)[span_5](end_span)
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">1,400 MOP</span>
           </div>
-          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_6](start_span)[span_6](end_span)
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
             <div>
-              <p class="font-semibold text-white text-sm">✂️ 絕育加輕洗牙</p>[span_7](start_span)[span_7](end_span)
-              <p class="text-[10px] text-[#86868b] mt-1">2026.07.28</p>[span_8](start_span)[span_8](end_span)
+              <p class="font-semibold text-white text-sm">✂️ 絕育加輕洗牙</p>
+              <p class="text-[10px] text-[#86868b] mt-1">2026.07.28</p>
             </div>
-            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">4,860 MOP</span>[span_9](start_span)[span_9](end_span)
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">4,860 MOP</span>
           </div>
-          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_10](start_span)[span_10](end_span)
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
             <div>
-              <p class="font-semibold text-white text-sm">👁️ 旅行接回後眼睛及全身腫脹打針</p>[span_11](start_span)[span_11](end_span)
-              <p class="text-[10px] text-[#86868b] mt-1">2026.04.25</p>[span_12](start_span)[span_12](end_span)
+              <p class="font-semibold text-white text-sm">👁️ 旅行接回後眼睛及全身腫脹打針</p>
+              <p class="text-[10px] text-[#86868b] mt-1">2026.04.25</p>
             </div>
-            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">666 MOP</span>[span_13](start_span)[span_13](end_span)
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">666 MOP</span>
           </div>
         </div>
 
@@ -200,15 +201,14 @@
       </div>
     </section>
 
-    <!-- 頁面 E: 體重追蹤 (Weight - 支援手動輸入與動態畫圖) -->
+    <!-- 頁面 E: 體重追蹤 (Weight - 雲端同步) -->
     <section id="page-weight" class="tab-page hidden">
       <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl space-y-6">
         <div>
           <h2 class="text-2xl font-bold text-white">⚖️ 體重追蹤 (Apple Health 風格)</h2>
-          <p class="text-xs text-[#86868b] mt-1">手動紀錄 Hazel 體重變化，自動渲染實時折線圖</p>
+          <p class="text-xs text-[#86868b] mt-1">手動紀錄 Hazel 體重變化，雙人雲端即時同步</p>
         </div>
 
-        <!-- 體重手動輸入表單 -->
         <div class="bg-[#1c1c1e] p-4 rounded-2xl border border-[#38383a]">
           <h3 class="text-xs font-semibold text-amber-300 mb-3 flex items-center gap-1.5">
             <span>📝</span> 新增體重紀錄
@@ -224,22 +224,21 @@
             </div>
           </div>
           <button id="save-weight" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-md">
-            儲存體重紀錄
+            上傳並儲存體重紀錄
           </button>
         </div>
 
-        <!-- 動態 Chart.js 折線圖畫布 -->
         <div class="bg-[#000000] p-4 rounded-2xl border border-[#333336]">
           <canvas id="weightChart" height="200"></canvas>
         </div>
 
-        <!-- 歷史紀錄列表 -->
         <div>
           <div class="flex justify-between items-center mb-2">
-            <p class="text-xs text-[#86868b]">📋 歷史體重數據：</p>
-            <button id="reset-weight" class="text-[10px] text-[#86868b] hover:text-red-400">重置為預設</button>
+            <p class="text-xs text-[#86868b]">📋 雲端歷史體重數據：</p>
           </div>
-          <div id="weight-history-list" class="space-y-2 text-xs"></div>
+          <div id="weight-history-list" class="space-y-2 text-xs">
+            <p class="text-[#86868b] text-center py-2">載入體重紀錄中...</p>
+          </div>
         </div>
       </div>
     </section>
@@ -261,10 +260,10 @@
             <p class="text-white font-semibold text-sm mt-1">正式加入我們的家庭</p>
             <p class="text-[#86868b] mt-0.5">本來以為是一隻金毛，結果是可愛的拉布拉多！</p>
           </div>
-          <div class="relative">[span_14](start_span)[span_14](end_span)
+          <div class="relative">
             <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-[#161617]"></div>
-            <p class="font-bold text-amber-400 text-sm">2026.07.28 ✂️</p>[span_15](start_span)[span_15](end_span)
-            <p class="text-white font-semibold text-sm mt-1">順利完成絕育與洗牙手術</p>[span_16](start_span)[span_16](end_span)
+            <p class="font-bold text-amber-400 text-sm">2026.07.28 ✂️</p>
+            <p class="text-white font-semibold text-sm mt-1">順利完成絕育與洗牙手術</p>
             <p class="text-[#86868b] mt-0.5">非常勇敢，康復速度驚人！</p>
           </div>
         </div>
@@ -274,130 +273,125 @@
   </div>
 
   <script>
-    // 獨立分頁切換邏輯
+    // Supabase 雲端設定
+    const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // 切換分頁
     function switchTab(tabName) {
       document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
       document.getElementById('page-' + tabName).classList.remove('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // 相片上載與 LocalStorage 本地儲存
+    // ------------------- 1. 相片雲端同步 ------------------- //
     const photoUpload = document.getElementById('photo-upload');
     const photoContainer = document.getElementById('photo-container');
     const defaultAvatar = document.getElementById('default-avatar');
 
-    const savedPhoto = localStorage.getItem('hazel_custom_photo');
-    if (savedPhoto) {
-      photoContainer.style.backgroundImage = `url(${savedPhoto})`;
-      defaultAvatar.classList.add('hidden');
+    async function loadCloudPhoto() {
+      const { data } = await supabase.from('site_settings').select('value').eq('key', 'hazel_hero_photo').single();
+      if (data && data.value) {
+        photoContainer.style.backgroundImage = `url(${data.value})`;
+        defaultAvatar.classList.add('hidden');
+      }
     }
 
     photoUpload.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(event) {
+        reader.onload = async function(event) {
           const imgData = event.target.result;
           photoContainer.style.backgroundImage = `url(${imgData})`;
           defaultAvatar.classList.add('hidden');
-          localStorage.setItem('hazel_custom_photo', imgData);
+
+          // 上傳至 Supabase
+          await supabase.from('site_settings').upsert({ key: 'hazel_hero_photo', value: imgData });
         };
         reader.readAsDataURL(file);
       }
     });
 
-    // 散步打卡邏輯
+    // ------------------- 2. 散步打卡雲端同步 ------------------- //
     let peeCount = 0;
     let poopCount = 0;
 
     document.getElementById('add-pee').onclick = () => { peeCount++; document.getElementById('pee-count').innerText = peeCount; };
     document.getElementById('add-poop').onclick = () => { poopCount++; document.getElementById('poop-count').innerText = poopCount; };
 
-    document.getElementById('save-log').onclick = () => {
+    document.getElementById('save-log').onclick = async () => {
       if (peeCount === 0 && poopCount === 0) { alert("請先點擊小便或便便計數！"); return; }
       const currentUser = document.getElementById('user-selector').value;
       const status = document.getElementById('poop-status').value;
-      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      const logItem = { user: currentUser, pee: peeCount, poop: poopCount, status: status, time: time };
-      let logs = JSON.parse(localStorage.getItem('hazel_walk_logs') || '[]');
-      logs.unshift(logItem);
-      localStorage.setItem('hazel_walk_logs', JSON.stringify(logs));
+      await supabase.from('walk_poop_logs').insert([{
+        pee_count: peeCount,
+        poop_count: poopCount,
+        poop_status: status,
+        logged_by: currentUser
+      }]);
 
       peeCount = 0; poopCount = 0;
       document.getElementById('pee-count').innerText = 0;
       document.getElementById('poop-count').innerText = 0;
-      renderLogs();
+      loadCloudLogs();
     };
 
-    function renderLogs() {
-      const logs = JSON.parse(localStorage.getItem('hazel_walk_logs') || '[]');
+    async function loadCloudLogs() {
+      const { data } = await supabase.from('walk_poop_logs').select('*').order('created_at', { ascending: false }).limit(10);
       const container = document.getElementById('logs-list');
-      if (logs.length === 0) {
+      if (!data || data.length === 0) {
         container.innerHTML = `<p id="empty-hint" class="text-[#86868b] text-center py-2">今天還沒有散步紀錄喔！</p>`;
         return;
       }
-      container.innerHTML = logs.map(item => `
+      container.innerHTML = data.map(item => `
         <div class="bg-[#1c1c1e] p-3 rounded-xl border border-[#38383a] flex justify-between items-center">
           <div>
-            <span class="text-amber-400 font-medium">${item.user}</span>
-            <span class="text-[#ceced2] ml-2">打卡：💧 ${item.pee} 次 | 💩 ${item.poop} 次 (${item.status})</span>
+            <span class="text-amber-400 font-medium">${item.logged_by || 'Family'}</span>
+            <span class="text-[#ceced2] ml-2">打卡：💧 ${item.pee_count} 次 | 💩 ${item.poop_count} 次 (${item.poop_status})</span>
           </div>
-          <span class="text-[10px] text-[#86868b]">${item.time}</span>
+          <span class="text-[10px] text-[#86868b]">${new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
         </div>
       `).join('');
     }
 
-    document.getElementById('clear-logs').onclick = () => { localStorage.removeItem('hazel_walk_logs'); renderLogs(); };
-
-    // ------------------- 體重動態追蹤與 Chart.js 畫圖系統 ------------------- //
-    const defaultWeightData = [
-      { date: '一個月前', weight: 22.5 },
-      { date: '現在', weight: 22.0 }
-    ];
-
+    // ------------------- 3. 體重雲端同步與圖表 ------------------- //
     let weightChart = null;
 
-    function getWeightData() {
-      const saved = localStorage.getItem('hazel_weight_records');
-      return saved ? JSON.parse(saved) : defaultWeightData;
-    }
+    async function loadCloudWeight() {
+      const { data } = await supabase.from('weight_logs').select('*').order('created_at', { ascending: true });
+      let records = data && data.length > 0 ? data : [
+        { date_label: '一個月前', weight: 22.5 },
+        { date_label: '現在', weight: 22.0 }
+      ];
 
-    function renderWeightChart() {
-      const records = getWeightData();
-      const labels = records.map(r => r.date);
-      const weights = records.map(r => r.weight);
-
-      // 渲染歷史列表
       const historyContainer = document.getElementById('weight-history-list');
       historyContainer.innerHTML = records.map(r => `
         <div class="bg-[#1c1c1e] p-2.5 rounded-xl border border-[#38383a] flex justify-between items-center">
-          <span class="text-white font-medium">${r.date}</span>
+          <span class="text-white font-medium">${r.date_label}</span>
           <span class="text-amber-400 font-bold">${r.weight} kg</span>
         </div>
       `).join('');
 
-      // 初始化或更新圖表
       const ctx = document.getElementById('weightChart').getContext('2d');
-      if (weightChart) {
-        weightChart.destroy();
-      }
+      if (weightChart) weightChart.destroy();
 
       weightChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: labels,
+          labels: records.map(r => r.date_label),
           datasets: [{
             label: '體重 (kg)',
-            data: weights,
+            data: records.map(r => r.weight),
             borderColor: '#f59e0b',
             backgroundColor: 'rgba(245, 158, 11, 0.15)',
             borderWidth: 3,
             fill: true,
             tension: 0.3,
             pointBackgroundColor: '#f59e0b',
-            pointRadius: 6,
-            pointHoverRadius: 8
+            pointRadius: 6
           }]
         },
         options: {
@@ -411,35 +405,23 @@
       });
     }
 
-    // 新增體重紀錄
-    document.getElementById('save-weight').onclick = () => {
+    document.getElementById('save-weight').onclick = async () => {
       const dateInput = document.getElementById('weight-date').value.trim();
       const valueInput = parseFloat(document.getElementById('weight-value').value);
 
-      if (!dateInput || isNaN(valueInput)) {
-        alert("請輸入有效的日期與體重數值！");
-        return;
-      }
+      if (!dateInput || isNaN(valueInput)) { alert("請輸入有效的日期與體重數值！"); return; }
 
-      let records = getWeightData();
-      records.push({ date: dateInput, weight: valueInput });
-      localStorage.setItem('hazel_weight_records', JSON.stringify(records));
+      await supabase.from('weight_logs').insert([{ date_label: dateInput, weight: valueInput }]);
 
       document.getElementById('weight-date').value = '';
       document.getElementById('weight-value').value = '';
-
-      renderWeightChart();
+      loadCloudWeight();
     };
 
-    // 重置體重
-    document.getElementById('reset-weight').onclick = () => {
-      localStorage.removeItem('hazel_weight_records');
-      renderWeightChart();
-    };
-
-    // 初始化頁面
-    renderLogs();
-    renderWeightChart();
+    // 初始化載入
+    loadCloudPhoto();
+    loadCloudLogs();
+    loadCloudWeight();
   </script>
 </body>
 </html>
