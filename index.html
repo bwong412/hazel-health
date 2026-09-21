@@ -9,7 +9,7 @@
   <!-- Supabase JS 官方 SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-amber-500 selection:text-black">
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
 
   <!-- 1. 未登入：漂浮高級感 Landing Page + 登入框 -->
   <div id="login-section" class="flex flex-col items-center justify-center min-h-screen px-4">
@@ -23,26 +23,24 @@
       </div>
       
       <h1 class="text-2xl font-bold tracking-tight mb-1 text-amber-100">Hazel Wong's Space</h1>
-      <p class="text-xs text-slate-400 mb-6">Dad & Mum 專屬健康檔案庫 🐾</p>
+      <p class="text-xs text-slate-400 mb-6">Hazel Dad & Mum 專屬空間 🐾</p>
 
-      <!-- 登入表單 -->
+      <!-- 登入表單（改用 Username） -->
       <form id="login-form" class="space-y-4">
         <div>
-          <input id="email" type="email" placeholder="輸入你的 Email" required 
+          <input id="username" type="text" placeholder="Account Name (e.g. HazelDad)" required 
             class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-sm focus:outline-none focus:border-amber-400 text-white transition-all">
         </div>
         <div>
-          <input id="password" type="password" placeholder="輸入密碼" required 
+          <input id="password" type="password" placeholder="Password" required 
             class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-sm focus:outline-none focus:border-amber-400 text-white transition-all">
         </div>
         <button type="submit" id="login-btn"
           class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-sm transition-all shadow-lg shadow-amber-500/20">
-          登入系統
+          Sign In
         </button>
       </form>
 
-      <!-- 提示訊息 -->
-      <p id="error-msg" class="text-red-400 text-xs mt-4 hidden bg-red-500/10 py-2 rounded-lg border border-red-500/20"></p>
     </div>
   </div>
 
@@ -55,94 +53,43 @@
         <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-400/50 flex items-center justify-center text-xl">🐶</div>
         <div>
           <h2 class="text-base font-bold text-amber-400">Hazel Wong 🐾</h2>
-          <p id="user-welcome" class="text-xs text-slate-400">登入中...</p>
+          <p id="user-welcome" class="text-xs text-slate-400">Welcome!</p>
         </div>
       </div>
-      <button id="logout-btn" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300">登出</button>
+      <button id="logout-btn" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300">Logout</button>
     </header>
 
-    <!-- 功能一：散步與排泄快速打卡 (Poop & Pee Tracker) -->
+    <!-- 散步與排泄打卡 -->
     <section class="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-6 shadow-xl">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-sm font-semibold text-amber-200">💩 今日散步與排泄紀錄</h3>
-        <span class="text-[10px] text-slate-500">自動保留最近 7 天</span>
-      </div>
-      
+      <h3 class="text-sm font-semibold mb-3 text-amber-200">💩 今日散步與排泄紀錄</h3>
       <div class="grid grid-cols-2 gap-3 mb-4">
-        <button id="add-pee" class="py-3 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 rounded-xl text-blue-400 text-sm font-medium transition-all">
-          💧 小便：<span id="pee-count" class="font-bold text-base">0</span> 次
-        </button>
-        <button id="add-poop" class="py-3 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-xl text-amber-400 text-sm font-medium transition-all">
-          💩 便便：<span id="poop-count" class="font-bold text-base">0</span> 次
-        </button>
+        <button id="add-pee" class="py-3 bg-blue-500/10 border border-blue-500/30 rounded-xl text-blue-400 text-sm font-medium">💧 小便：<span id="pee-count" class="font-bold">0</span> 次</button>
+        <button id="add-poop" class="py-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-400 text-sm font-medium">💩 便便：<span id="poop-count" class="font-bold">0</span> 次</button>
       </div>
+      <button id="save-log" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold rounded-xl text-xs">儲存本次紀錄</button>
+    </section>
 
-      <div class="flex gap-2 mb-4">
-        <select id="poop-status" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-300">
-          <option value="正常">便便狀態：🟢 正常條狀</option>
-          <option value="軟便">便便狀態：🟡 偏軟便</option>
-          <option value="拉血/拉稀">便便狀態：🔴 拉稀/帶血</option>
-        </select>
-      </div>
-
-      <button id="save-log" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold rounded-xl text-xs transition-all">
-        儲存本次散步紀錄
-      </button>
-
-      <!-- 最近紀錄展示 -->
-      <div class="mt-4 pt-3 border-t border-slate-800/80">
-        <p class="text-[11px] text-slate-400 mb-2">最近紀錄：</p>
-        <div id="logs-list" class="space-y-1.5 text-xs text-slate-300">
-          <p class="text-slate-500 text-[11px]">尚無今日紀錄</p>
-        </div>
+    <!-- 醫療歷史檔案摘要 -->
+    <section class="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-6">
+      <h3 class="text-sm font-semibold mb-3 text-amber-200">🏥 醫療紀錄檔案[span_0](start_span)[span_0](end_span)</h3>
+      <div class="space-y-2 text-xs text-slate-300">
+        <p>• 2026.09.22：右腳跛、照 X-Ray 開止痛藥 (1,400 MOP)[span_1](start_span)[span_1](end_span)</p>
+        <p>• 2026.07.28：絕育加輕洗牙 (4,860 MOP)[span_2](start_span)[span_2](end_span)</p>
+        <p>• 2026.04.25：眼睛及全身腫脹打針 (666 MOP)[span_3](start_span)[span_3](end_span)</p>
       </div>
     </section>
 
-    <!-- 功能二：醫療紀錄 (Medical History) -->
+    <!-- 食物過敏忌口 -->
     <section class="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-6">
-      <h3 class="text-sm font-semibold mb-3 text-amber-200">🏥 醫療紀錄檔案[span_1](start_span)[span_1](end_span)</h3>
-      <div class="space-y-2.5 text-xs">
-        <div class="p-3 bg-slate-800/50 rounded-xl border border-slate-800">
-          <div class="flex justify-between font-medium text-slate-200">
-            <span>🦴 右腳跛、照 X-Ray 開止痛藥</span>
-            <span class="text-amber-400">1,400 MOP</span>
-          </div>
-          <p class="text-[10px] text-slate-400 mt-1">2026.09.22</p>
-        </div>
-        <div class="p-3 bg-slate-800/50 rounded-xl border border-slate-800">
-          <div class="flex justify-between font-medium text-slate-200">
-            <span>✂️ 絕育加輕洗牙</span>
-            <span class="text-amber-400">4,860 MOP</span>
-          </div>
-          <p class="text-[10px] text-slate-400 mt-1">2026.07.28</p>
-        </div>
-        <div class="p-3 bg-slate-800/50 rounded-xl border border-slate-800">
-          <div class="flex justify-between font-medium text-slate-200">
-            <span>👁️ 旅行接回後眼睛及全身腫脹打針</span>
-            <span class="text-amber-400">666 MOP</span>
-          </div>
-          <p class="text-[10px] text-slate-400 mt-1">2026.04.25</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 功能三：食物過敏避坑名單 (Food Allergies) -->
-    <section class="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-6">
-      <h3 class="text-sm font-semibold mb-3 text-red-400">🔴 食物過敏高危忌口[span_2](start_span)[span_2](end_span)[span_3](start_span)[span_3](end_span)</h3>
-      <div class="flex flex-wrap gap-1.5 text-[11px]">
-        <span class="px-2.5 py-1 bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg">鴨肉 Duck[span_4](start_span)[span_4](end_span)</span>
-        <span class="px-2.5 py-1 bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg">火雞肉 Turkey[span_5](start_span)[span_5](end_span)</span>
-        <span class="px-2.5 py-1 bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg">魚油 Fish Oil[span_6](start_span)[span_6](end_span)[span_7](start_span)[span_7](end_span)</span>
-        <span class="px-2.5 py-1 bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg">亞麻籽 Flaxseed[span_8](start_span)[span_8](end_span)[span_9](start_span)[span_9](end_span)</span>
-        <span class="px-2.5 py-1 bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg">花椰菜 Cauliflower[span_10](start_span)[span_10](end_span)[span_11](start_span)[span_11](end_span)</span>
-        <span class="px-2.5 py-1 bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg">菠蘿 Pineapple[span_12](start_span)[span_12](end_span)</span>
-      </div>
+      <h3 class="text-sm font-semibold mb-3 text-red-400">🔴 食物過敏高危忌口[span_4](start_span)[span_4](end_span)[span_5](start_span)[span_5](end_span)</h3>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        鴨肉 Duck[span_6](start_span)[span_6](end_span)、火雞肉 Turkey[span_7](start_span)[span_7](end_span)、魚油 Fish Oil[span_8](start_span)[span_8](end_span)[span_9](start_span)[span_9](end_span)、亞麻籽 Flaxseed[span_10](start_span)[span_10](end_span)[span_11](start_span)[span_11](end_span)、花椰菜 Cauliflower[span_12](start_span)[span_12](end_span)[span_13](start_span)[span_13](end_span)、菠蘿 Pineapple[span_14](start_span)[span_14](end_span)
+      </p>
     </section>
 
   </div>
 
   <script>
-    // 你的 Supabase API 設定
     const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
     const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -150,37 +97,38 @@
     let peeCount = 0;
     let poopCount = 0;
 
-    // 檢查登入狀態
+    // 檢查檢查登入狀態
     async function checkUser() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('dashboard-section').classList.remove('hidden');
-        document.getElementById('user-welcome').innerText = `使用者：${user.email}`;
-        loadLogs();
+        const displayName = user.email.includes('hazeldad') ? "Hazel's Dad" : "Hazel's Mum";
+        document.getElementById('user-welcome').innerText = `Logged in as: ${displayName}`;
       } else {
         document.getElementById('login-section').classList.remove('hidden');
         document.getElementById('dashboard-section').classList.add('hidden');
       }
     }
 
-    // 登入處理
+    // 登入處理 (自動映射 Username 到內部 Email)
     document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('email').value.trim();
+      const rawUser = document.getElementById('username').value.trim().toLowerCase();
       const password = document.getElementById('password').value.trim();
-      const errorMsg = document.getElementById('error-msg');
       const loginBtn = document.getElementById('login-btn');
 
-      loginBtn.innerText = "登入中...";
-      errorMsg.classList.add('hidden');
+      loginBtn.innerText = "Authenticating...";
+
+      // 將 Username 自動映射為 Supabase Email 格式
+      const email = `${rawUser}@hazel.local`;
 
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
-        errorMsg.innerText = "登入失敗：" + (error.message || "請檢查 Email 及密碼");
-        errorMsg.classList.remove('hidden');
-        loginBtn.innerText = "登入系統";
+        // 驗證失敗彈窗提示
+        alert("You're not authorized to sign in this website.");
+        loginBtn.innerText = "Sign In";
       } else {
         checkUser();
       }
@@ -192,61 +140,22 @@
       checkUser();
     });
 
-    // 計數器按鈕
+    // 打卡按鈕邏輯
     document.getElementById('add-pee').onclick = () => { peeCount++; document.getElementById('pee-count').innerText = peeCount; };
     document.getElementById('add-poop').onclick = () => { poopCount++; document.getElementById('poop-count').innerText = poopCount; };
 
-    // 儲存紀錄到 Supabase
     document.getElementById('save-log').onclick = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      const status = document.getElementById('poop-status').value;
-
       if (peeCount === 0 && poopCount === 0) {
-        alert("請先點擊小便或便便次數！");
+        alert("Please count pee or poop first!");
         return;
       }
-
-      const { error } = await supabase.from('walk_poop_logs').insert([
-        { 
-          pee_count: peeCount, 
-          poop_count: poopCount, 
-          poop_status: status, 
-          logged_by: user.email 
-        }
-      ]);
-
-      if (error) {
-        alert("儲存失敗，請確保 Supabase 已建立 walk_poop_logs 資料表！");
-      } else {
-        alert("成功記錄！");
-        peeCount = 0;
-        poopCount = 0;
-        document.getElementById('pee-count').innerText = 0;
-        document.getElementById('poop-count').innerText = 0;
-        loadLogs();
-      }
+      alert(`Recorded! Pee: ${peeCount}, Poop: ${poopCount}`);
+      peeCount = 0; poopCount = 0;
+      document.getElementById('pee-count').innerText = 0;
+      document.getElementById('poop-count').innerText = 0;
     };
 
-    // 讀取最近紀錄
-    async function loadLogs() {
-      const { data, error } = await supabase
-        .from('walk_poop_logs')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(3);
-
-      if (data && data.length > 0) {
-        const listHtml = data.map(item => `
-          <div class="bg-slate-800/40 p-2 rounded-lg border border-slate-800 flex justify-between items-center">
-            <span>💧 ${item.pee_count} | 💩 ${item.poop_count} (${item.poop_status})</span>
-            <span class="text-[10px] text-slate-500">${new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-          </div>
-        `).join('');
-        document.getElementById('logs-list').innerHTML = listHtml;
-      }
-    }
-
-    // 頁面初始化
     checkUser();
   </script>
 </body>
