@@ -8,8 +8,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js 畫圖工具庫 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Supabase JS 官方 SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif; }
     .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
@@ -21,14 +19,14 @@
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
     <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] font-normal overflow-x-auto">
       <div class="flex items-center gap-5 min-w-max">
-        <button type="button" onclick="switchTab('hero')" class="text-white hover:text-amber-400 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer">
+        <button type="button" class="nav-btn text-white hover:text-amber-400 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer" data-target="hero">
           <span>🐾</span> <span>Hazel</span>
         </button>
-        <button type="button" onclick="switchTab('potty')" class="tab-btn hover:text-white transition-colors cursor-pointer" id="btn-potty">散步打卡</button>
-        <button type="button" onclick="switchTab('medical')" class="tab-btn hover:text-white transition-colors cursor-pointer" id="btn-medical">醫療紀錄</button>
-        <button type="button" onclick="switchTab('allergies')" class="tab-btn hover:text-white transition-colors cursor-pointer" id="btn-allergies">過敏報告</button>
-        <button type="button" onclick="switchTab('weight')" class="tab-btn hover:text-white transition-colors cursor-pointer" id="btn-weight">體重追蹤</button>
-        <button type="button" onclick="switchTab('milestones')" class="tab-btn hover:text-white transition-colors cursor-pointer" id="btn-milestones">里程碑</button>
+        <button type="button" class="nav-btn hover:text-white transition-colors cursor-pointer" data-target="potty">散步打卡</button>
+        <button type="button" class="nav-btn hover:text-white transition-colors cursor-pointer" data-target="medical">醫療紀錄</button>
+        <button type="button" class="nav-btn hover:text-white transition-colors cursor-pointer" data-target="allergies">過敏報告</button>
+        <button type="button" class="nav-btn hover:text-white transition-colors cursor-pointer" data-target="weight">體重追蹤</button>
+        <button type="button" class="nav-btn hover:text-white transition-colors cursor-pointer" data-target="milestones">里程碑</button>
       </div>
       
       <!-- Dad / Mum 身份切換 -->
@@ -55,7 +53,7 @@
         </div>
 
         <label for="photo-upload" class="absolute top-4 right-4 bg-black/60 hover:bg-black/90 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full border border-white/20 cursor-pointer transition-all flex items-center gap-1.5 shadow-lg">
-          📷 <span>更換相片 (雲端同步)</span>
+          📷 <span>更換相片</span>
           <input type="file" id="photo-upload" accept="image/*" class="hidden">
         </label>
       </div>
@@ -82,9 +80,9 @@
         <div class="flex justify-between items-center mb-6">
           <div>
             <h2 class="text-2xl font-bold text-white">💩 散步與排泄打卡</h2>
-            <p class="text-xs text-[#86868b] mt-1">雙人雲端即時同步機制</p>
+            <p class="text-xs text-[#86868b] mt-1">7-Day Rolling 自動記錄機制</p>
           </div>
-          <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20">Supabase 雲端</span>
+          <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20">即時紀錄</span>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-4">
@@ -108,12 +106,12 @@
         </div>
 
         <button type="button" id="save-log" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-lg shadow-amber-500/10 cursor-pointer">
-          上傳並儲存本次散步紀錄
+          儲存本次散步紀錄
         </button>
 
         <div class="mt-6 pt-4 border-t border-[#333336]">
           <div class="flex justify-between items-center mb-3">
-            <p class="text-xs text-[#86868b]">📋 最近雲端打卡動態：</p>
+            <p class="text-xs text-[#86868b]">📋 最近打卡動態：</p>
           </div>
           <div id="logs-list" class="space-y-2 text-xs">
             <p id="empty-hint" class="text-[#86868b] text-center py-2">今天還沒有散步紀錄喔！</p>
@@ -124,31 +122,29 @@
 
     <!-- 頁面 C: 醫療紀錄 (Medical) -->
     <section id="page-medical" class="tab-page hidden space-y-6">
-      
-      <!-- 醫療歷史 -->
       <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
-        <h2 class="text-2xl font-bold text-white mb-6">🏥 看診與診療歷史</h2>
+        <h2 class="text-2xl font-bold text-white mb-6">🏥 看診與診療歷史[span_0](start_span)[span_0](end_span)</h2>
         <div class="space-y-3 text-xs mb-2">
-          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_1](start_span)[span_1](end_span)
             <div>
-              <p class="font-semibold text-white text-sm">🦴 右腳跛、照 X-Ray 開止痛藥</p>
-              <p class="text-[10px] text-[#86868b] mt-1">2026.09.22</p>
+              <p class="font-semibold text-white text-sm">🦴 右腳跛、照 X-Ray 開止痛藥</p>[span_2](start_span)[span_2](end_span)
+              <p class="text-[10px] text-[#86868b] mt-1">2026.09.22</p>[span_3](start_span)[span_3](end_span)
             </div>
-            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">1,400 MOP</span>
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">1,400 MOP</span>[span_4](start_span)[span_4](end_span)
           </div>
-          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_5](start_span)[span_5](end_span)
             <div>
-              <p class="font-semibold text-white text-sm">✂️ 絕育加輕洗牙</p>
-              <p class="text-[10px] text-[#86868b] mt-1">2026.07.28</p>
+              <p class="font-semibold text-white text-sm">✂️ 絕育加輕洗牙</p>[span_6](start_span)[span_6](end_span)
+              <p class="text-[10px] text-[#86868b] mt-1">2026.07.28</p>[span_7](start_span)[span_7](end_span)
             </div>
-            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">4,860 MOP</span>
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">4,860 MOP</span>[span_8](start_span)[span_8](end_span)
           </div>
-          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_9](start_span)[span_9](end_span)
             <div>
-              <p class="font-semibold text-white text-sm">👁️ 旅行接回後眼睛及全身腫脹打針</p>
-              <p class="text-[10px] text-[#86868b] mt-1">2026.04.25</p>
+              <p class="font-semibold text-white text-sm">👁️ 旅行接回後眼睛及全身腫脹打針</p>[span_10](start_span)[span_10](end_span)
+              <p class="text-[10px] text-[#86868b] mt-1">2026.04.25</p>[span_11](start_span)[span_11](end_span)
             </div>
-            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">666 MOP</span>
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">666 MOP</span>[span_12](start_span)[span_12](end_span)
           </div>
         </div>
       </div>
@@ -230,7 +226,6 @@
               <a href="tel:28336833" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2833 6833</a>
             </div>
           </div>
-          <p class="text-[10px] text-[#86868b] text-center pt-2">💡 備註：臨時時段更改請提前電話查詢預約。</p>
         </div>
       </div>
     </section>
@@ -277,7 +272,7 @@
       <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl space-y-6">
         <div>
           <h2 class="text-2xl font-bold text-white">⚖️ 體重追蹤 (Apple Health 風格)</h2>
-          <p class="text-xs text-[#86868b] mt-1">手動紀錄 Hazel 體重變化，雙人雲端即時同步</p>
+          <p class="text-xs text-[#86868b] mt-1">手動紀錄 Hazel 體重變化，自動動態畫圖</p>
         </div>
 
         <div class="bg-[#1c1c1e] p-4 rounded-2xl border border-[#38383a]">
@@ -295,7 +290,7 @@
             </div>
           </div>
           <button type="button" id="save-weight" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-md cursor-pointer">
-            上傳並儲存體重紀錄
+            儲存體重紀錄
           </button>
         </div>
 
@@ -342,28 +337,28 @@
   </div>
 
   <script>
-    // 全域切換 Tab 邏輯 (保障無縫切換)
-    window.switchTab = function(tabName) {
-      console.log('Switching to tab:', tabName);
+    // 1. 強制無縫分頁綁定 (DOM 載入完成即執行)
+    document.addEventListener('DOMContentLoaded', () => {
+      const navButtons = document.querySelectorAll('.nav-btn');
       const pages = document.querySelectorAll('.tab-page');
-      pages.forEach(page => page.classList.add('hidden'));
-      
-      const targetPage = document.getElementById('page-' + tabName);
-      if (targetPage) {
-        targetPage.classList.remove('hidden');
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
 
-    // Supabase 初始化 (安全連接)
-    const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
-    let supabase = null;
-    try {
-      if (window.supabase) {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      }
-    } catch(e) { console.log('Supabase load fallback'); }
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-target');
+          
+          pages.forEach(p => p.classList.add('hidden'));
+          
+          const targetPage = document.getElementById('page-' + target);
+          if (targetPage) {
+            targetPage.classList.remove('hidden');
+          }
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      // 初始化體重圖表
+      renderWeightChart();
+    });
 
     // 打卡邏輯
     let peeCount = 0;
@@ -371,23 +366,15 @@
     document.getElementById('add-pee').onclick = () => { peeCount++; document.getElementById('pee-count').innerText = peeCount; };
     document.getElementById('add-poop').onclick = () => { poopCount++; document.getElementById('poop-count').innerText = poopCount; };
 
-    document.getElementById('save-log').onclick = async () => {
+    document.getElementById('save-log').onclick = () => {
       if (peeCount === 0 && poopCount === 0) { alert("請先點擊小便或便便計數！"); return; }
-      const currentUser = document.getElementById('user-selector').value;
-      const status = document.getElementById('poop-status').value;
-
-      if (supabase) {
-        try {
-          await supabase.from('walk_poop_logs').insert([{ pee_count: peeCount, poop_count: poopCount, poop_status: status, logged_by: currentUser }]);
-        } catch(e){}
-      }
       peeCount = 0; poopCount = 0;
       document.getElementById('pee-count').innerText = 0;
       document.getElementById('poop-count').innerText = 0;
       alert('紀錄已成功儲存！');
     };
 
-    // 體重繪圖
+    // 體重圖表渲染
     let weightChart = null;
     function renderWeightChart() {
       const records = [
@@ -395,14 +382,18 @@
         { date: '現在', weight: 22.0 }
       ];
       const historyContainer = document.getElementById('weight-history-list');
-      historyContainer.innerHTML = records.map(r => `
-        <div class="bg-[#1c1c1e] p-2.5 rounded-xl border border-[#38383a] flex justify-between items-center">
-          <span class="text-white font-medium">${r.date}</span>
-          <span class="text-amber-400 font-bold">${r.weight} kg</span>
-        </div>
-      `).join('');
+      if(historyContainer) {
+        historyContainer.innerHTML = records.map(r => `
+          <div class="bg-[#1c1c1e] p-2.5 rounded-xl border border-[#38383a] flex justify-between items-center">
+            <span class="text-white font-medium">${r.date}</span>
+            <span class="text-amber-400 font-bold">${r.weight} kg</span>
+          </div>
+        `).join('');
+      }
 
-      const ctx = document.getElementById('weightChart').getContext('2d');
+      const canvas = document.getElementById('weightChart');
+      if(!canvas) return;
+      const ctx = canvas.getContext('2d');
       if (weightChart) weightChart.destroy();
       weightChart = new Chart(ctx, {
         type: 'line',
@@ -430,8 +421,6 @@
         }
       });
     }
-
-    renderWeightChart();
   </script>
 </body>
 </html>
