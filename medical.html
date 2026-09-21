@@ -1,1 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-HANT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>醫療紀錄 - Hazel’s Website 🐾</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
+    .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  </style>
+</head>
+<body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
 
+  <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
+    <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] overflow-x-auto">
+      <div class="flex items-center gap-5 min-w-max">
+        <a href="index.html" class="hover:text-white transition-colors"><span>🐾</span> <span>Hazel</span></a>
+        <a href="potty.html" class="hover:text-white transition-colors">散步打卡</a>
+        <a href="medical.html" class="text-white font-semibold hover:text-amber-400 transition-colors">醫療紀錄</a>
+        <a href="allergies.html" class="hover:text-white transition-colors">過敏報告</a>
+        <a href="weight.html" class="hover:text-white transition-colors">體重追蹤</a>
+        <a href="milestones.html" class="hover:text-white transition-colors">里程碑</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-6">
+    
+    <!-- 看診歷史 -->
+    <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
+      <h2 class="text-2xl font-bold text-white mb-6">🏥 看診與診療歷史</h2>
+      <div class="space-y-3 text-xs mb-2">
+        <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
+          <div>
+            <p class="font-semibold text-white text-sm">🦴 右腳跛、照 X-Ray 開止痛藥</p>
+            <p class="text-[10px] text-[#86868b] mt-1">2026.09.22</p>
+          </div>
+          <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">1,400 MOP</span>
+        </div>
+        <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
+          <div>
+            <p class="font-semibold text-white text-sm">✂️ 絕育加輕洗牙</p>
+            <p class="text-[10px] text-[#86868b] mt-1">2026.07.28</p>
+          </div>
+          <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">4,860 MOP</span>
+        </div>
+        <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
+          <div>
+            <p class="font-semibold text-white text-sm">👁️ 旅行接回後眼睛及全身腫脹打針</p>
+            <p class="text-[10px] text-[#86868b] mt-1">2026.04.25</p>
+          </div>
+          <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">666 MOP</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 24h 寵物接送服務專線 -->
+    <div class="bg-gradient-to-r from-amber-500/20 via-[#161617] to-[#161617] border border-amber-500/40 rounded-3xl p-6 shadow-2xl flex items-center justify-between">
+      <div>
+        <span class="text-xs font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-2.5 py-1 rounded-md border border-amber-400/30">Petber 專車</span>
+        <h3 class="text-lg font-bold text-white mt-2">🚗 24h 澳門寵物接送服務</h3>
+        <p class="text-xs text-[#86868b] mt-1">緊急看診、日常出行專用接送</p>
+      </div>
+      <a href="tel:65714917" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-xl shadow-lg transition-all flex items-center gap-1.5">
+        📞 <span>6571 4917</span>
+      </a>
+    </div>
+
+    <!-- 澳門獸醫診所完整名冊 -->
+    <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h2 class="text-2xl font-bold text-white">🏥 澳門獸醫診所名冊</h2>
+          <p class="text-xs text-[#86868b] mt-1">全澳/氹仔診所電話、營業時間與地址一覽</p>
+        </div>
+        <span class="text-xs bg-red-500/20 text-red-400 px-3 py-1 rounded-full border border-red-500/30">緊急通訊</span>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl">
+          <p class="text-xs font-bold text-red-400 mb-3 flex items-center gap-1.5">
+            <span>🚨</span> 24 小時營業急診診所：
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
+              <div>
+                <p class="font-bold text-white">皇家診所 (澳門)</p>
+                <p class="text-[10px] text-[#86868b] mt-0.5">皇朝巴黎街182號南岸花園地下</p>
+              </div>
+              <a href="tel:28501099" class="px-2.5 py-1 bg-red-500/20 text-red-300 font-semibold rounded-lg border border-red-500/40">2850 1099</a>
+            </div>
+            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
+              <div>
+                <p class="font-bold text-white">愛加倍診所 (澳門)</p>
+                <p class="text-[10px] text-[#86868b] mt-0.5">交加炮台馬路1A號建設花園GF樓</p>
+              </div>
+              <a href="tel:28524005" class="px-2.5 py-1 bg-red-500/20 text-red-300 font-semibold rounded-lg border border-red-500/40">2852 4005</a>
+            </div>
+            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
+              <div>
+                <p class="font-bold text-white">藍澳 (渡船街)</p>
+                <p class="text-[10px] text-[#86868b] mt-0.5">柯利維喇街31A 雅興大廈地下</p>
+              </div>
+              <a href="tel:28550121" class="px-2.5 py-1 bg-red-500/20 text-red-300 font-semibold rounded-lg border border-red-500/40">2855 0121</a>
+            </div>
+            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
+              <div>
+                <p class="font-bold text-white">綠十字 (氹仔)</p>
+                <p class="text-[10px] text-[#86868b] mt-0.5">馬拉松圓形地37號美景花園第五園AK</p>
+              </div>
+              <a href="tel:28837050" class="px-2.5 py-1 bg-red-500/20 text-red-300 font-semibold rounded-lg border border-red-500/40">2883 7050</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+          <div class="p-3.5 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
+            <div>
+              <p class="font-bold text-white">澳門寵物醫院</p>
+              <p class="text-[10px] text-amber-400 font-medium">09:00 AM - 10:00 PM</p>
+              <p class="text-[10px] text-[#86868b] mt-0.5">賈伯樂提督街3-5號富康花園I-J舖</p>
+            </div>
+            <a href="tel:28332262" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2833 2262</a>
+          </div>
+          <div class="p-3.5 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
+            <div>
+              <p class="font-bold text-white">東望洋診所</p>
+              <p class="text-[10px] text-amber-400 font-medium">12:00 PM - 09:00 PM</p>
+              <p class="text-[10px] text-[#86868b] mt-0.5">高冠街5B號,帶成樓地下A</p>
+            </div>
+            <a href="tel:28336833" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2833 6833</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
