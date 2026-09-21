@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hazel’s Website - Apple Style 🐾</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif; }
     .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
@@ -17,7 +16,7 @@
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
     <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] font-normal overflow-x-auto">
       <div class="flex items-center gap-5 min-w-max">
-        <a href="index.html" class="text-white hover:text-amber-400 font-semibold transition-colors flex items-center gap-1.5">
+        <a href="index.html" class="text-white font-semibold hover:text-amber-400 transition-colors flex items-center gap-1.5">
           <span>🐾</span> <span>Hazel</span>
         </a>
         <a href="potty.html" class="hover:text-white transition-colors">散步打卡</a>
@@ -44,7 +43,7 @@
       </div>
 
       <label for="photo-upload" class="absolute top-4 right-4 bg-black/60 hover:bg-black/90 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full border border-white/20 cursor-pointer transition-all flex items-center gap-1.5 shadow-lg">
-        📷 <span id="upload-status">更換相片 (雲端同步)</span>
+        📷 <span id="upload-status">更換相片</span>
         <input type="file" id="photo-upload" accept="image/*" class="hidden">
       </label>
     </div>
@@ -52,7 +51,7 @@
     <div>
       <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-4 text-white">Hazel’s Website</h1>
       <p class="text-base md:text-lg text-[#86868b] leading-relaxed font-normal">
-        這裡是一個充滿愛心的小角落，專屬於我們的狗狗 Hazel 🐶。她在 2025 年正式加入我們的家庭，本來以為是一隻金毛，結果卻是可愛的拉布拉多，帶來了更多驚喜與歡笑。在這個網站，你可以找到 Hazel 的所有生活點滴：她的故事、照片、健康記錄，還有我們每天的溫馨分享。希望大家能一起陪伴她、喜歡她，送上滿滿的祝福，願 Hazel 永遠健康快樂 💖。
+        這裡是一個充滿愛心的小角落，專屬於我們的狗狗 Hazel 🐶。她在 2025 年正式加入我們的家庭，本來以為是一隻金毛，結果卻是可愛的拉布拉多，帶來了更多驚喜與歡笑。在這個網站，你可以找到 Hazel 的所有生活點滴：她的故事、照片、健康記錄，還有我們每天的溫馨分享[span_0](start_span)[span_0](end_span)。希望大家能一起陪伴她、喜歡她，送上滿滿的祝福，願 Hazel 永遠健康快樂 💖。
       </p>
     </div>
 
@@ -66,38 +65,69 @@
   <script>
     const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
     const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const photoUpload = document.getElementById('photo-upload');
     const photoContainer = document.getElementById('photo-container');
     const defaultAvatar = document.getElementById('default-avatar');
 
-    async function loadCloudPhoto() {
-      const { data } = await supabase.from('site_settings').select('value').eq('key', 'hazel_hero_photo').single();
-      if (data && data.value) {
-        photoContainer.style.backgroundImage = `url(${data.value})`;
+    // 載入本地或雲端照片
+    function loadSavedPhoto() {
+      const localPhoto = localStorage.getItem('hazel_custom_photo');
+      if (localPhoto) {
+        photoContainer.style.backgroundImage = `url(${localPhoto})`;
         defaultAvatar.classList.add('hidden');
       }
+
+      // 背景嘗試向 Supabase 獲取最新的照片
+      fetch(`${SUPABASE_URL}/rest/v1/site_settings?key=eq.hazel_hero_photo`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data && data[0] && data[0].value) {
+          photoContainer.style.backgroundImage = `url(${data[0].value})`;
+          defaultAvatar.classList.add('hidden');
+          localStorage.setItem('hazel_custom_photo', data[0].value);
+        }
+      }).catch(e => console.log('Photo cloud fetch background'));
     }
 
+    // 相片更換上傳（本地即時變更 + 背景傳送 Supabase）
     photoUpload.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
-        document.getElementById('upload-status').innerText = '上傳中...';
+        document.getElementById('upload-status').innerText = '更換中...';
         const reader = new FileReader();
-        reader.onload = async function(event) {
+        reader.onload = function(event) {
           const imgData = event.target.result;
+          
+          // 1. 立刻在畫面展示並寫入本地（零延遲）
           photoContainer.style.backgroundImage = `url(${imgData})`;
           defaultAvatar.classList.add('hidden');
-          await supabase.from('site_settings').upsert({ key: 'hazel_hero_photo', value: imgData });
-          document.getElementById('upload-status').innerText = '更換相片 (雲端同步)';
-          alert('相片已成功儲存至 Supabase 雲端！女朋友打開網頁也能看到了。');
+          localStorage.setItem('hazel_custom_photo', imgData);
+          document.getElementById('upload-status').innerText = '更換相片';
+
+          // 2. 背景傳送到 Supabase 雲端
+          fetch(`${SUPABASE_URL}/rest/v1/site_settings`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify({ key: 'hazel_hero_photo', value: imgData })
+          }).then(() => {
+            alert('相片已成功儲存！');
+          }).catch(() => {
+            alert('相片已儲存至本地！');
+          });
         };
         reader.readAsDataURL(file);
       }
     });
 
-    loadCloudPhoto();
+    window.onload = loadSavedPhoto;
   </script>
 </body>
 </html>
