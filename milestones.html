@@ -1,1 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-HANT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>里程碑 - Hazel’s Website 🐾</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
+    .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  </style>
+</head>
+<body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
+
+  <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
+    <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] overflow-x-auto">
+      <div class="flex items-center gap-5 min-w-max">
+        <a href="index.html" class="hover:text-white transition-colors"><span>🐾</span> <span>Hazel</span></a>
+        <a href="potty.html" class="hover:text-white transition-colors">散步打卡</a>
+        <a href="medical.html" class="hover:text-white transition-colors">醫療紀錄</a>
+        <a href="allergies.html" class="hover:text-white transition-colors">過敏報告</a>
+        <a href="weight.html" class="hover:text-white transition-colors">體重追蹤</a>
+        <a href="milestones.html" class="text-white font-semibold hover:text-amber-400 transition-colors">里程碑</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-6">
+    <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl space-y-6">
+      <div>
+        <h2 class="text-2xl font-bold text-white">⏳ Hazel 重要里程碑</h2>
+        <p class="text-xs text-[#86868b] mt-1">紀錄 Hazel 的成長難忘時刻，雙人雲端同步</p>
+      </div>
+
+      <!-- 新增里程碑表單 -->
+      <div class="bg-[#1c1c1e] p-4 rounded-2xl border border-[#38383a]">
+        <h3 class="text-xs font-semibold text-amber-300 mb-3 flex items-center gap-1.5">✨ 新增里程碑時刻</h3>
+        <div class="space-y-3 mb-3">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-[10px] text-[#86868b] mb-1 block">日期：</label>
+              <input type="text" id="ms-date" placeholder="例如: 2026.10.01" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+            <div>
+              <label class="text-[10px] text-[#86868b] mb-1 block">標題 / 事件：</label>
+              <input type="text" id="ms-title" placeholder="例如: 第一次去海邊" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+          </div>
+          <div>
+            <label class="text-[10px] text-[#86868b] mb-1 block">故事細節：</label>
+            <input type="text" id="ms-desc" placeholder="例如: 玩水超開心，回家睡了大半天！" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+          </div>
+        </div>
+        <button type="button" id="save-milestone" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 active:scale-98 text-black font-bold rounded-xl text-xs transition-all shadow-md cursor-pointer">
+          新增里程碑至雲端
+        </button>
+      </div>
+
+      <div class="relative pl-6 border-l-2 border-amber-500/40 space-y-8 text-xs" id="milestone-timeline">
+        載入里程碑中...
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
+
+    const defaultMilestones = [
+      { event_date: '2025.04.12 🎂', title: 'Hazel 誕生（白羊座小狗）', description: '小女王來到這個世界的日子！' },
+      { event_date: '2025.10.25 🏡', title: '正式加入我們的家庭', description: '本來以為是一隻金毛，結果是可愛的拉布拉多！' },
+      { event_date: '2026.07.28 ✂️', title: '順利完成絕育與洗牙手術', description: '非常勇敢，康復速度驚人！' }
+    ];
+
+    async function loadCloudMilestones() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones?select=*&order=created_at.asc`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const data = await res.json();
+        const records = (data && data.length > 0) ? data : defaultMilestones;
+
+        document.getElementById('milestone-timeline').innerHTML = records.map(m => `
+          <div class="relative">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-[#161617]"></div>
+            <p class="font-bold text-amber-400 text-sm">${m.event_date}</p>
+            <p class="text-white font-semibold text-sm mt-1">${m.title}</p>
+            <p class="text-[#86868b] mt-0.5">${m.description || ''}</p>
+          </div>
+        `).join('');
+      } catch(e) { console.log('Load milestones error', e); }
+    }
+
+    document.getElementById('save-milestone').onclick = async function() {
+      const date = document.getElementById('ms-date').value.trim();
+      const title = document.getElementById('ms-title').value.trim();
+      const desc = document.getElementById('ms-desc').value.trim();
+
+      if (!date || !title) { alert("請填寫日期與標題！"); return; }
+
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        },
+        body: JSON.stringify({ event_date: date, title: title, description: desc })
+      });
+
+      if (res.ok) {
+        alert("✨ 新里程碑已成功儲存至 Supabase 雲端！");
+        document.getElementById('ms-date').value = '';
+        document.getElementById('ms-title').value = '';
+        document.getElementById('ms-desc').value = '';
+        loadCloudMilestones();
+      } else {
+        alert("儲存失敗！");
+      }
+    };
+
+    window.onload = loadCloudMilestones;
+  </script>
+</body>
+</html>
 
