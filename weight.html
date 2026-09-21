@@ -1,1 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-HANT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>體重追蹤 - Hazel’s Website 🐾</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif; }
+    .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  </style>
+</head>
+<body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
 
+  <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
+    <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2]">
+      <div class="flex items-center gap-5 min-w-max">
+        <a href="index.html" class="hover:text-white transition-colors"><span>🐾</span> <span>Hazel</span></a>
+        <a href="potty.html" class="hover:text-white transition-colors">散步打卡</a>
+        <a href="medical.html" class="hover:text-white transition-colors">醫療紀錄</a>
+        <a href="allergies.html" class="hover:text-white transition-colors">過敏報告</a>
+        <a href="weight.html" class="text-white font-semibold hover:text-amber-400 transition-colors">體重追蹤</a>
+        <a href="milestones.html" class="hover:text-white transition-colors">里程碑</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-6">
+    <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl space-y-6">
+      <div>
+        <h2 class="text-2xl font-bold text-white">⚖️ 體重追蹤 (Apple Health 風格)</h2>
+        <p class="text-xs text-[#86868b] mt-1">手動紀錄 Hazel 體重變化，雙人雲端即時同步</p>
+      </div>
+
+      <!-- 新增體重輸入框 -->
+      <div class="bg-[#1c1c1e] p-4 rounded-2xl border border-[#38383a]">
+        <h3 class="text-xs font-semibold text-amber-300 mb-3 flex items-center gap-1.5"><span>📝</span> 新增體重紀錄</h3>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label class="text-[10px] text-[#86868b] mb-1 block">日期 / 時間點：</label>
+            <input type="text" id="weight-date" placeholder="例如: 09/22" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+          </div>
+          <div>
+            <label class="text-[10px] text-[#86868b] mb-1 block">體重 (kg)：</label>
+            <input type="number" step="0.1" id="weight-value" placeholder="例如: 22.0" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+          </div>
+        </div>
+        <button type="button" id="save-weight" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-md cursor-pointer">
+          上傳並儲存體重紀錄至雲端
+        </button>
+      </div>
+
+      <div class="bg-[#000000] p-4 rounded-2xl border border-[#333336]">
+        <canvas id="weightChart" height="200"></canvas>
+      </div>
+
+      <div>
+        <p class="text-xs text-[#86868b] mb-2">📋 歷史體重數據：</p>
+        <div id="weight-history-list" class="space-y-2 text-xs">載入中...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let weightChart = null;
+
+    async function loadCloudWeight() {
+      const { data, error } = await supabase.from('weight_logs').select('*').order('created_at', { ascending: true });
+      
+      let records = (data && data.length > 0) ? data : [
+        { date_label: '一個月前', weight: 22.5 },
+        { date_label: '現在', weight: 22.0 }
+      ];
+
+      const historyContainer = document.getElementById('weight-history-list');
+      historyContainer.innerHTML = records.map(r => `
+        <div class="bg-[#1c1c1e] p-2.5 rounded-xl border border-[#38383a] flex justify-between items-center">
+          <span class="text-white font-medium">${r.date_label}</span>
+          <span class="text-amber-400 font-bold">${r.weight} kg</span>
+        </div>
+      `).join('');
+
+      const ctx = document.getElementById('weightChart').getContext('2d');
+      if (weightChart) weightChart.destroy();
+      weightChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: records.map(r => r.date_label),
+          datasets: [{
+            label: '體重 (kg)',
+            data: records.map(r => r.weight),
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245, 158, 11, 0.15)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: '#f59e0b',
+            pointRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#86868b', font: { size: 11 } } },
+            y: { grid: { color: '#333336' }, ticks: { color: '#86868b', font: { size: 11 } } }
+          }
+        }
+      });
+    }
+
+    document.getElementById('save-weight').onclick = async () => {
+      const dateInput = document.getElementById('weight-date').value.trim();
+      const valueInput = parseFloat(document.getElementById('weight-value').value);
+
+      if (!dateInput || isNaN(valueInput)) { alert("請輸入有效的日期與體重數值！"); return; }
+
+      const { error } = await supabase.from('weight_logs').insert([{ date_label: dateInput, weight: valueInput }]);
+      
+      if (error) {
+        alert("儲存失敗，請確保 Supabase 的 SQL 已經成功執行！");
+      } else {
+        alert("體重紀錄已成功儲存至 Supabase 雲端！");
+        document.getElementById('weight-date').value = '';
+        document.getElementById('weight-value').value = '';
+        loadCloudWeight();
+      }
+    };
+
+    loadCloudWeight();
+  </script>
+</body>
+</html>
