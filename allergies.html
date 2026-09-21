@@ -9,25 +9,16 @@
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
     .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
     
-    /* 可愛又高級的微浮動動畫 (Smooth Floating Animation) */
+    /* 微浮動動畫 (Smooth Floating Animation) */
     @keyframes floatSlow {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-8px) rotate(1.5deg); }
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
     }
-    @keyframes floatReverse {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-10px) rotate(-1.5deg); }
-    }
-    .animate-float-1 { animation: floatSlow 4s ease-in-out infinite; }
-    .animate-float-2 { animation: floatReverse 4.5s ease-in-out infinite 0.5s; }
-    .animate-float-3 { animation: floatSlow 3.8s ease-in-out infinite 1s; }
-    .animate-float-4 { animation: floatReverse 4.2s ease-in-out infinite 1.5s; }
-    .animate-float-5 { animation: floatSlow 4.6s ease-in-out infinite 0.8s; }
+    .animate-float { animation: floatSlow 4s ease-in-out infinite; }
   </style>
 </head>
 <body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
 
-  <!-- 頂部獨立分頁導覽列 -->
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
     <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] overflow-x-auto">
       <div class="flex items-center gap-5 min-w-max">
@@ -43,66 +34,45 @@
 
   <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-8">
     
-    <!-- 1. Hazel 最愛美食 (卡片 + 3D 圖案浮動效果) -->
-    <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl relative overflow-hidden">
-      <div class="flex justify-between items-center mb-6">
+    <!-- 1. Hazel 最愛美食 (自由上載 + 雲端同步) -->
+    <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl space-y-6">
+      <div class="flex justify-between items-center">
         <div>
           <h2 class="text-2xl font-bold text-amber-300 flex items-center gap-2">
             <span>🥰</span> Hazel 最愛吃的食物
           </h2>
-          <p class="text-xs text-[#86868b] mt-1">安全、美味且營養的獎勵小零食</p>
+          <p class="text-xs text-[#86868b] mt-1">安全、美味且營養的獎勵小零食，雙人雲端同步</p>
         </div>
-        <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20 font-semibold">健康美味</span>
+        <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20 font-semibold">自訂美食卡片</span>
       </div>
 
-      <!-- 5大最愛美食展示網格 -->
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-        
-        <!-- 香蕉 -->
-        <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-3 flex flex-col items-center text-center animate-float-1 group hover:border-amber-400/50 transition-all">
-          <div class="w-20 h-20 mb-2 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
-            <img src="https://i.ibb.co/L14X0xT/banana.jpg" alt="香蕉" class="w-full h-full object-cover">
+      <!-- 手動新增/上載美食卡片表單 -->
+      <div class="bg-[#1c1c1e] p-4 rounded-2xl border border-[#38383a]">
+        <h3 class="text-xs font-semibold text-amber-300 mb-3 flex items-center gap-1.5">
+          <span>➕</span> 新增 / 上載最愛美食
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+          <div>
+            <label class="text-[10px] text-[#86868b] mb-1 block">食物名稱：</label>
+            <input type="text" id="food-name" placeholder="例如: 🍌 香蕉 或 🍎 蘋果" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
           </div>
-          <span class="font-bold text-white text-xs">🍌 香蕉</span>
-          <span class="text-[10px] text-[#86868b] mt-0.5">香甜補鉀小零食</span>
-        </div>
-
-        <!-- 蘋果 -->
-        <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-3 flex flex-col items-center text-center animate-float-2 group hover:border-red-400/50 transition-all">
-          <div class="w-20 h-20 mb-2 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
-            <img src="https://i.ibb.co/SrtPqL3/apple.jpg" alt="蘋果" class="w-full h-full object-cover">
+          <div>
+            <label class="text-[10px] text-[#86868b] mb-1 block">口感 / 簡介：</label>
+            <input type="text" id="food-desc" placeholder="例如: 香甜補鉀小零食" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
           </div>
-          <span class="font-bold text-white text-xs">🍎 蘋果</span>
-          <span class="text-[10px] text-[#86868b] mt-0.5">爽脆清甜解饞</span>
-        </div>
-
-        <!-- 芝士 -->
-        <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-3 flex flex-col items-center text-center animate-float-3 group hover:border-amber-400/50 transition-all">
-          <div class="w-20 h-20 mb-2 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
-            <img src="https://i.ibb.co/3s8p62v/cheese.jpg" alt="芝士" class="w-full h-full object-cover">
+          <div>
+            <label class="text-[10px] text-[#86868b] mb-1 block">選擇美食圖片：</label>
+            <input type="file" id="food-img-input" accept="image/*" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-2 py-1.5 text-xs text-white focus:outline-none file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-[10px] file:bg-amber-500 file:text-black font-semibold">
           </div>
-          <span class="font-bold text-white text-xs">🧀 芝士</span>
-          <span class="text-[10px] text-[#86868b] mt-0.5">濃郁奶香極致誘惑</span>
         </div>
+        <button type="button" id="save-food" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 active:scale-98 text-black font-bold rounded-xl text-xs transition-all shadow-md cursor-pointer">
+          上傳並建立美食卡片
+        </button>
+      </div>
 
-        <!-- 乳酪 -->
-        <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-3 flex flex-col items-center text-center animate-float-4 group hover:border-blue-400/50 transition-all">
-          <div class="w-20 h-20 mb-2 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
-            <img src="https://i.ibb.co/9vB34Xz/yogurt.jpg" alt="乳酪" class="w-full h-full object-cover">
-          </div>
-          <span class="font-bold text-white text-xs">🥣 乳酪</span>
-          <span class="text-[10px] text-[#86868b] mt-0.5">幫助腸道好消化</span>
-        </div>
-
-        <!-- 雞蛋 -->
-        <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-3 flex flex-col items-center text-center animate-float-5 group hover:border-yellow-400/50 transition-all col-span-2 md:col-span-1">
-          <div class="w-20 h-20 mb-2 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
-            <img src="https://i.ibb.co/p33mB73/egg.jpg" alt="雞蛋" class="w-full h-full object-cover">
-          </div>
-          <span class="font-bold text-white text-xs">🥚 雞蛋</span>
-          <span class="text-[10px] text-[#86868b] mt-0.5">優質蛋白質補充</span>
-        </div>
-
+      <!-- 美食網格卡片區塊 -->
+      <div id="food-grid" class="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <p class="text-[#86868b] text-xs col-span-full text-center py-4">載入美食列表中...</p>
       </div>
     </div>
 
@@ -119,40 +89,121 @@
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs">
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
-          <span>🦆</span> 鴨肉 / 鴨血 / 鴨腸
-        </div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
-          <span>🦃</span> 火雞肉 Turkey
-        </div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
-          <span>🐷</span> 豬耳朵 Pig Ear
-        </div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
-          <span>🥩</span> 生肉 Rawhide
-        </div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
-          <span>🐟</span> 魚油 Fish Oil
-        </div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
-          <span>🍍</span> 菠蘿 / 山楂
-        </div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
-          <span>🥣</span> 燕麥 / 義大利麵
-        </div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
-          <span>🥛</span> 希臘酸奶 / 鮮奶油
-        </div>
-      </div>
-
-      <div class="mt-6 p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a]">
-        <p class="text-xs text-amber-300 font-medium flex items-center gap-2">
-          <span>💡 貼心提醒：</span> 購買零食或主糧前請先核對以上忌口清單，愛護 Hazel 健康！
-        </p>
+        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🦆</span> 鴨肉 / 鴨血 / 鴨腸</div>
+        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🦃</span> 火雞肉 Turkey</div>
+        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🐷</span> 豬耳朵 Pig Ear</div>
+        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🥩</span> 生肉 Rawhide</div>
+        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🐟</span> 魚油 Fish Oil</div>
+        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🍍</span> 菠蘿 / 山楂</div>
+        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🥣</span> 燕麥 / 義大利麵</div>
+        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🥛</span> 希臘酸奶 / 鮮奶油</div>
       </div>
     </div>
 
   </div>
 
+  <script>
+    const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
+
+    // 載入美食卡片
+    async function loadFoods() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?key=like.hazel_food_%`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const data = await res.json();
+        const container = document.getElementById('food-grid');
+
+        if (!data || data.length === 0) {
+          container.innerHTML = `<p class="text-[#86868b] text-xs col-span-full text-center py-4">目前還沒有上傳美食，快在上方新增 Hazel 最愛吃的食物吧！</p>`;
+          return;
+        }
+
+        container.innerHTML = data.map(item => {
+          const foodInfo = JSON.parse(item.value);
+          return `
+            <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-3 flex flex-col items-center text-center animate-float group hover:border-amber-400/50 transition-all relative">
+              <button type="button" onclick="deleteFood('${item.key}')" class="absolute top-1.5 right-1.5 text-[10px] text-red-400 bg-red-500/10 hover:bg-red-500/20 rounded-full w-5 h-5 flex items-center justify-center cursor-pointer">✕</button>
+              <div class="w-20 h-20 mb-2 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform bg-[#2c2c2e]">
+                <img src="${foodInfo.img}" alt="${foodInfo.name}" class="w-full h-full object-cover">
+              </div>
+              <span class="font-bold text-white text-xs">${foodInfo.name}</span>
+              <span class="text-[10px] text-[#86868b] mt-0.5">${foodInfo.desc}</span>
+            </div>
+          `;
+        }).join('');
+      } catch(e) { console.log('Load foods error', e); }
+    }
+
+    // 上傳並新增美食 (圖片會自動進行壓縮，確保 100% 寫入 Supabase)
+    document.getElementById('save-food').onclick = function() {
+      const name = document.getElementById('food-name').value.trim();
+      const desc = document.getElementById('food-desc').value.trim();
+      const fileInput = document.getElementById('food-img-input');
+
+      if (!name || !fileInput.files[0]) {
+        alert("請填寫食物名稱並選擇一張圖片！");
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          // 畫布壓縮圖片尺寸
+          const canvas = document.createElement('canvas');
+          const max_size = 400;
+          let width = img.width, height = img.height;
+          if (width > height) { if (width > max_size) { height *= max_size / width; width = max_size; } }
+          else { if (height > max_size) { width *= max_size / height; height = max_size; } }
+          canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedImg = canvas.toDataURL('image/jpeg', 0.8);
+
+          const foodKey = `hazel_food_${Date.now()}`;
+          const foodValue = JSON.stringify({ name: name, desc: desc, img: compressedImg });
+
+          fetch(`${SUPABASE_URL}/rest/v1/site_settings`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify({ key: foodKey, value: foodValue })
+          }).then(res => {
+            if (res.ok) {
+              alert("✨ 美食卡片已成功上傳並同步至雲端！");
+              document.getElementById('food-name').value = '';
+              document.getElementById('food-desc').value = '';
+              document.getElementById('food-img-input').value = '';
+              loadFoods();
+            } else {
+              alert("上傳失敗，請重試！");
+            }
+          });
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    };
+
+    // 刪除美食卡片
+    async function deleteFood(key) {
+      if (!confirm("確定要刪除這張美食卡片嗎？")) return;
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?key=eq.${key}`, {
+        method: 'DELETE',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      if (res.ok) loadFoods();
+    }
+
+    window.onload = loadFoods;
+  </script>
 </body>
 </html>
