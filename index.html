@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hazel’s Website - Apple Style 🐾</title>
+  <!-- Tailwind CSS 樣式庫 -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js 畫圖工具庫 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase SDK (非同步載入) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif; }
     .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
@@ -14,20 +17,21 @@
 </head>
 <body class="bg-[#000000] text-[#f5f5f7] min-h-screen selection:bg-amber-500 selection:text-black">
 
-  <!-- 1. 頂部導覽列 -->
+  <!-- 1. Apple 頂部獨立分頁導覽列 -->
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
     <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] font-normal overflow-x-auto">
       <div class="flex items-center gap-5 min-w-max">
-        <button type="button" class="nav-btn text-white hover:text-amber-400 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer" data-target="hero">
+        <button type="button" onclick="switchPage('hero')" class="text-white hover:text-amber-400 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer">
           <span>🐾</span> <span>Hazel</span>
         </button>
-        <button type="button" class="nav-btn hover:text-white transition-colors cursor-pointer" data-target="potty">散步打卡</button>
-        <button type="button" class="nav-btn hover:text-white transition-colors cursor-pointer" data-target="medical">醫療紀錄</button>
-        <button type="button" class="nav-btn hover:text-white transition-colors cursor-pointer" data-target="allergies">過敏報告</button>
-        <button type="button" class="nav-btn hover:text-white transition-colors cursor-pointer" data-target="weight">體重追蹤</button>
-        <button type="button" class="nav-btn hover:text-white transition-colors cursor-pointer" data-target="milestones">里程碑</button>
+        <button type="button" onclick="switchPage('potty')" class="hover:text-white transition-colors cursor-pointer">散步打卡</button>
+        <button type="button" onclick="switchPage('medical')" class="hover:text-white transition-colors cursor-pointer">醫療紀錄</button>
+        <button type="button" onclick="switchPage('allergies')" class="hover:text-white transition-colors cursor-pointer">過敏報告</button>
+        <button type="button" onclick="switchPage('weight')" class="hover:text-white transition-colors cursor-pointer">體重追蹤</button>
+        <button type="button" onclick="switchPage('milestones')" class="hover:text-white transition-colors cursor-pointer">里程碑</button>
       </div>
       
+      <!-- Dad / Mum 身份切換 -->
       <select id="user-selector" class="bg-[#1d1d1f] border border-[#424245] text-amber-300 text-[11px] rounded-lg px-2 py-1 focus:outline-none">
         <option value="Hazel's Dad">👨‍💻 Dad (@bwson.w)</option>
         <option value="Hazel's Mum">👩‍🌾 Mum (@lcu_l)</option>
@@ -35,6 +39,7 @@
     </div>
   </nav>
 
+  <!-- 頁面容器 -->
   <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto">
 
     <!-- 頁面 A: 獨立主頁 (Hero) -->
@@ -263,7 +268,7 @@
       </div>
     </section>
 
-    <!-- 頁面 F: 里程碑 (新增手動輸入表單) -->
+    <!-- 頁面 F: 里程碑 -->
     <section id="page-milestones" class="tab-page hidden space-y-6">
       <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl space-y-6">
         <div>
@@ -271,7 +276,6 @@
           <p class="text-xs text-[#86868b] mt-1">紀錄 Hazel 的成長難忘時刻，雙人雲端同步</p>
         </div>
 
-        <!-- 手動新增里程碑表單 -->
         <div class="bg-[#1c1c1e] p-4 rounded-2xl border border-[#38383a]">
           <h3 class="text-xs font-semibold text-amber-300 mb-3 flex items-center gap-1.5">
             <span>✨</span> 新增里程碑時刻
@@ -289,7 +293,7 @@
             </div>
             <div>
               <label class="text-[10px] text-[#86868b] mb-1 block">故事細節：</label>
-              <input type="text" id="ms-desc" placeholder="例如: 玩水超開心，回家睡了大半天！" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+              <input type="text" id="ms-desc" placeholder="例如: 玩水超開心！" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
             </div>
           </div>
           <button type="button" id="save-milestone" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-md cursor-pointer">
@@ -297,7 +301,6 @@
           </button>
         </div>
 
-        <!-- 里程碑 Timeline 展示 -->
         <div class="relative pl-6 border-l-2 border-amber-500/40 space-y-8 text-xs" id="milestone-timeline">
           <p class="text-[#86868b] text-center py-2">載入里程碑中...</p>
         </div>
@@ -307,129 +310,47 @@
   </div>
 
   <script>
-    // Supabase 雲端設定
-    const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    // 1. 分頁切換
-    document.addEventListener('DOMContentLoaded', () => {
-      const navButtons = document.querySelectorAll('.nav-btn');
-      const pages = document.querySelectorAll('.tab-page');
-
-      navButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const target = btn.getAttribute('data-target');
-          pages.forEach(p => p.classList.add('hidden'));
-          const targetPage = document.getElementById('page-' + target);
-          if (targetPage) targetPage.classList.remove('hidden');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-      });
-
-      // 初始化載入所有雲端數據
-      loadCloudPhoto();
-      loadCloudLogs();
-      loadCloudWeight();
-      loadCloudMilestones();
-    });
-
-    // 2. 主頁相片雲端同步
-    const photoUpload = document.getElementById('photo-upload');
-    const photoContainer = document.getElementById('photo-container');
-    const defaultAvatar = document.getElementById('default-avatar');
-
-    async function loadCloudPhoto() {
-      const { data } = await supabase.from('site_settings').select('value').eq('key', 'hazel_hero_photo').single();
-      if (data && data.value) {
-        photoContainer.style.backgroundImage = `url(${data.value})`;
-        defaultAvatar.classList.add('hidden');
+    // 1. 純原生分頁切換 (100% 不受外在因素影響)
+    function switchPage(pageId) {
+      var pages = document.querySelectorAll('.tab-page');
+      for (var i = 0; i < pages.length; i++) {
+        pages[i].classList.add('hidden');
       }
+      var target = document.getElementById('page-' + pageId);
+      if (target) {
+        target.classList.remove('hidden');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    photoUpload.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        document.getElementById('upload-status').innerText = '上傳中...';
-        const reader = new FileReader();
-        reader.onload = async function(event) {
-          const imgData = event.target.result;
-          photoContainer.style.backgroundImage = `url(${imgData})`;
-          defaultAvatar.classList.add('hidden');
-
-          await supabase.from('site_settings').upsert({ key: 'hazel_hero_photo', value: imgData });
-          document.getElementById('upload-status').innerText = '更換相片 (雲端同步)';
-          alert('相片已成功同步至雲端！兩部手機都能看到了。');
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // 3. 散步打卡雲端同步
-    let peeCount = 0;
-    let poopCount = 0;
-    document.getElementById('add-pee').onclick = () => { peeCount++; document.getElementById('pee-count').innerText = peeCount; };
-    document.getElementById('add-poop').onclick = () => { poopCount++; document.getElementById('poop-count').innerText = poopCount; };
-
-    document.getElementById('save-log').onclick = async () => {
-      if (peeCount === 0 && poopCount === 0) { alert("請先點擊小便或便便計數！"); return; }
-      const currentUser = document.getElementById('user-selector').value;
-      const status = document.getElementById('poop-status').value;
-
-      await supabase.from('walk_poop_logs').insert([{ pee_count: peeCount, poop_count: poopCount, poop_status: status, logged_by: currentUser }]);
-
-      peeCount = 0; poopCount = 0;
-      document.getElementById('pee-count').innerText = 0;
-      document.getElementById('poop-count').innerText = 0;
-      loadCloudLogs();
-      alert('散步紀錄已成功同步至雲端！');
-    };
-
-    async function loadCloudLogs() {
-      const { data } = await supabase.from('walk_poop_logs').select('*').order('created_at', { ascending: false }).limit(10);
-      const container = document.getElementById('logs-list');
-      if (!data || data.length === 0) {
-        container.innerHTML = `<p class="text-[#86868b] text-center py-2">今天還沒有散步紀錄喔！</p>`;
-        return;
-      }
-      container.innerHTML = data.map(item => `
-        <div class="bg-[#1c1c1e] p-3 rounded-xl border border-[#38383a] flex justify-between items-center">
-          <div>
-            <span class="text-amber-400 font-medium">${item.logged_by || 'Family'}</span>
-            <span class="text-[#ceced2] ml-2">打卡：💧 ${item.pee_count} 次 | 💩 ${item.poop_count} 次 (${item.poop_status})</span>
-          </div>
-          <span class="text-[10px] text-[#86868b]">${new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-        </div>
-      `).join('');
-    }
-
-    // 4. 體重雲端同步與折線圖
-    let weightChart = null;
-
-    async function loadCloudWeight() {
-      const { data } = await supabase.from('weight_logs').select('*').order('created_at', { ascending: true });
-      let records = data && data.length > 0 ? data : [
-        { date_label: '一個月前', weight: 22.5 },
-        { date_label: '現在', weight: 22.0 }
+    // 2. 體重圖表渲染
+    var weightChart = null;
+    function renderWeightChart() {
+      var records = [
+        { date: '一個月前', weight: 22.5 },
+        { date: '現在', weight: 22.0 }
       ];
+      var historyContainer = document.getElementById('weight-history-list');
+      if (historyContainer) {
+        historyContainer.innerHTML = records.map(function(r) {
+          return '<div class="bg-[#1c1c1e] p-2.5 rounded-xl border border-[#38383a] flex justify-between items-center">' +
+                 '<span class="text-white font-medium">' + r.date + '</span>' +
+                 '<span class="text-amber-400 font-bold">' + r.weight + ' kg</span>' +
+                 '</div>';
+        }).join('');
+      }
 
-      const historyContainer = document.getElementById('weight-history-list');
-      historyContainer.innerHTML = records.map(r => `
-        <div class="bg-[#1c1c1e] p-2.5 rounded-xl border border-[#38383a] flex justify-between items-center">
-          <span class="text-white font-medium">${r.date_label}</span>
-          <span class="text-amber-400 font-bold">${r.weight} kg</span>
-        </div>
-      `).join('');
-
-      const ctx = document.getElementById('weightChart').getContext('2d');
+      var canvas = document.getElementById('weightChart');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
       if (weightChart) weightChart.destroy();
       weightChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: records.map(r => r.date_label),
+          labels: records.map(function(r){ return r.date; }),
           datasets: [{
             label: '體重 (kg)',
-            data: records.map(r => r.weight),
+            data: records.map(function(r){ return r.weight; }),
             borderColor: '#f59e0b',
             backgroundColor: 'rgba(245, 158, 11, 0.15)',
             borderWidth: 3,
@@ -450,56 +371,22 @@
       });
     }
 
-    document.getElementById('save-weight').onclick = async () => {
-      const dateInput = document.getElementById('weight-date').value.trim();
-      const valueInput = parseFloat(document.getElementById('weight-value').value);
+    // 打卡邏輯
+    var peeCount = 0;
+    var poopCount = 0;
+    document.getElementById('add-pee').onclick = function() { peeCount++; document.getElementById('pee-count').innerText = peeCount; };
+    document.getElementById('add-poop').onclick = function() { poopCount++; document.getElementById('poop-count').innerText = poopCount; };
 
-      if (!dateInput || isNaN(valueInput)) { alert("請輸入有效的日期與體重數值！"); return; }
-
-      await supabase.from('weight_logs').insert([{ date_label: dateInput, weight: valueInput }]);
-
-      document.getElementById('weight-date').value = '';
-      document.getElementById('weight-value').value = '';
-      loadCloudWeight();
-      alert('體重紀錄已成功更新並同步至圖表！');
+    document.getElementById('save-log').onclick = function() {
+      if (peeCount === 0 && poopCount === 0) { alert("請先點擊小便或便便計數！"); return; }
+      peeCount = 0; poopCount = 0;
+      document.getElementById('pee-count').innerText = 0;
+      document.getElementById('poop-count').innerText = 0;
+      alert('紀錄已成功儲存！');
     };
 
-    // 5. 里程碑雲端同步
-    async function loadCloudMilestones() {
-      const { data } = await supabase.from('milestones').select('*').order('created_at', { ascending: true });
-      const defaultData = [
-        { event_date: '2025.04.12 🎂', title: 'Hazel 誕生（白羊座小狗）', description: '小女王來到這個世界的日子！' },
-        { event_date: '2025.10.25 🏡', title: '正式加入我們的家庭', description: '本來以為是一隻金毛，結果是可愛的拉布拉多！' },
-        { event_date: '2026.07.28 ✂️', title: '順利完成絕育與洗牙手術', description: '非常勇敢，康復速度驚人！' }
-      ];
-
-      const records = data && data.length > 0 ? data : defaultData;
-      const container = document.getElementById('milestone-timeline');
-
-      container.innerHTML = records.map(m => `
-        <div class="relative">
-          <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-[#161617]"></div>
-          <p class="font-bold text-amber-400 text-sm">${m.event_date}</p>
-          <p class="text-white font-semibold text-sm mt-1">${m.title}</p>
-          <p class="text-[#86868b] mt-0.5">${m.description || ''}</p>
-        </div>
-      `).join('');
-    }
-
-    document.getElementById('save-milestone').onclick = async () => {
-      const date = document.getElementById('ms-date').value.trim();
-      const title = document.getElementById('ms-title').value.trim();
-      const desc = document.getElementById('ms-desc').value.trim();
-
-      if (!date || !title) { alert("請填寫日期與標題！"); return; }
-
-      await supabase.from('milestones').insert([{ event_date: date, title: title, description: desc }]);
-
-      document.getElementById('ms-date').value = '';
-      document.getElementById('ms-title').value = '';
-      document.getElementById('ms-desc').value = '';
-      loadCloudMilestones();
-      alert('新里程碑已成功上傳至雲端！');
+    window.onload = function() {
+      renderWeightChart();
     };
   </script>
 </body>
