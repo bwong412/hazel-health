@@ -6,38 +6,52 @@
   <title>Hazel Wong Space 🐾</title>
   <!-- Tailwind CSS 樣式庫 -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js 畫圖工具庫（用於體重折線圖） -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-amber-500 selection:text-black">
 
-  <!-- Hazel 主頁 Dashboard (免登入直達) -->
+  <!-- 頂部 Hero & Header 區塊 -->
   <div class="max-w-md mx-auto p-4 pb-20">
     
-    <!-- 頂部 Header & 身份切換器 -->
-    <header class="flex justify-between items-center py-4 border-b border-slate-800 mb-6">
+    <!-- 頂部身份與簡介卡片 -->
+    <header class="flex justify-between items-center py-4 border-b border-slate-800/80 mb-6">
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-full bg-amber-500/20 border-2 border-amber-400/50 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(251,191,36,0.2)]">
+        <div class="w-12 h-12 rounded-full bg-amber-500/20 border-2 border-amber-400/50 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(251,191,36,0.25)]">
           🐶
         </div>
         <div>
-          <h1 class="text-lg font-bold text-amber-100">Hazel Wong 🐾</h1>
-          <p class="text-xs text-slate-400">Labrador Retriever • 榛子醬女王</p>
+          <h1 class="text-lg font-bold text-amber-100 tracking-wide">Hazel Wong 🐾</h1>
+          <p class="text-[11px] text-slate-400">Macau Labrador • ESFP 🌵 植物破壞王</p>
         </div>
       </div>
       
-      <!-- 身份切換按鈕 -->
-      <select id="user-selector" class="bg-slate-900 border border-amber-500/40 text-amber-300 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none">
-        <option value="Hazel's Dad">👨‍💻 Hazel's Dad</option>
-        <option value="Hazel's Mum">👩‍🌾 Hazel's Mum</option>
+      <!-- Dad / Mum 身份切換 -->
+      <select id="user-selector" class="bg-slate-900 border border-amber-500/40 text-amber-300 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none shadow-md">
+        <option value="Hazel's Dad">👨‍💻 Dad (@bwson.w)</option>
+        <option value="Hazel's Mum">👩‍🌾 Mum (@lcu_l)</option>
       </select>
     </header>
 
-    <!-- 1. 散步與排泄打卡 (Poop & Pee Tracker) -->
+    <!-- 驅蟲與疫苗倒數提醒卡片 -->
+    <div class="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 rounded-2xl p-4 mb-6 shadow-lg flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">💊</span>
+        <div>
+          <p class="text-xs font-semibold text-amber-200">下次驅蟲 / 疫苗提醒</p>
+          <p class="text-[10px] text-slate-400">心絲蟲與體外驅蟲保養</p>
+        </div>
+      </div>
+      <span class="text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded-lg border border-amber-400/20">倒數 5 天</span>
+    </div>
+
+    <!-- 模組 1: 今日散步與排泄打卡 (7-Day Rolling) -->
     <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 mb-6 shadow-xl backdrop-blur-md">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-sm font-semibold text-amber-200 flex items-center gap-1.5">
           <span>💩</span> 今日散步與排泄打卡
         </h3>
-        <span class="text-[10px] text-slate-500 bg-slate-800/80 px-2 py-0.5 rounded-full">快取自動保留</span>
+        <span class="text-[10px] text-slate-500 bg-slate-800/80 px-2 py-0.5 rounded-full">自動保留 7 天</span>
       </div>
       
       <div class="grid grid-cols-2 gap-3 mb-4">
@@ -64,10 +78,9 @@
         儲存本次散步紀錄
       </button>
 
-      <!-- 最近動態紀錄 -->
       <div class="mt-5 pt-4 border-t border-slate-800">
         <div class="flex justify-between items-center mb-2">
-          <p class="text-[11px] text-slate-400 font-medium">📋 今日打卡紀錄：</p>
+          <p class="text-[11px] text-slate-400 font-medium">📋 最近打卡動態：</p>
           <button id="clear-logs" class="text-[10px] text-slate-500 hover:text-red-400">清空紀錄</button>
         </div>
         <div id="logs-list" class="space-y-2 text-xs text-slate-300">
@@ -76,12 +89,25 @@
       </div>
     </section>
 
-    <!-- 2. 醫療紀錄檔案 (Medical History) -->
+    <!-- 模組 2: 體重追蹤表 (Weight Tracker) -->
     <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 mb-6 shadow-xl">
       <h3 class="text-sm font-semibold mb-3 text-amber-200 flex items-center gap-1.5">
-        <span>🏥</span> 醫療紀錄與開支檔案
+        <span>⚖️</span> 體重追蹤 (Apple Health 風格)
       </h3>
-      <div class="space-y-2.5 text-xs">
+      <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80 mb-3">
+        <canvas id="weightChart" height="160"></canvas>
+      </div>
+      <p class="text-[10px] text-slate-400 text-center">理想體重區間：22 kg - 25 kg（拉布拉多標準）</p>
+    </section>
+
+    <!-- 模組 3: 醫療紀錄與澳門 24hr 急診診所名冊 -->
+    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 mb-6 shadow-xl">
+      <h3 class="text-sm font-semibold mb-3 text-amber-200 flex items-center gap-1.5">
+        <span>🏥</span> 看診紀錄與全澳診所名冊
+      </h3>
+      
+      <!-- 看診歷史 -->
+      <div class="space-y-2 text-xs mb-4">
         <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50 flex justify-between items-center">
           <div>
             <p class="font-semibold text-slate-200">🦴 右腳跛、照 X-Ray 開止痛藥</p>
@@ -104,32 +130,93 @@
           <span class="text-amber-400 font-bold bg-amber-400/10 px-2 py-1 rounded-lg border border-amber-400/20">666 MOP</span>
         </div>
       </div>
+
+      <!-- 澳門急診診所電話快捷撥號 -->
+      <div class="pt-3 border-t border-slate-800">
+        <p class="text-[11px] font-semibold text-red-400 mb-2 flex items-center gap-1">
+          🚨 澳門 24小時/緊急獸醫診所：
+        </p>
+        <div class="grid grid-cols-2 gap-2 text-[11px]">
+          <a href="tel:+85328832200" class="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 text-slate-200 block text-center">
+            📞 澳門獸醫醫院<br><span class="text-[9px] text-slate-400">2883 2200</span>
+          </a>
+          <a href="tel:+85328840228" class="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 text-slate-200 block text-center">
+            📞 氹仔動植物診所<br><span class="text-[9px] text-slate-400">2884 0228</span>
+          </a>
+        </div>
+      </div>
     </section>
 
-    <!-- 3. 食物過敏高危忌口名單 (Food Allergies) -->
+    <!-- 模組 4: 完整食物不耐受/忌口報告 (FluffBio™ 權威數據) -->
     <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 mb-6 shadow-xl">
-      <h3 class="text-sm font-semibold mb-3 text-red-400 flex items-center gap-1.5">
-        <span>🚫</span> 食物過敏高危忌口（絕對避坑）
-      </h3>
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="text-sm font-semibold text-red-400 flex items-center gap-1.5">
+          <span>🚫</span> 食物不耐受高危忌口
+        </h3>
+        <span class="text-[10px] text-slate-500">FluffBio™ 檢測</span>
+      </div>
+      
+      <p class="text-[11px] text-slate-400 mb-3">根據 300 項專業不耐受報告，以下食材需絕對避坑：</p>
+
       <div class="grid grid-cols-2 gap-2 text-[11px]">
         <div class="px-3 py-2 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
-          <span>🦆</span> 鴨肉 Duck
+          <span>🦆</span> 鴨肉 / 鴨血 / 鴨腸
         </div>
         <div class="px-3 py-2 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
           <span>🦃</span> 火雞肉 Turkey
         </div>
         <div class="px-3 py-2 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
+          <span>🐷</span> 豬耳朵 Pig Ear
+        </div>
+        <div class="px-3 py-2 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
+          <span>🥩</span> 生肉 Rawhide
+        </div>
+        <div class="px-3 py-2 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
           <span>🐟</span> 魚油 Fish Oil
         </div>
         <div class="px-3 py-2 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
-          <span>🌱</span> 亞麻籽 Flaxseed
+          <span>🍍</span> 菠蘿 / 山楂
         </div>
         <div class="px-3 py-2 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
-          <span>🥦</span> 花椰菜 Cauliflower
+          <span>🥣</span> 燕麥 / 意大利麵
         </div>
         <div class="px-3 py-2 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2">
-          <span>🍍</span> 菠蘿 Pineapple
+          <span>🥛</span> 希臘酸奶 / 鮮奶油
         </div>
+      </div>
+    </section>
+
+    <!-- 模組 5: 里程碑時間軸 (Milestones Timeline) -->
+    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 mb-6 shadow-xl">
+      <h3 class="text-sm font-semibold mb-4 text-amber-200 flex items-center gap-1.5">
+        <span>⏳</span> Hazel 重要里程碑 Timeline
+      </h3>
+      <div class="relative pl-6 border-l-2 border-amber-500/30 space-y-6 text-xs">
+        
+        <!-- 節點 1 -->
+        <div class="relative">
+          <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-slate-950 shadow-[0_0_10px_rgba(251,191,36,0.5)]"></div>
+          <p class="font-bold text-amber-300">2025.04.12 🎂</p>
+          <p class="text-slate-200 font-semibold mt-0.5">Hazel 誕生（白羊座小狗）</p>
+          <p class="text-[10px] text-slate-400">小女王來到這個世界的日子！</p>
+        </div>
+
+        <!-- 節點 2 -->
+        <div class="relative">
+          <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-slate-950"></div>
+          <p class="font-bold text-amber-300">2025.10.25 🏡</p>
+          <p class="text-slate-200 font-semibold mt-0.5">來到 Dad & Mum 身邊的第一天</p>
+          <p class="text-[10px] text-slate-400">正式成為 Hazel Wong，展開溫馨生活！</p>
+        </div>
+
+        <!-- 節點 3 -->
+        <div class="relative">
+          <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-slate-950"></div>
+          <p class="font-bold text-amber-300">2026.07.28 ✂️</p>
+          <p class="text-slate-200 font-semibold mt-0.5">順利完成絕育與洗牙手術</p>
+          <p class="text-[10px] text-slate-400">非常勇敢，康復速度驚人！</p>
+        </div>
+
       </div>
     </section>
 
@@ -200,6 +287,34 @@
       localStorage.removeItem('hazel_walk_logs');
       renderLogs();
     };
+
+    // 初始化 Apple Health 風格體重折線圖
+    const ctx = document.getElementById('weightChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['5月', '6月', '7月', '8月', '9月'],
+        datasets: [{
+          label: '體重 (kg)',
+          data: [18.5, 20.2, 21.8, 23.0, 23.5],
+          borderColor: '#f59e0b',
+          backgroundColor: 'rgba(245, 158, 11, 0.15)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#f59e0b',
+          pointRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+          y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+        }
+      }
+    });
 
     // 初始化
     renderLogs();
