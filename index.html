@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-HANT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hazel Wong Space 🐾</title>
+  <!-- 引入 Tailwind CSS（網頁高級感樣式） -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入 Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+
+  <!-- 1. 未登入：高級感 漂浮 Hero 頁面 + Login Form -->
+  <div id="login-section" class="flex flex-col items-center justify-center min-h-screen px-4">
+    <div class="text-center max-w-sm w-full bg-slate-900/80 p-8 rounded-3xl border border-slate-800 shadow-2xl backdrop-blur-md">
+      <!-- 漂浮 Hazel 頭像 -->
+      <div class="animate-bounce mb-6 inline-block">
+        <div class="w-24 h-24 rounded-full bg-amber-500/20 border-2 border-amber-400/50 flex items-center justify-center text-4xl shadow-[0_0_30px_rgba(251,191,36,0.3)]">
+          🐶
+        </div>
+      </div>
+      <h1 class="text-2xl font-bold tracking-tight mb-1 text-amber-100">Hazel Wong's Space</h1>
+      <p class="text-xs text-slate-400 mb-6">Hazel Dad & Mum Only 專屬空間</p>
+
+      <!-- 登入表單 -->
+      <form id="login-form" class="space-y-4">
+        <div>
+          <input id="email" type="email" placeholder="Email" required 
+            class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-sm focus:outline-none focus:border-amber-400 text-white">
+        </div>
+        <div>
+          <input id="password" type="password" placeholder="Password" required 
+            class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-sm focus:outline-none focus:border-amber-400 text-white">
+        </div>
+        <button type="submit" 
+          class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-sm transition-all shadow-lg shadow-amber-500/20">
+          登入帳號
+        </button>
+      </form>
+      <p id="error-msg" class="text-red-400 text-xs mt-3 hidden"></p>
+    </div>
+  </div>
+
+  <!-- 2. 登入後：Hazel 主頁 Dashboard -->
+  <div id="dashboard-section" class="hidden max-w-lg mx-auto p-4 pb-20">
+    <!-- 頂部 Header -->
+    <header class="flex justify-between items-center py-4 border-b border-slate-800 mb-6">
+      <div>
+        <h2 class="text-lg font-bold text-amber-400">Hazel Space 🐾</h2>
+        <p id="user-welcome" class="text-xs text-slate-400">歡迎回來！</p>
+      </div>
+      <button id="logout-btn" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700">登出</button>
+    </header>
+
+    <!-- 散步與排泄打卡 Widget -->
+    <section class="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-6 shadow-xl">
+      <h3 class="text-sm font-semibold mb-3 text-amber-200">💩 散步與排泄快速打卡</h3>
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <button id="add-pee" class="py-2.5 bg-blue-500/10 border border-blue-500/30 rounded-xl text-blue-400 text-sm font-medium">💧 小便 +1 (現: <span id="pee-count">0</span>)</button>
+        <button id="add-poop" class="py-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-400 text-sm font-medium">💩 便便 +1 (現: <span id="poop-count">0</span>)</button>
+      </div>
+      <button id="save-log" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-semibold">紀錄本次散步</button>
+    </section>
+
+    <!-- Hazel 基本資料與醫療摘要 -->
+    <section class="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-6">
+      <h3 class="text-sm font-semibold mb-2 text-amber-200">🏥 醫療摘要[span_0](start_span)[span_0](end_span)</h3>
+      <ul class="text-xs space-y-2 text-slate-300">
+        <li>🎂 生日：2025 年 4 月 12 日[span_1](start_span)[span_1](end_span)</li>
+        <li>💉 最近疫苗：2025-12 第二針 (250$ MOP)[span_2](start_span)[span_2](end_span)</li>
+        <li>✂️ 絕育洗牙：2026-07-28 (4,860$ MOP)[span_3](start_span)[span_3](end_span)</li>
+        <li>🦴 X-Ray：2026-09-22 右腳跛 (1,400$ MOP)[span_4](start_span)[span_4](end_span)</li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    // 填入你的 Supabase URL 與 Publishable Key
+    const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let peeCount = 0;
+    let poopCount = 0;
+
+    // 初始化：檢查是否已登入
+    async function checkUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('dashboard-section').classList.remove('hidden');
+        document.getElementById('user-welcome').innerText = `目前使用者：${user.email.includes('dad') ? "Hazel's Dad" : "Hazel's Mum"}`;
+      } else {
+        document.getElementById('login-section').classList.remove('hidden');
+        document.getElementById('dashboard-section').classList.add('hidden');
+      }
+    }
+
+    // 登入邏輯
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        document.getElementById('error-msg').innerText = "登入失敗：請檢查 Email 與密碼";
+        document.getElementById('error-msg').classList.remove('hidden');
+      } else {
+        checkUser();
+      }
+    });
+
+    // 登出邏輯
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      checkUser();
+    });
+
+    // 計數按鈕
+    document.getElementById('add-pee').onclick = () => { peeCount++; document.getElementById('pee-count').innerText = peeCount; };
+    document.getElementById('add-poop').onclick = () => { poopCount++; document.getElementById('poop-count').innerText = poopCount; };
+
+    checkUser();
+  </script>
+</body>
+</html>
