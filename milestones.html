@@ -12,6 +12,7 @@
 </head>
 <body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
 
+  <!-- 頂部獨立分頁導覽列 -->
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
     <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] overflow-x-auto">
       <div class="flex items-center gap-5 min-w-max">
@@ -56,6 +57,7 @@
         </button>
       </div>
 
+      <!-- 時間軸展示區塊 -->
       <div class="relative pl-6 border-l-2 border-amber-500/40 space-y-8 text-xs" id="milestone-timeline">
         載入里程碑中...
       </div>
@@ -67,30 +69,61 @@
     const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
 
     const defaultMilestones = [
-      { event_date: '2025.04.12 🎂', title: 'Hazel 誕生（白羊座小狗）', description: '小女王來到這個世界的日子！' },
-      { event_date: '2025.10.25 🏡', title: '正式加入我們的家庭', description: '本來以為是一隻金毛，結果是可愛的拉布拉多！' },
-      { event_date: '2026.07.28 ✂️', title: '順利完成絕育與洗牙手術', description: '非常勇敢，康復速度驚人！' }
+      { id: 'def1', event_date: '2025.04.12 🎂', title: 'Hazel 誕生（白羊座小狗）', description: '小女王來到這個世界的日子！' },
+      { id: 'def2', event_date: '2025.10.25 🏡', title: '正式加入我們的家庭', description: '本來以為是一隻金毛，結果是可愛的拉布拉多！' },
+      { id: 'def3', event_date: '2026.07.28 ✂️', title: '順利完成絕育與洗牙手術', description: '非常勇敢，康復速度驚人！' }
     ];
 
+    // 從 Supabase 載入里程碑
     async function loadCloudMilestones() {
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones?select=*&order=created_at.asc`, {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
         });
         const data = await res.json();
-        const records = (data && data.length > 0) ? data : defaultMilestones;
+        
+        // 過濾掉屬於醫療紀錄的資料（只顯示里程碑）
+        const filteredData = (data && data.length > 0) ? data.filter(d => !d.description || !d.description.includes('MOP')) : [];
+        const records = (filteredData.length > 0) ? filteredData : defaultMilestones;
 
         document.getElementById('milestone-timeline').innerHTML = records.map(m => `
-          <div class="relative">
+          <div class="relative group flex justify-between items-start gap-4">
             <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-[#161617]"></div>
-            <p class="font-bold text-amber-400 text-sm">${m.event_date}</p>
-            <p class="text-white font-semibold text-sm mt-1">${m.title}</p>
-            <p class="text-[#86868b] mt-0.5">${m.description || ''}</p>
+            <div>
+              <p class="font-bold text-amber-400 text-sm">${m.event_date}</p>
+              <p class="text-white font-semibold text-sm mt-1">${m.title}</p>
+              <p class="text-[#86868b] mt-0.5">${m.description || ''}</p>
+            </div>
+            ${m.id && !m.id.toString().startsWith('def') ? `
+              <button type="button" onclick="deleteMilestone(${m.id})" class="text-[11px] text-red-400/80 hover:text-red-400 bg-red-500/10 hover:bg-red-500/20 px-2.5 py-1 rounded-lg border border-red-500/20 transition-all cursor-pointer">
+                🗑️ 刪除
+              </button>
+            ` : ''}
           </div>
         `).join('');
       } catch(e) { console.log('Load milestones error', e); }
     }
 
+    // 刪除指定的里程碑紀錄
+    async function deleteMilestone(id) {
+      if (!confirm("確定要刪除這條里程碑紀錄嗎？")) return;
+
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones?id=eq.${id}`, {
+        method: 'DELETE',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+      });
+
+      if (res.ok) {
+        loadCloudMilestones();
+      } else {
+        alert("刪除失敗，請重試！");
+      }
+    }
+
+    // 新增里程碑儲存至 Supabase 雲端
     document.getElementById('save-milestone').onclick = async function() {
       const date = document.getElementById('ms-date').value.trim();
       const title = document.getElementById('ms-title').value.trim();
@@ -123,4 +156,3 @@
   </script>
 </body>
 </html>
-
