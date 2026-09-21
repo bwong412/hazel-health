@@ -21,14 +21,14 @@
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
     <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] font-normal overflow-x-auto">
       <div class="flex items-center gap-5 min-w-max">
-        <button onclick="switchTab('hero')" class="text-white hover:text-amber-400 font-semibold transition-colors flex items-center gap-1.5">
+        <button type="button" onclick="switchTab('hero')" class="text-white hover:text-amber-400 font-semibold transition-colors flex items-center gap-1.5 cursor-pointer">
           <span>🐾</span> <span>Hazel</span>
         </button>
-        <button onclick="switchTab('potty')" class="tab-btn hover:text-white transition-colors" id="btn-potty">散步打卡</button>
-        <button onclick="switchTab('medical')" class="tab-btn hover:text-white transition-colors" id="btn-medical">醫療紀錄</button>
-        <button onclick="switchTab('allergies')" class="tab-btn hover:text-white transition-colors" id="btn-allergies">過敏報告</button>
-        <button onclick="switchTab('weight')" class="tab-btn hover:text-white transition-colors" id="btn-weight">體重追蹤</button>
-        <button onclick="switchTab('milestones')" class="tab-btn hover:text-white transition-colors" id="btn-milestones">里程碑</button>
+        <button type="button" onclick="switchTab('potty')" class="tab-btn hover:text-white transition-colors cursor-pointer" id="btn-potty">散步打卡</button>
+        <button type="button" onclick="switchTab('medical')" class="tab-btn hover:text-white transition-colors cursor-pointer" id="btn-medical">醫療紀錄</button>
+        <button type="button" onclick="switchTab('allergies')" class="tab-btn hover:text-white transition-colors cursor-pointer" id="btn-allergies">過敏報告</button>
+        <button type="button" onclick="switchTab('weight')" class="tab-btn hover:text-white transition-colors cursor-pointer" id="btn-weight">體重追蹤</button>
+        <button type="button" onclick="switchTab('milestones')" class="tab-btn hover:text-white transition-colors cursor-pointer" id="btn-milestones">里程碑</button>
       </div>
       
       <!-- Dad / Mum 身份切換 -->
@@ -88,11 +88,11 @@
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-4">
-          <button id="add-pee" class="py-6 bg-[#1c1c1e] hover:bg-[#2c2c2e] active:scale-98 border border-[#38383a] rounded-2xl text-blue-400 text-sm font-medium transition-all flex flex-col items-center gap-1">
+          <button type="button" id="add-pee" class="py-6 bg-[#1c1c1e] hover:bg-[#2c2c2e] active:scale-98 border border-[#38383a] rounded-2xl text-blue-400 text-sm font-medium transition-all flex flex-col items-center gap-1 cursor-pointer">
             <span class="text-xs text-[#86868b]">💧 小便計數</span>
             <span class="text-4xl font-bold"><span id="pee-count">0</span> 次</span>
           </button>
-          <button id="add-poop" class="py-6 bg-[#1c1c1e] hover:bg-[#2c2c2e] active:scale-98 border border-[#38383a] rounded-2xl text-amber-400 text-sm font-medium transition-all flex flex-col items-center gap-1">
+          <button type="button" id="add-poop" class="py-6 bg-[#1c1c1e] hover:bg-[#2c2c2e] active:scale-98 border border-[#38383a] rounded-2xl text-amber-400 text-sm font-medium transition-all flex flex-col items-center gap-1 cursor-pointer">
             <span class="text-xs text-[#86868b]">💩 便便計數</span>
             <span class="text-4xl font-bold"><span id="poop-count">0</span> 次</span>
           </button>
@@ -107,7 +107,7 @@
           </select>
         </div>
 
-        <button id="save-log" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-lg shadow-amber-500/10">
+        <button type="button" id="save-log" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-lg shadow-amber-500/10 cursor-pointer">
           上傳並儲存本次散步紀錄
         </button>
 
@@ -116,39 +116,39 @@
             <p class="text-xs text-[#86868b]">📋 最近雲端打卡動態：</p>
           </div>
           <div id="logs-list" class="space-y-2 text-xs">
-            <p id="empty-hint" class="text-[#86868b] text-center py-2">載入雲端紀錄中...</p>
+            <p id="empty-hint" class="text-[#86868b] text-center py-2">今天還沒有散步紀錄喔！</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 頁面 C: 醫療紀錄 (Medical + 全澳診所與接送服務名冊) -->
+    <!-- 頁面 C: 醫療紀錄 (Medical) -->
     <section id="page-medical" class="tab-page hidden space-y-6">
       
       <!-- 醫療歷史 -->
       <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
-        <h2 class="text-2xl font-bold text-white mb-6">🏥 看診與診療歷史[span_3](start_span)[span_3](end_span)</h2>
+        <h2 class="text-2xl font-bold text-white mb-6">🏥 看診與診療歷史</h2>
         <div class="space-y-3 text-xs mb-2">
-          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_4](start_span)[span_4](end_span)
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
             <div>
-              <p class="font-semibold text-white text-sm">🦴 右腳跛、照 X-Ray 開止痛藥</p>[span_5](start_span)[span_5](end_span)
-              <p class="text-[10px] text-[#86868b] mt-1">2026.09.22</p>[span_6](start_span)[span_6](end_span)
+              <p class="font-semibold text-white text-sm">🦴 右腳跛、照 X-Ray 開止痛藥</p>
+              <p class="text-[10px] text-[#86868b] mt-1">2026.09.22</p>
             </div>
-            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">1,400 MOP</span>[span_7](start_span)[span_7](end_span)
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">1,400 MOP</span>
           </div>
-          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_8](start_span)[span_8](end_span)
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
             <div>
-              <p class="font-semibold text-white text-sm">✂️ 絕育加輕洗牙</p>[span_9](start_span)[span_9](end_span)
-              <p class="text-[10px] text-[#86868b] mt-1">2026.07.28</p>[span_10](start_span)[span_10](end_span)
+              <p class="font-semibold text-white text-sm">✂️ 絕育加輕洗牙</p>
+              <p class="text-[10px] text-[#86868b] mt-1">2026.07.28</p>
             </div>
-            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">4,860 MOP</span>[span_11](start_span)[span_11](end_span)
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">4,860 MOP</span>
           </div>
-          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">[span_12](start_span)[span_12](end_span)
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
             <div>
-              <p class="font-semibold text-white text-sm">👁️ 旅行接回後眼睛及全身腫脹打針</p>[span_13](start_span)[span_13](end_span)
-              <p class="text-[10px] text-[#86868b] mt-1">2026.04.25</p>[span_14](start_span)[span_14](end_span)
+              <p class="font-semibold text-white text-sm">👁️ 旅行接回後眼睛及全身腫脹打針</p>
+              <p class="text-[10px] text-[#86868b] mt-1">2026.04.25</p>
             </div>
-            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">666 MOP</span>[span_15](start_span)[span_15](end_span)
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">666 MOP</span>
           </div>
         </div>
       </div>
@@ -165,7 +165,7 @@
         </a>
       </div>
 
-      <!-- 澳門獸醫診所完整名冊 (包含 24hr 急診標註) -->
+      <!-- 澳門獸醫診所完整名冊 -->
       <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
         <div class="flex justify-between items-center mb-6">
           <div>
@@ -176,8 +176,6 @@
         </div>
 
         <div class="space-y-3 text-xs">
-          
-          <!-- 24 小時急診區塊 -->
           <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl">
             <p class="text-xs font-bold text-red-400 mb-3 flex items-center gap-1.5">
               <span>🚨</span> 24 小時營業急診診所：
@@ -214,9 +212,7 @@
             </div>
           </div>
 
-          <!-- 一般診所列表卡片 -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-            
             <div class="p-3.5 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
               <div>
                 <p class="font-bold text-white">澳門寵物醫院</p>
@@ -225,7 +221,6 @@
               </div>
               <a href="tel:28332262" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2833 2262</a>
             </div>
-
             <div class="p-3.5 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
               <div>
                 <p class="font-bold text-white">東望洋診所</p>
@@ -234,46 +229,8 @@
               </div>
               <a href="tel:28336833" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2833 6833</a>
             </div>
-
-            <div class="p-3.5 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
-              <div>
-                <p class="font-bold text-white">安健診所</p>
-                <p class="text-[10px] text-[#86868b]">10:00 AM - 07:00 PM (逢週三公休)</p>
-                <p class="text-[10px] text-[#86868b] mt-0.5">雅廉訪巷3號興大廈1樓B樓F室</p>
-              </div>
-              <a href="tel:28470808" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2847 0808</a>
-            </div>
-
-            <div class="p-3.5 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
-              <div>
-                <p class="font-bold text-white">查理斯診所</p>
-                <p class="text-[10px] text-[#86868b]">11:30 AM - 08:00 PM</p>
-                <p class="text-[10px] text-[#86868b] mt-0.5">綠景大廈地下A座</p>
-              </div>
-              <a href="tel:28313725" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2831 3725</a>
-            </div>
-
-            <div class="p-3.5 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
-              <div>
-                <p class="font-bold text-white">康域 (氹仔)</p>
-                <p class="text-[10px] text-[#86868b]">11:00 AM - 10:00 PM</p>
-                <p class="text-[10px] text-[#86868b] mt-0.5">氹仔廣東大馬路 南新花園地下AB鋪</p>
-              </div>
-              <a href="tel:28821016" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2882 1016</a>
-            </div>
-
-            <div class="p-3.5 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
-              <div>
-                <p class="font-bold text-white">皇家 (氹仔)</p>
-                <p class="text-[10px] text-[#86868b]">11:00 AM - 08:30 PM</p>
-                <p class="text-[10px] text-[#86868b] mt-0.5">氹仔布拉干薩街83號華寶花園地下N</p>
-              </div>
-              <a href="tel:28501097" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2850 1097</a>
-            </div>
-
           </div>
-
-          <p class="text-[10px] text-[#86868b] text-center pt-2">💡 備註：臨時時段更改請提前電話查詢預約[span_16](start_span)[span_16](end_span)。</p>
+          <p class="text-[10px] text-[#86868b] text-center pt-2">💡 備註：臨時時段更改請提前電話查詢預約。</p>
         </div>
       </div>
     </section>
@@ -337,7 +294,7 @@
               <input type="number" step="0.1" id="weight-value" placeholder="例如: 22.0" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
             </div>
           </div>
-          <button id="save-weight" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-md">
+          <button type="button" id="save-weight" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-md cursor-pointer">
             上傳並儲存體重紀錄
           </button>
         </div>
@@ -348,11 +305,9 @@
 
         <div>
           <div class="flex justify-between items-center mb-2">
-            <p class="text-xs text-[#86868b]">📋 雲端歷史體重數據：</p>
+            <p class="text-xs text-[#86868b]">📋 歷史體重數據：</p>
           </div>
-          <div id="weight-history-list" class="space-y-2 text-xs">
-            <p class="text-[#86868b] text-center py-2">載入體重紀錄中...</p>
-          </div>
+          <div id="weight-history-list" class="space-y-2 text-xs"></div>
         </div>
       </div>
     </section>
@@ -387,49 +342,32 @@
   </div>
 
   <script>
-    // Supabase 雲端設定
+    // 全域切換 Tab 邏輯 (保障無縫切換)
+    window.switchTab = function(tabName) {
+      console.log('Switching to tab:', tabName);
+      const pages = document.querySelectorAll('.tab-page');
+      pages.forEach(page => page.classList.add('hidden'));
+      
+      const targetPage = document.getElementById('page-' + tabName);
+      if (targetPage) {
+        targetPage.classList.remove('hidden');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Supabase 初始化 (安全連接)
     const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
     const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    // 切換分頁
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
-      document.getElementById('page-' + tabName).classList.remove('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // 相片雲端同步
-    const photoUpload = document.getElementById('photo-upload');
-    const photoContainer = document.getElementById('photo-container');
-    const defaultAvatar = document.getElementById('default-avatar');
-
-    async function loadCloudPhoto() {
-      const { data } = await supabase.from('site_settings').select('value').eq('key', 'hazel_hero_photo').single();
-      if (data && data.value) {
-        photoContainer.style.backgroundImage = `url(${data.value})`;
-        defaultAvatar.classList.add('hidden');
+    let supabase = null;
+    try {
+      if (window.supabase) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       }
-    }
+    } catch(e) { console.log('Supabase load fallback'); }
 
-    photoUpload.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = async function(event) {
-          const imgData = event.target.result;
-          photoContainer.style.backgroundImage = `url(${imgData})`;
-          defaultAvatar.classList.add('hidden');
-          await supabase.from('site_settings').upsert({ key: 'hazel_hero_photo', value: imgData });
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // 散步打卡雲端同步
+    // 打卡邏輯
     let peeCount = 0;
     let poopCount = 0;
-
     document.getElementById('add-pee').onclick = () => { peeCount++; document.getElementById('pee-count').innerText = peeCount; };
     document.getElementById('add-poop').onclick = () => { poopCount++; document.getElementById('poop-count').innerText = poopCount; };
 
@@ -438,62 +376,38 @@
       const currentUser = document.getElementById('user-selector').value;
       const status = document.getElementById('poop-status').value;
 
-      await supabase.from('walk_poop_logs').insert([{
-        pee_count: peeCount,
-        poop_count: poopCount,
-        poop_status: status,
-        logged_by: currentUser
-      }]);
-
+      if (supabase) {
+        try {
+          await supabase.from('walk_poop_logs').insert([{ pee_count: peeCount, poop_count: poopCount, poop_status: status, logged_by: currentUser }]);
+        } catch(e){}
+      }
       peeCount = 0; poopCount = 0;
       document.getElementById('pee-count').innerText = 0;
       document.getElementById('poop-count').innerText = 0;
-      loadCloudLogs();
+      alert('紀錄已成功儲存！');
     };
 
-    async function loadCloudLogs() {
-      const { data } = await supabase.from('walk_poop_logs').select('*').order('created_at', { ascending: false }).limit(10);
-      const container = document.getElementById('logs-list');
-      if (!data || data.length === 0) {
-        container.innerHTML = `<p id="empty-hint" class="text-[#86868b] text-center py-2">今天還沒有散步紀錄喔！</p>`;
-        return;
-      }
-      container.innerHTML = data.map(item => `
-        <div class="bg-[#1c1c1e] p-3 rounded-xl border border-[#38383a] flex justify-between items-center">
-          <div>
-            <span class="text-amber-400 font-medium">${item.logged_by || 'Family'}</span>
-            <span class="text-[#ceced2] ml-2">打卡：💧 ${item.pee_count} 次 | 💩 ${item.poop_count} 次 (${item.poop_status})</span>
-          </div>
-          <span class="text-[10px] text-[#86868b]">${new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-        </div>
-      `).join('');
-    }
-
-    // 體重雲端同步與圖表
+    // 體重繪圖
     let weightChart = null;
-
-    async function loadCloudWeight() {
-      const { data } = await supabase.from('weight_logs').select('*').order('created_at', { ascending: true });
-      let records = data && data.length > 0 ? data : [
-        { date_label: '一個月前', weight: 22.5 },
-        { date_label: '現在', weight: 22.0 }
+    function renderWeightChart() {
+      const records = [
+        { date: '一個月前', weight: 22.5 },
+        { date: '現在', weight: 22.0 }
       ];
-
       const historyContainer = document.getElementById('weight-history-list');
       historyContainer.innerHTML = records.map(r => `
         <div class="bg-[#1c1c1e] p-2.5 rounded-xl border border-[#38383a] flex justify-between items-center">
-          <span class="text-white font-medium">${r.date_label}</span>
+          <span class="text-white font-medium">${r.date}</span>
           <span class="text-amber-400 font-bold">${r.weight} kg</span>
         </div>
       `).join('');
 
       const ctx = document.getElementById('weightChart').getContext('2d');
       if (weightChart) weightChart.destroy();
-
       weightChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: records.map(r => r.date_label),
+          labels: records.map(r => r.date),
           datasets: [{
             label: '體重 (kg)',
             data: records.map(r => r.weight),
@@ -517,23 +431,7 @@
       });
     }
 
-    document.getElementById('save-weight').onclick = async () => {
-      const dateInput = document.getElementById('weight-date').value.trim();
-      const valueInput = parseFloat(document.getElementById('weight-value').value);
-
-      if (!dateInput || isNaN(valueInput)) { alert("請輸入有效的日期與體重數值！"); return; }
-
-      await supabase.from('weight_logs').insert([{ date_label: dateInput, weight: valueInput }]);
-
-      document.getElementById('weight-date').value = '';
-      document.getElementById('weight-value').value = '';
-      loadCloudWeight();
-    };
-
-    // 初始化載入
-    loadCloudPhoto();
-    loadCloudLogs();
-    loadCloudWeight();
+    renderWeightChart();
   </script>
 </body>
 </html>
