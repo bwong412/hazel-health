@@ -3,172 +3,152 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>過敏與美食報告 - Hazel’s Website 🐾</title>
+  <title>醫療紀錄 - Hazel’s Website 🐾</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
     .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-    
-    /* Nothing Phone 點陣微呼吸燈效果 */
-    @keyframes glyphPulse {
-      0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.4)); }
-      50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.8)); }
-    }
-    .glyph-dot { animation: glyphPulse 3s ease-in-out infinite; }
   </style>
 </head>
 <body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
 
-  <!-- 頂部獨立分頁導覽列 -->
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
     <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] overflow-x-auto">
       <div class="flex items-center gap-5 min-w-max">
         <a href="index.html" class="hover:text-white transition-colors"><span>🐾</span> <span>Hazel</span></a>
         <a href="potty.html" class="hover:text-white transition-colors">散步打卡</a>
-        <a href="medical.html" class="hover:text-white transition-colors">醫療紀錄</a>
-        <a href="allergies.html" class="text-white font-semibold hover:text-amber-400 transition-colors">過敏報告</a>
+        <a href="medical.html" class="text-white font-semibold hover:text-amber-400 transition-colors">醫療紀錄</a>
+        <a href="allergies.html" class="hover:text-white transition-colors">過敏報告</a>
         <a href="weight.html" class="hover:text-white transition-colors">體重追蹤</a>
         <a href="milestones.html" class="hover:text-white transition-colors">里程碑</a>
       </div>
     </div>
   </nav>
 
-  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-8">
+  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-6">
     
-    <!-- 1. Hazel 最愛美食 (Nothing Phone 點陣矩陣風格) -->
+    <!-- 看診歷史區塊 -->
     <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl space-y-6">
-      <div class="flex justify-between items-center">
-        <div>
-          <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-            <span>🥰</span> Hazel 最愛吃的食物
-          </h2>
-          <p class="text-xs text-[#86868b] mt-1">Nothing Style (Dot-Matrix) 點陣幾何食物矩陣</p>
-        </div>
-        <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20 font-mono tracking-widest">DOT-MATRIX</span>
+      <div>
+        <h2 class="text-2xl font-bold text-white">🏥 看診與診療歷史</h2>
+        <p class="text-xs text-[#86868b] mt-1">紀錄 Hazel 的看診原因、費用與診所地點，雙人雲端同步</p>
       </div>
 
-      <!-- 5 大核心美食 點陣卡片展示區 -->
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-        
-        <!-- 香蕉 🍌 (Dot Matrix SVG) -->
-        <div class="bg-[#1c1c1e] border border-[#38383a] hover:border-amber-400/60 rounded-2xl p-4 flex flex-col items-center text-center transition-all group">
-          <div class="w-16 h-16 mb-2 rounded-xl bg-black border border-[#333336] flex items-center justify-center glyph-dot">
-            <svg class="w-10 h-10 text-amber-400 fill-current" viewBox="0 0 24 24">
-              <rect x="6" y="4" width="2" height="2"/>
-              <rect x="8" y="6" width="2" height="2"/>
-              <rect x="10" y="8" width="2" height="2"/>
-              <rect x="12" y="10" width="2" height="4"/>
-              <rect x="10" y="14" width="2" height="4"/>
-              <rect x="8" y="16" width="2" height="2"/>
-              <rect x="6" y="18" width="2" height="2"/>
-            </svg>
-          </div>
-          <span class="font-bold text-white text-xs mt-1">🍌 香蕉</span>
-          <span class="text-[10px] text-[#86868b] mt-0.5 font-mono">Banana</span>
-        </div>
-
-        <!-- 蘋果 🍎 (Dot Matrix SVG) -->
-        <div class="bg-[#1c1c1e] border border-[#38383a] hover:border-red-400/60 rounded-2xl p-4 flex flex-col items-center text-center transition-all group">
-          <div class="w-16 h-16 mb-2 rounded-xl bg-black border border-[#333336] flex items-center justify-center glyph-dot">
-            <svg class="w-10 h-10 text-red-400 fill-current" viewBox="0 0 24 24">
-              <rect x="11" y="3" width="2" height="3"/>
-              <rect x="8" y="6" width="8" height="2"/>
-              <rect x="6" y="8" width="12" height="8"/>
-              <rect x="8" y="16" width="8" height="2"/>
-            </svg>
-          </div>
-          <span class="font-bold text-white text-xs mt-1">🍎 蘋果</span>
-          <span class="text-[10px] text-[#86868b] mt-0.5 font-mono">Apple</span>
-        </div>
-
-        <!-- 芝士 🧀 (Dot Matrix SVG) -->
-        <div class="bg-[#1c1c1e] border border-[#38383a] hover:border-amber-400/60 rounded-2xl p-4 flex flex-col items-center text-center transition-all group">
-          <div class="w-16 h-16 mb-2 rounded-xl bg-black border border-[#333336] flex items-center justify-center glyph-dot">
-            <svg class="w-10 h-10 text-amber-300 fill-current" viewBox="0 0 24 24">
-              <rect x="14" y="5" width="2" height="2"/>
-              <rect x="10" y="8" width="8" height="2"/>
-              <rect x="6" y="11" width="14" height="2"/>
-              <rect x="4" y="14" width="18" height="4"/>
-            </svg>
-          </div>
-          <span class="font-bold text-white text-xs mt-1">🧀 芝士</span>
-          <span class="text-[10px] text-[#86868b] mt-0.5 font-mono">Cheese</span>
-        </div>
-
-        <!-- 乳酪 🥣 (Dot Matrix SVG) -->
-        <div class="bg-[#1c1c1e] border border-[#38383a] hover:border-blue-400/60 rounded-2xl p-4 flex flex-col items-center text-center transition-all group">
-          <div class="w-16 h-16 mb-2 rounded-xl bg-black border border-[#333336] flex items-center justify-center glyph-dot">
-            <svg class="w-10 h-10 text-blue-400 fill-current" viewBox="0 0 24 24">
-              <rect x="7" y="7" width="10" height="2"/>
-              <rect x="5" y="9" width="14" height="6"/>
-              <rect x="8" y="15" width="8" height="2"/>
-            </svg>
-          </div>
-          <span class="font-bold text-white text-xs mt-1">🥣 乳酪</span>
-          <span class="text-[10px] text-[#86868b] mt-0.5 font-mono">Yogurt</span>
-        </div>
-
-        <!-- 雞蛋 🥚 (Dot Matrix SVG) -->
-        <div class="bg-[#1c1c1e] border border-[#38383a] hover:border-yellow-400/60 rounded-2xl p-4 flex flex-col items-center text-center transition-all group col-span-2 md:col-span-1">
-          <div class="w-16 h-16 mb-2 rounded-xl bg-black border border-[#333336] flex items-center justify-center glyph-dot">
-            <svg class="w-10 h-10 text-yellow-100 fill-current" viewBox="0 0 24 24">
-              <rect x="10" y="4" width="4" height="2"/>
-              <rect x="8" y="6" width="8" height="3"/>
-              <rect x="6" y="9" width="12" height="8"/>
-              <rect x="8" y="17" width="8" height="2"/>
-            </svg>
-          </div>
-          <span class="font-bold text-white text-xs mt-1">🥚 雞蛋</span>
-          <span class="text-[10px] text-[#86868b] mt-0.5 font-mono">Egg</span>
-        </div>
-
-      </div>
-
-      <!-- 手動新增文字備註零食 -->
+      <!-- 手動新增看診紀錄表單 -->
       <div class="bg-[#1c1c1e] p-4 rounded-2xl border border-[#38383a]">
         <h3 class="text-xs font-semibold text-amber-300 mb-3 flex items-center gap-1.5">
-          <span>➕</span> 新增更多 Hazel 喜愛小零食 (純文字即時雲端儲存)
+          <span>📝</span> 新增 / 修正看診紀錄
         </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-          <div>
-            <label class="text-[10px] text-[#86868b] mb-1 block">零食名稱：</label>
-            <input type="text" id="food-name" placeholder="例如: 🍠 風乾番薯條" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+        <div class="space-y-3 mb-3">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-[10px] text-[#86868b] mb-1 block">看診日期：</label>
+              <input type="text" id="med-date" placeholder="例如: 2026.09.22" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+            <div>
+              <label class="text-[10px] text-[#86868b] mb-1 block">診療原因 / 項目：</label>
+              <input type="text" id="med-title" placeholder="例如: 🦴 右腳跛、照 X-Ray" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
           </div>
-          <div>
-            <label class="text-[10px] text-[#86868b] mb-1 block">備註簡介：</label>
-            <input type="text" id="food-desc" placeholder="例如: 咬勁十足，訓練專用" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-[10px] text-[#86868b] mb-1 block">📍 看診診所 / 地點：</label>
+              <input type="text" id="med-location" placeholder="例如: 皇家診所 (皇朝) 或 綠十字" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+            <div>
+              <label class="text-[10px] text-[#86868b] mb-1 block">費用 (MOP)：</label>
+              <input type="text" id="med-cost" placeholder="例如: 1,400 MOP" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
           </div>
         </div>
-        <button type="button" id="save-food" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 active:scale-98 text-black font-bold rounded-xl text-xs transition-all shadow-md cursor-pointer">
-          新增至喜愛清單
+        <button type="button" id="save-medical" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 active:scale-98 text-black font-bold rounded-xl text-xs transition-all shadow-md cursor-pointer">
+          上傳並儲存看診紀錄至雲端
         </button>
       </div>
 
-      <!-- 自訂清單展示 -->
-      <div id="custom-food-list" class="space-y-2 text-xs"></div>
+      <!-- 雲端動態看診歷史列表 (含 🗑️ 刪除按鈕) -->
+      <div id="medical-list" class="space-y-3 text-xs">
+        載入醫療紀錄中...
+      </div>
     </div>
 
-    <!-- 2. 食安中心 / 高危忌口清單 -->
+    <!-- 24h 寵物接送服務專線 -->
+    <div class="bg-gradient-to-r from-amber-500/20 via-[#161617] to-[#161617] border border-amber-500/40 rounded-3xl p-6 shadow-2xl flex items-center justify-between">
+      <div>
+        <span class="text-xs font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-2.5 py-1 rounded-md border border-amber-400/30">Petber 專車</span>
+        <h3 class="text-lg font-bold text-white mt-2">🚗 24h 澳門寵物接送服務</h3>
+        <p class="text-xs text-[#86868b] mt-1">緊急看診、日常出行專用接送</p>
+      </div>
+      <a href="tel:65714917" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-xl shadow-lg transition-all flex items-center gap-1.5">
+        📞 <span>6571 4917</span>
+      </a>
+    </div>
+
+    <!-- 澳門獸醫診所完整名冊 -->
     <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
       <div class="flex justify-between items-center mb-6">
         <div>
-          <h2 class="text-2xl font-bold text-red-400 flex items-center gap-2">
-            <span>🚫</span> 食安中心 - 高危忌口名單
-          </h2>
-          <p class="text-xs text-[#86868b] mt-1">Hazel 需嚴格避免採購與餵食之食材</p>
+          <h2 class="text-2xl font-bold text-white">🏥 澳門獸醫診所名冊</h2>
+          <p class="text-xs text-[#86868b] mt-1">全澳/氹仔診所電話、營業時間與地址一覽</p>
         </div>
-        <span class="text-xs bg-red-500/10 text-red-400 px-3 py-1 rounded-full border border-red-500/20 font-semibold">FluffBio™ 300項檢測</span>
+        <span class="text-xs bg-red-500/20 text-red-400 px-3 py-1 rounded-full border border-red-500/30">緊急通訊</span>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs">
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🦆</span> 鴨肉 / 鴨血 / 鴨腸</div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🦃</span> 火雞肉 Turkey</div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🐷</span> 豬耳朵 Pig Ear</div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🥩</span> 生肉 Rawhide</div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🐟</span> 魚油 Fish Oil</div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🍍</span> 菠蘿 / 山楂</div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🥣</span> 燕麥 / 義大利麵</div>
-        <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl flex items-center gap-2"><span>🥛</span> 希臘酸奶 / 鮮奶油</div>
+      <div class="space-y-3 text-xs">
+        <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl">
+          <p class="text-xs font-bold text-red-400 mb-3 flex items-center gap-1.5">
+            <span>🚨</span> 24 小時營業急診診所：
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
+              <div>
+                <p class="font-bold text-white">皇家診所 (澳門)</p>
+                <p class="text-[10px] text-[#86868b] mt-0.5">皇朝巴黎街182號南岸花園地下</p>
+              </div>
+              <a href="tel:28501099" class="px-2.5 py-1 bg-red-500/20 text-red-300 font-semibold rounded-lg border border-red-500/40">2850 1099</a>
+            </div>
+            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
+              <div>
+                <p class="font-bold text-white">愛加倍診所 (澳門)</p>
+                <p class="text-[10px] text-[#86868b] mt-0.5">交加炮台馬路1A號建設花園GF樓</p>
+              </div>
+              <a href="tel:28524005" class="px-2.5 py-1 bg-red-500/20 text-red-300 font-semibold rounded-lg border border-red-500/40">2852 4005</a>
+            </div>
+            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
+              <div>
+                <p class="font-bold text-white">藍澳 (渡船街)</p>
+                <p class="text-[10px] text-[#86868b] mt-0.5">柯利維喇街31A 雅興大廈地下</p>
+              </div>
+              <a href="tel:28550121" class="px-2.5 py-1 bg-red-500/20 text-red-300 font-semibold rounded-lg border border-red-500/40">2855 0121</a>
+            </div>
+            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
+              <div>
+                <p class="font-bold text-white">綠十字 (氹仔)</p>
+                <p class="text-[10px] text-[#86868b] mt-0.5">馬拉松圓形地37號美景花園第五園AK</p>
+              </div>
+              <a href="tel:28837050" class="px-2.5 py-1 bg-red-500/20 text-red-300 font-semibold rounded-lg border border-red-500/40">2883 7050</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+          <div class="p-3.5 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
+            <div>
+              <p class="font-bold text-white">澳門寵物醫院</p>
+              <p class="text-[10px] text-amber-400 font-medium">09:00 AM - 10:00 PM</p>
+              <p class="text-[10px] text-[#86868b] mt-0.5">賈伯樂提督街3-5號富康花園I-J舖</p>
+            </div>
+            <a href="tel:28332262" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2833 2262</a>
+          </div>
+          <div class="p-3.5 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
+            <div>
+              <p class="font-bold text-white">東望洋診所</p>
+              <p class="text-[10px] text-amber-400 font-medium">12:00 PM - 09:00 PM</p>
+              <p class="text-[10px] text-[#86868b] mt-0.5">高冠街5B號,帶成樓地下A</p>
+            </div>
+            <a href="tel:28336833" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2833 6833</a>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -178,76 +158,148 @@
     const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
     const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
 
-    // 載入自訂純文字零食清單
-    async function loadFoods() {
+    // 從 Supabase 載入醫療歷史
+    async function loadCloudMedical() {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?key=like.hazel_textfood_%`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones?select=*&order=created_at.desc`, {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
         });
         const data = await res.json();
-        const container = document.getElementById('custom-food-list');
+        
+        // 過濾只屬於醫療紀錄的資料
+        const medicalRecords = (data && data.length > 0) ? data.filter(d => d.description && d.description.includes('MOP')) : [];
 
-        if (!data || data.length === 0) {
-          container.innerHTML = '';
+        const container = document.getElementById('medical-list');
+        if (medicalRecords.length === 0) {
+          container.innerHTML = `<p class="text-[#86868b] text-center py-4">目前還沒有醫療紀錄，請在上方新增！</p>`;
           return;
         }
 
-        container.innerHTML = `<p class="text-[#86868b] text-[11px] mb-2">📋 更多自訂喜愛小零食：</p>` + data.map(item => {
-          const foodInfo = JSON.parse(item.value);
+        container.innerHTML = medicalRecords.map(m => {
+          const parts = m.description ? m.description.split(' | ') : ['📍 未標示地點', ''];
+          const loc = parts[0] || '📍 未標示地點';
+          const cost = parts[1] || '';
+
           return `
-            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
-              <div>
-                <span class="text-amber-300 font-bold">${foodInfo.name}</span>
-                <span class="text-[#86868b] ml-2">${foodInfo.desc}</span>
+            <div id="med-item-${m.id}" class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center gap-3">
+              <div class="flex-1">
+                <p class="font-semibold text-white text-sm">${m.title}</p>
+                <div class="flex items-center gap-2 mt-1.5 text-[11px] text-[#86868b]">
+                  <span class="text-amber-400 font-medium">${loc}</span>
+                  <span>•</span>
+                  <span>${m.event_date}</span>
+                </div>
               </div>
-              <button type="button" onclick="deleteFood('${item.key}')" class="text-[10px] text-red-400 bg-red-500/10 hover:bg-red-500/20 px-2 py-1 rounded-lg border border-red-500/20 cursor-pointer">🗑️ 刪除</button>
+              <div class="flex items-center gap-3">
+                <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">${cost}</span>
+                <button type="button" onclick="deleteMedical(${m.id})" class="text-[11px] text-red-400/80 hover:text-red-400 bg-red-500/10 hover:bg-red-500/20 px-2.5 py-1.5 rounded-xl border border-red-500/20 transition-all cursor-pointer">
+                  🗑️ 刪除
+                </button>
+              </div>
             </div>
           `;
         }).join('');
-      } catch(e) { console.log('Load foods error', e); }
+      } catch(e) { console.log('Load medical logs error', e); }
     }
 
-    // 新增文字零食
-    document.getElementById('save-food').onclick = async function() {
-      const name = document.getElementById('food-name').value.trim();
-      const desc = document.getElementById('food-desc').value.trim();
+    // 刪除醫療紀錄 (畫面即時移除)
+    async function deleteMedical(id) {
+      if (!confirm("確定要刪除這筆看診紀錄嗎？")) return;
 
-      if (!name) { alert("請填寫零食名稱！"); return; }
+      const itemElem = document.getElementById(`med-item-${id}`);
+      if (itemElem) itemElem.style.opacity = '0.3';
 
-      const foodKey = `hazel_textfood_${Date.now()}`;
-      const foodValue = JSON.stringify({ name: name, desc: desc });
-
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Prefer': 'resolution=merge-duplicates'
-        },
-        body: JSON.stringify({ key: foodKey, value: foodValue })
-      });
-
-      if (res.ok) {
-        document.getElementById('food-name').value = '';
-        document.getElementById('food-desc').value = '';
-        loadFoods();
-      } else {
-        alert("新增失敗，請重試！");
-      }
-    };
-
-    // 刪除零食
-    async function deleteFood(key) {
-      if (!confirm("確定要刪除這項零食備註嗎？")) return;
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?key=eq.${key}`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones?id=eq.${id}`, {
         method: 'DELETE',
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
       });
-      if (res.ok) loadFoods();
+
+      if (res.ok) {
+        if (itemElem) itemElem.remove();
+      } else {
+        alert("刪除失敗，請重試！");
+        if (itemElem) itemElem.style.opacity = '1';
+      }
     }
 
-    window.onload = loadFoods;
+    // 新增醫療紀錄 (即時刷出畫面 + 背景寫入 Supabase)
+    document.getElementById('save-medical').onclick = async function() {
+      const date = document.getElementById('med-date').value.trim();
+      const title = document.getElementById('med-title').value.trim();
+      const location = document.getElementById('med-location').value.trim();
+      const cost = document.getElementById('med-cost').value.trim();
+
+      if (!date || !title || !cost) { alert("請填寫日期、診療原因與費用！"); return; }
+
+      const locationText = location ? (location.startsWith('📍') ? location : '📍 ' + location) : '📍 未標示地點';
+      const fullDesc = `${locationText} | ${cost}`;
+
+      // 1. 即時插入列表頂部 (零延遲展示)
+      const container = document.getElementById('medical-list');
+      const tempId = Date.now();
+      const newCardHTML = `
+        <div id="med-item-${tempId}" class="p-4 bg-[#1c1c1e] rounded-2xl border border-amber-500/40 flex justify-between items-center gap-3 transition-all">
+          <div class="flex-1">
+            <p class="font-semibold text-white text-sm">${title}</p>
+            <div class="flex items-center gap-2 mt-1.5 text-[11px] text-[#86868b]">
+              <span class="text-amber-400 font-medium">${locationText}</span>
+              <span>•</span>
+              <span>${date}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">${cost}</span>
+            <button type="button" onclick="deleteMedical(${tempId})" class="text-[11px] text-red-400/80 hover:text-red-400 bg-red-500/10 hover:bg-red-500/20 px-2.5 py-1.5 rounded-xl border border-red-500/20 transition-all cursor-pointer">
+              🗑️ 刪除
+            </button>
+          </div>
+        </div>
+      `;
+
+      if (container.innerHTML.includes('目前還沒有醫療紀錄') || container.innerHTML.includes('載入醫療紀錄中')) {
+        container.innerHTML = newCardHTML;
+      } else {
+        container.insertAdjacentHTML('afterbegin', newCardHTML);
+      }
+
+      // 清空輸入框
+      document.getElementById('med-date').value = '';
+      document.getElementById('med-title').value = '';
+      document.getElementById('med-location').value = '';
+      document.getElementById('med-cost').value = '';
+
+      // 2. 傳送到 Supabase 雲端
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify({ event_date: date, title: title, description: fullDesc })
+        });
+
+        if (res.ok) {
+          const insertedData = await res.json();
+          if (insertedData && insertedData[0] && insertedData[0].id) {
+            const tempElem = document.getElementById(`med-item-${tempId}`);
+            if (tempElem) {
+              tempElem.id = `med-item-${insertedData[0].id}`;
+              tempElem.classList.remove('border-amber-500/40');
+              tempElem.classList.add('border-[#38383a]');
+              const btn = tempElem.querySelector('button');
+              if (btn) btn.setAttribute('onclick', `deleteMedical(${insertedData[0].id})`);
+            }
+          }
+        }
+      } catch(e) {
+        console.log('Background save error', e);
+      }
+    };
+
+    window.onload = loadCloudMedical;
   </script>
 </body>
 </html>
