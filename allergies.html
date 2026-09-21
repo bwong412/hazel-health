@@ -3,11 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>過敏報告 - Hazel’s Website 🐾</title>
+  <title>過敏與美食報告 - Hazel’s Website 🐾</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
     .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    
+    /* 可愛又高級的微浮動動畫 (Smooth Floating Animation) */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(1.5deg); }
+    }
+    @keyframes floatReverse {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(-1.5deg); }
+    }
+    .animate-float-1 { animation: floatSlow 4s ease-in-out infinite; }
+    .animate-float-2 { animation: floatReverse 4.5s ease-in-out infinite 0.5s; }
+    .animate-float-3 { animation: floatSlow 3.8s ease-in-out infinite 1s; }
+    .animate-float-4 { animation: floatReverse 4.2s ease-in-out infinite 1.5s; }
+    .animate-float-5 { animation: floatSlow 4.6s ease-in-out infinite 0.8s; }
   </style>
 </head>
 <body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
@@ -26,12 +41,79 @@
     </div>
   </nav>
 
-  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-6">
+  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-8">
+    
+    <!-- 1. Hazel 最愛美食 (卡片 + 3D 圖案浮動效果) -->
+    <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h2 class="text-2xl font-bold text-amber-300 flex items-center gap-2">
+            <span>🥰</span> Hazel 最愛吃的食物
+          </h2>
+          <p class="text-xs text-[#86868b] mt-1">安全、美味且營養的獎勵小零食</p>
+        </div>
+        <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20 font-semibold">健康美味</span>
+      </div>
+
+      <!-- 5大最愛美食展示網格 -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+        
+        <!-- 香蕉 -->
+        <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-3 flex flex-col items-center text-center animate-float-1 group hover:border-amber-400/50 transition-all">
+          <div class="w-20 h-20 mb-2 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
+            <img src="https://i.ibb.co/L14X0xT/banana.jpg" alt="香蕉" class="w-full h-full object-cover">
+          </div>
+          <span class="font-bold text-white text-xs">🍌 香蕉</span>
+          <span class="text-[10px] text-[#86868b] mt-0.5">香甜補鉀小零食</span>
+        </div>
+
+        <!-- 蘋果 -->
+        <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-3 flex flex-col items-center text-center animate-float-2 group hover:border-red-400/50 transition-all">
+          <div class="w-20 h-20 mb-2 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
+            <img src="https://i.ibb.co/SrtPqL3/apple.jpg" alt="蘋果" class="w-full h-full object-cover">
+          </div>
+          <span class="font-bold text-white text-xs">🍎 蘋果</span>
+          <span class="text-[10px] text-[#86868b] mt-0.5">爽脆清甜解饞</span>
+        </div>
+
+        <!-- 芝士 -->
+        <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-3 flex flex-col items-center text-center animate-float-3 group hover:border-amber-400/50 transition-all">
+          <div class="w-20 h-20 mb-2 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
+            <img src="https://i.ibb.co/3s8p62v/cheese.jpg" alt="芝士" class="w-full h-full object-cover">
+          </div>
+          <span class="font-bold text-white text-xs">🧀 芝士</span>
+          <span class="text-[10px] text-[#86868b] mt-0.5">濃郁奶香極致誘惑</span>
+        </div>
+
+        <!-- 乳酪 -->
+        <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-3 flex flex-col items-center text-center animate-float-4 group hover:border-blue-400/50 transition-all">
+          <div class="w-20 h-20 mb-2 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
+            <img src="https://i.ibb.co/9vB34Xz/yogurt.jpg" alt="乳酪" class="w-full h-full object-cover">
+          </div>
+          <span class="font-bold text-white text-xs">🥣 乳酪</span>
+          <span class="text-[10px] text-[#86868b] mt-0.5">幫助腸道好消化</span>
+        </div>
+
+        <!-- 雞蛋 -->
+        <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-3 flex flex-col items-center text-center animate-float-5 group hover:border-yellow-400/50 transition-all col-span-2 md:col-span-1">
+          <div class="w-20 h-20 mb-2 rounded-xl overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
+            <img src="https://i.ibb.co/p33mB73/egg.jpg" alt="雞蛋" class="w-full h-full object-cover">
+          </div>
+          <span class="font-bold text-white text-xs">🥚 雞蛋</span>
+          <span class="text-[10px] text-[#86868b] mt-0.5">優質蛋白質補充</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 2. 食安中心 / 高危忌口清單 -->
     <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
       <div class="flex justify-between items-center mb-6">
         <div>
-          <h2 class="text-2xl font-bold text-red-400">🚫 食物不耐受高危忌口</h2>
-          <p class="text-xs text-[#86868b] mt-1">Hazel 需嚴格避免採購與餵食之食材清單</p>
+          <h2 class="text-2xl font-bold text-red-400 flex items-center gap-2">
+            <span>🚫</span> 食安中心 - 高危忌口名單
+          </h2>
+          <p class="text-xs text-[#86868b] mt-1">Hazel 需嚴格避免採購與餵食之食材</p>
         </div>
         <span class="text-xs bg-red-500/10 text-red-400 px-3 py-1 rounded-full border border-red-500/20 font-semibold">FluffBio™ 300項檢測</span>
       </div>
@@ -65,12 +147,12 @@
 
       <div class="mt-6 p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a]">
         <p class="text-xs text-amber-300 font-medium flex items-center gap-2">
-          <span>💡 貼心提醒：</span> 購買寵物零食或主糧前，請先核對以上高敏清單，確保 Hazel 健康安全！
+          <span>💡 貼心提醒：</span> 購買零食或主糧前請先核對以上忌口清單，愛護 Hazel 健康！
         </p>
       </div>
     </div>
+
   </div>
 
 </body>
 </html>
-
