@@ -32,6 +32,7 @@
         <p class="text-xs text-[#86868b] mt-1">紀錄 Hazel 的看診原因、費用與診所地點，雙人雲端同步</p>
       </div>
 
+      <!-- 手動新增表單 -->
       <div class="bg-[#1c1c1e] p-4 rounded-2xl border border-[#38383a]">
         <h3 class="text-xs font-semibold text-amber-300 mb-3 flex items-center gap-1.5">📝 新增看診紀錄</h3>
         <div class="space-y-3 mb-3">
@@ -61,6 +62,7 @@
         </button>
       </div>
 
+      <!-- 列表展示區塊 -->
       <div id="medical-list" class="space-y-3 text-xs">載入醫療紀錄中...</div>
     </div>
   </div>
@@ -69,78 +71,80 @@
     const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
     const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
 
+    // 載入醫療紀錄 (使用獨立的 medical_logs 資料表)
     async function loadCloudMedical() {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones?select=*&order=created_at.desc`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/medical_logs?select=*&order=created_at.desc`, {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
         });
         const data = await res.json();
-        const medicalRecords = (data && Array.isArray(data)) ? data.filter(d => d.description && d.description.includes('MOP')) : [];
         const container = document.getElementById('medical-list');
 
-        if (medicalRecords.length === 0) {
+        if (!data || data.length === 0) {
           container.innerHTML = `<p class="text-[#86868b] text-center py-4">目前還沒有醫療紀錄，請在上方新增！</p>`;
           return;
         }
 
-        container.innerHTML = medicalRecords.map(m => {
-          const parts = m.description ? m.description.split(' | ') : ['📍 未標示地點', ''];
-          return `
-            <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center gap-3">
-              <div class="flex-1">
-                <p class="font-semibold text-white text-sm">${m.title}</p>
-                <div class="flex items-center gap-2 mt-1.5 text-[11px] text-[#86868b]">
-                  <span class="text-amber-400 font-medium">${parts[0]}</span> • <span>${m.event_date}</span>
-                </div>
-              </div>
-              <div class="flex items-center gap-3">
-                <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">${parts[1] || ''}</span>
-                <button type="button" onclick="deleteMedical(${m.id})" class="text-[11px] text-red-400 bg-red-500/10 px-2.5 py-1.5 rounded-xl border border-red-500/20 cursor-pointer">🗑️ 刪除</button>
+        container.innerHTML = data.map(m => `
+          <div class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center gap-3">
+            <div class="flex-1">
+              <p class="font-semibold text-white text-sm">${m.title}</p>
+              <div class="flex items-center gap-2 mt-1.5 text-[11px] text-[#86868b]">
+                <span class="text-amber-400 font-medium">${m.location || '📍 未標示地點'}</span> • <span>${m.event_date}</span>
               </div>
             </div>
-          `;
-        }).join('');
+            <div class="flex items-center gap-3">
+              <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">${m.cost || ''}</span>
+              <button type="button" onclick="deleteMedical(${m.id})" class="text-[11px] text-red-400 bg-red-500/10 px-2.5 py-1.5 rounded-xl border border-red-500/20 cursor-pointer">🗑️ 刪除</button>
+            </div>
+          </div>
+        `).join('');
       } catch(e) { console.log('Load error', e); }
     }
 
+    // 刪除紀錄
     async function deleteMedical(id) {
-      if (!confirm("確定要刪除這筆紀錄嗎？")) return;
-      await fetch(`${SUPABASE_URL}/rest/v1/milestones?id=eq.${id}`, {
+      if (!confirm("確定要刪除這筆看診紀錄嗎？")) return;
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/medical_logs?id=eq.${id}`, {
         method: 'DELETE',
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
       });
-      loadCloudMedical();
+      if (res.ok) loadCloudMedical();
     }
 
+    // 新增紀錄
     document.getElementById('save-medical').onclick = async function() {
       const date = document.getElementById('med-date').value.trim();
       const title = document.getElementById('med-title').value.trim();
       const location = document.getElementById('med-location').value.trim();
       const cost = document.getElementById('med-cost').value.trim();
 
-      if (!date || !title || !cost) { alert("請填寫完整資訊！"); return; }
+      if (!date || !title) { alert("請填寫看診日期與診療原因！"); return; }
 
-      const fullDesc = `${location ? '📍 ' + location : '📍 未標示地點'} | ${cost}`;
-
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/medical_logs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'apikey': SUPABASE_KEY,
           'Authorization': `Bearer ${SUPABASE_KEY}`
         },
-        body: JSON.stringify({ event_date: date, title: title, description: fullDesc })
+        body: JSON.stringify({ 
+          event_date: date, 
+          title: title, 
+          location: location ? (location.startsWith('📍') ? location : '📍 ' + location) : '📍 未標示地點',
+          cost: cost
+        })
       });
 
       if (res.ok) {
-        alert("✨ 成功 Save 入雲端！女朋友手機都睇得到了！");
+        alert("✨ 醫療紀錄已成功儲存至 Supabase 雲端！");
         document.getElementById('med-date').value = '';
         document.getElementById('med-title').value = '';
         document.getElementById('med-location').value = '';
         document.getElementById('med-cost').value = '';
         loadCloudMedical();
       } else {
-        alert("⚠️ 上傳失敗！請確定您已執行第一步最新的 SQL 指令解鎖 RLS！");
+        alert("⚠️ 儲存失敗，請確定第一步 SQL 已執行！");
       }
     };
 
