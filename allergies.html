@@ -3,11 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>醫療紀錄 - Hazel’s Website 🐾</title>
+  <title>過敏與食安報告 - Hazel’s Website 🐾</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
     .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    @keyframes glyphPulse {
+      0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.4)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.8)); }
+    }
+    .glyph-dot { animation: glyphPulse 3s ease-in-out infinite; }
   </style>
 </head>
 <body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
@@ -17,289 +22,233 @@
       <div class="flex items-center gap-5 min-w-max">
         <a href="index.html" class="hover:text-white transition-colors"><span>🐾</span> <span>Hazel</span></a>
         <a href="potty.html" class="hover:text-white transition-colors">散步打卡</a>
-        <a href="medical.html" class="text-white font-semibold hover:text-amber-400 transition-colors">醫療紀錄</a>
-        <a href="allergies.html" class="hover:text-white transition-colors">過敏報告</a>
+        <a href="medical.html" class="hover:text-white transition-colors">醫療紀錄</a>
+        <a href="allergies.html" class="text-white font-semibold hover:text-amber-400 transition-colors">過敏報告</a>
         <a href="weight.html" class="hover:text-white transition-colors">體重追蹤</a>
         <a href="milestones.html" class="hover:text-white transition-colors">里程碑</a>
       </div>
     </div>
   </nav>
 
-  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-6">
+  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-8">
     
-    <!-- 看診歷史區塊 -->
-    <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl space-y-6">
-      <div>
-        <h2 class="text-2xl font-bold text-white">🏥 看診與診療歷史</h2>
-        <p class="text-xs text-[#86868b] mt-1">紀錄 Hazel 的看診原因、費用與診所地點，雙人雲端同步</p>
+    <!-- 1. Hazel 最愛美食點陣區塊 -->
+    <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl space-y-4">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+            <span>🥰</span> Hazel 最愛吃的食物
+          </h2>
+          <p class="text-xs text-[#86868b] mt-1">Nothing Style (Dot-Matrix) 點陣食物矩陣</p>
+        </div>
+        <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20 font-mono tracking-widest">SAFE FOODS</span>
       </div>
 
-      <!-- 手動新增看診紀錄表單 -->
-      <div class="bg-[#1c1c1e] p-4 rounded-2xl border border-[#38383a]">
-        <h3 class="text-xs font-semibold text-amber-300 mb-3 flex items-center gap-1.5">
-          <span>📝</span> 新增 / 修正看診紀錄
-        </h3>
-        <div class="space-y-3 mb-3">
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="text-[10px] text-[#86868b] mb-1 block">看診日期：</label>
-              <input type="text" id="med-date" placeholder="例如: 2026.09.22" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
-            </div>
-            <div>
-              <label class="text-[10px] text-[#86868b] mb-1 block">診療原因 / 項目：</label>
-              <input type="text" id="med-title" placeholder="例如: 🦴 右腳跛、照 X-Ray" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
-            </div>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div class="bg-[#1c1c1e] border border-[#38383a] hover:border-amber-400/60 rounded-2xl p-4 flex flex-col items-center text-center transition-all group">
+          <div class="w-16 h-16 mb-2 rounded-xl bg-black border border-[#333336] flex items-center justify-center glyph-dot">
+            <svg class="w-10 h-10 text-amber-400 fill-current" viewBox="0 0 24 24"><rect x="6" y="4" width="2" height="2"/><rect x="8" y="6" width="2" height="2"/><rect x="10" y="8" width="2" height="2"/><rect x="12" y="10" width="2" height="4"/><rect x="10" y="14" width="2" height="4"/><rect x="8" y="16" width="2" height="2"/><rect x="6" y="18" width="2" height="2"/></svg>
           </div>
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="text-[10px] text-[#86868b] mb-1 block">📍 看診診所 / 地點：</label>
-              <input type="text" id="med-location" placeholder="例如: 皇家診所 (皇朝) 或 綠十字" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
-            </div>
-            <div>
-              <label class="text-[10px] text-[#86868b] mb-1 block">費用 (MOP)：</label>
-              <input type="text" id="med-cost" placeholder="例如: 1,400 MOP" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
-            </div>
-          </div>
+          <span class="font-bold text-white text-xs mt-1">🍌 香蕉</span>
+          <span class="text-[10px] text-[#86868b] mt-0.5 font-mono">Banana</span>
         </div>
-        <button type="button" id="save-medical" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 active:scale-98 text-black font-bold rounded-xl text-xs transition-all shadow-md cursor-pointer">
-          上傳並儲存看診紀錄至雲端
+
+        <div class="bg-[#1c1c1e] border border-[#38383a] hover:border-red-400/60 rounded-2xl p-4 flex flex-col items-center text-center transition-all group">
+          <div class="w-16 h-16 mb-2 rounded-xl bg-black border border-[#333336] flex items-center justify-center glyph-dot">
+            <svg class="w-10 h-10 text-red-400 fill-current" viewBox="0 0 24 24"><rect x="11" y="3" width="2" height="3"/><rect x="8" y="6" width="8" height="2"/><rect x="6" y="8" width="12" height="8"/><rect x="8" y="16" width="8" height="2"/></svg>
+          </div>
+          <span class="font-bold text-white text-xs mt-1">🍎 蘋果</span>
+          <span class="text-[10px] text-[#86868b] mt-0.5 font-mono">Apple</span>
+        </div>
+
+        <div class="bg-[#1c1c1e] border border-[#38383a] hover:border-amber-400/60 rounded-2xl p-4 flex flex-col items-center text-center transition-all group">
+          <div class="w-16 h-16 mb-2 rounded-xl bg-black border border-[#333336] flex items-center justify-center glyph-dot">
+            <svg class="w-10 h-10 text-amber-300 fill-current" viewBox="0 0 24 24"><rect x="14" y="5" width="2" height="2"/><rect x="10" y="8" width="8" height="2"/><rect x="6" y="11" width="14" height="2"/><rect x="4" y="14" width="18" height="4"/></svg>
+          </div>
+          <span class="font-bold text-white text-xs mt-1">🧀 芝士</span>
+          <span class="text-[10px] text-[#86868b] mt-0.5 font-mono">Cheese</span>
+        </div>
+
+        <div class="bg-[#1c1c1e] border border-[#38383a] hover:border-blue-400/60 rounded-2xl p-4 flex flex-col items-center text-center transition-all group">
+          <div class="w-16 h-16 mb-2 rounded-xl bg-black border border-[#333336] flex items-center justify-center glyph-dot">
+            <svg class="w-10 h-10 text-blue-400 fill-current" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="2"/><rect x="5" y="9" width="14" height="6"/><rect x="8" y="15" width="8" height="2"/></svg>
+          </div>
+          <span class="font-bold text-white text-xs mt-1">🥣 乳酪</span>
+          <span class="text-[10px] text-[#86868b] mt-0.5 font-mono">Yogurt</span>
+        </div>
+
+        <div class="bg-[#1c1c1e] border border-[#38383a] hover:border-yellow-400/60 rounded-2xl p-4 flex flex-col items-center text-center transition-all group col-span-2 md:col-span-1">
+          <div class="w-16 h-16 mb-2 rounded-xl bg-black border border-[#333336] flex items-center justify-center glyph-dot">
+            <svg class="w-10 h-10 text-yellow-100 fill-current" viewBox="0 0 24 24"><rect x="10" y="4" width="4" height="2"/><rect x="8" y="6" width="8" height="3"/><rect x="6" y="9" width="12" height="8"/><rect x="8" y="17" width="8" height="2"/></svg>
+          </div>
+          <span class="font-bold text-white text-xs mt-1">🥚 雞蛋</span>
+          <span class="text-[10px] text-[#86868b] mt-0.5 font-mono">Egg</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. FluffBio™ 300項 完整不耐受分類檢測報告 -->
+    <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl space-y-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+        <div>
+          <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+            <span>📋</span> FluffBio™ 300項敏感性檢測報告
+          </h2>
+          <p class="text-xs text-[#86868b] mt-1">Test ID: LGTB0512287001 | Hazel 專屬不耐受分析</p>
+        </div>
+      </div>
+
+      <!-- 分類分頁 Tab 切換按鈕 -->
+      <div class="flex gap-2 border-b border-[#333336] pb-3 overflow-x-auto text-xs font-semibold">
+        <button onclick="switchTab('red')" id="tab-red" class="px-4 py-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
+          🔴 極度過敏 / 禁食 (16項)
+        </button>
+        <button onclick="switchTab('yellow')" id="tab-yellow" class="px-4 py-2 rounded-xl bg-[#2c2c2e] text-[#86868b] border border-transparent transition-all flex items-center gap-1.5 cursor-pointer">
+          🟡 潛在注意 / 觀察 (250+項)
+        </button>
+        <button onclick="switchTab('green')" id="tab-green" class="px-4 py-2 rounded-xl bg-[#2c2c2e] text-[#86868b] border border-transparent transition-all flex items-center gap-1.5 cursor-pointer">
+          🟢 完全無問題 / 安全 (40+項)
         </button>
       </div>
 
-      <!-- 雲端動態看診歷史列表 (含 🗑️ 刪除按鈕) -->
-      <div id="medical-list" class="space-y-3 text-xs">
-        載入醫療紀錄中...
-      </div>
-    </div>
-
-    <!-- 24h 寵物接送服務專線 -->
-    <div class="bg-gradient-to-r from-amber-500/20 via-[#161617] to-[#161617] border border-amber-500/40 rounded-3xl p-6 shadow-2xl flex items-center justify-between">
-      <div>
-        <span class="text-xs font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-2.5 py-1 rounded-md border border-amber-400/30">Petber 專車</span>
-        <h3 class="text-lg font-bold text-white mt-2">🚗 24h 澳門寵物接送服務</h3>
-        <p class="text-xs text-[#86868b] mt-1">緊急看診、日常出行專用接送</p>
-      </div>
-      <a href="tel:65714917" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-xl shadow-lg transition-all flex items-center gap-1.5">
-        📞 <span>6571 4917</span>
-      </a>
-    </div>
-
-    <!-- 澳門獸醫診所完整名冊 -->
-    <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl">
-      <div class="flex justify-between items-center mb-6">
-        <div>
-          <h2 class="text-2xl font-bold text-white">🏥 澳門獸醫診所名冊</h2>
-          <p class="text-xs text-[#86868b] mt-1">全澳/氹仔診所電話、營業時間與地址一覽</p>
-        </div>
-        <span class="text-xs bg-red-500/20 text-red-400 px-3 py-1 rounded-full border border-red-500/30">緊急通訊</span>
-      </div>
-
-      <div class="space-y-3 text-xs">
-        <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl">
-          <p class="text-xs font-bold text-red-400 mb-3 flex items-center gap-1.5">
-            <span>🚨</span> 24 小時營業急診診所：
-          </p>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
-              <div>
-                <p class="font-bold text-white">皇家診所 (澳門)</p>
-                <p class="text-[10px] text-[#86868b] mt-0.5">皇朝巴黎街182號南岸花園地下</p>
-              </div>
-              <a href="tel:28501099" class="px-2.5 py-1 bg-red-500/20 text-red-300 font-semibold rounded-lg border border-red-500/40">2850 1099</a>
-            </div>
-            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
-              <div>
-                <p class="font-bold text-white">愛加倍診所 (澳門)</p>
-                <p class="text-[10px] text-[#86868b] mt-0.5">交加炮台馬路1A號建設花園GF樓</p>
-              </div>
-              <a href="tel:28524005" class="px-2.5 py-1 bg-red-500/20 text-red-300 font-semibold rounded-lg border border-red-500/40">2852 4005</a>
-            </div>
-            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
-              <div>
-                <p class="font-bold text-white">藍澳 (渡船街)</p>
-                <p class="text-[10px] text-[#86868b] mt-0.5">柯利維喇街31A 雅興大廈地下</p>
-              </div>
-              <a href="tel:28550121" class="px-2.5 py-1 bg-red-500/20 text-red-300 font-semibold rounded-lg border border-red-500/40">2855 0121</a>
-            </div>
-            <div class="p-3 bg-[#1c1c1e] rounded-xl border border-[#38383a] flex justify-between items-center">
-              <div>
-                <p class="font-bold text-white">綠十字 (氹仔)</p>
-                <p class="text-[10px] text-[#86868b] mt-0.5">馬拉松圓形地37號美景花園第五園AK</p>
-              </div>
-              <a href="tel:28837050" class="px-2.5 py-1 bg-red-500/20 text-red-300 font-semibold rounded-lg border border-red-500/40">2883 7050</a>
-            </div>
-          </div>
+      <!-- Tab A: 🔴 巨危/禁食 (紅色) -->
+      <div id="content-red" class="space-y-4">
+        <div class="p-3.5 bg-red-500/10 border border-red-500/30 rounded-2xl text-xs text-red-300">
+          ⚠️ <strong>優先避免項目：</strong> 檢測顯示顯著不耐受或失衡，建議立即停止餵食或避免接觸。
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-          <div class="p-3.5 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
-            <div>
-              <p class="font-bold text-white">澳門寵物醫院</p>
-              <p class="text-[10px] text-amber-400 font-medium">09:00 AM - 10:00 PM</p>
-              <p class="text-[10px] text-[#86868b] mt-0.5">賈伯樂提督街3-5號富康花園I-J舖</p>
-            </div>
-            <a href="tel:28332262" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2833 2262</a>
+        <div class="space-y-3">
+          <p class="text-xs font-bold text-red-400">🥩 食物類 (Food Items)：</p>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5 text-xs">
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🦆 鴨肉 / 鴨血 / 鴨腸</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🦃 火雞肉 Turkey</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🐷 豬耳朵 Pig Ear</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🥩 生肉 Rawhide</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🥛 希臘酸奶 Greek Yogurt</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🍍 鳳梨 / 菠蘿 Pineapple</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🍒 山楂 Hawthorn Fruit</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🌹 玫瑰果 Rosehip</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🌾 卡姆小麥 Kamut</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🥣 燕麥 / 燕麥粉 Oats</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🍝 義大利麵 Pasta</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🌿 鼠尾草 Sage</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🟡 姜黃 Turmeric</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🐟 魚油 Fish Oil</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🐟 鲐魚 Chub Mackerel</div>
           </div>
-          <div class="p-3.5 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center">
-            <div>
-              <p class="font-bold text-white">東望洋診所</p>
-              <p class="text-[10px] text-amber-400 font-medium">12:00 PM - 09:00 PM</p>
-              <p class="text-[10px] text-[#86868b] mt-0.5">高冠街5B號,帶成樓地下A</p>
-            </div>
-            <a href="tel:28336833" class="px-2.5 py-1.5 bg-[#2c2c2e] hover:bg-[#3c3c3e] text-amber-300 font-semibold rounded-xl border border-[#424245]">2833 6833</a>
+
+          <p class="text-xs font-bold text-red-400 pt-2">🌿 環境與非食物類 (Non-Food Items)：</p>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5 text-xs">
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🌳 赤楊 Alder</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🦠 黑曲霉 Aspergillus Niger</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🌲 美國山櫸 American Beech</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🧹 灰塵 Dust</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🌱 英國車前草 English Plantain</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🌲 日本山櫸 Japanese Beech</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🍺 啤酒花 Hop</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🌿 薄荷 Mint</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🪵 苔蘚 Mood Moss</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🍃 卵葉青蘚 Ordinary moss</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🌾 黑麥草 Perennial Ryegrass</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🌳 楊樹 Poplar Tree</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🌼 油菜籽 Rapeseed</div>
+            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-200 rounded-xl">🌾 鹽草 Salt Grass</div>
           </div>
         </div>
       </div>
+
+      <!-- Tab B: 🟡 注意/觀察 (黃色) -->
+      <div id="content-yellow" class="hidden space-y-4">
+        <div class="p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-2xl text-xs text-amber-300">
+          ⚠️ <strong>輕至中度敏感：</strong> 代表潛在不耐受，建議適度限制，若出現皮膚癢或軟便需減少攝取。
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5 text-xs text-[#ceced2]">
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🦙 羊駝肉 Alpaca</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🥩 牛肉 / 火雞 / 鴨肉風味劑</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🥓 培根 Bacon</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🥩 牛肉 Beef / 水牛 Buffalo</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🐓 雞肉/雞心/雞肝/雞脂肪</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🐊 鱷魚肉 Crocodile</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🐐 山羊 Goat / 鵝肉 Goose</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🐴 馬肉 / 袋鼠肉 Kangaroo</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🐑 羊肉/羊心/羊腎/羊肝 Lamb</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🦘 駝鹿肉 Moose / 鴕鳥肉</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🐖 豬肉/豬心/豬肝/豬肉腸</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🐇 兔肉 Rabbit / 鹿肉 Venison</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🥛 乳白蛋白/乳球蛋白/酪蛋白</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🧀 切達/奶油/艾登/菲達奶酪</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🥚 蛋白 / 蛋黃 / 蛋白殻</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🥛 鮮奶油 / 牛奶 / 羊奶 / 豆奶</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🫐 巴西莓/杏子/黑莓/蔓越莓</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🥭 火龍果/芒果/橙子/木瓜/桃子</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🌾 大麥/麵筋/藜麥/黑麥/大米</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🐟 鱈魚肝油/亞麻籽油/三文魚油</div>
+          <div class="p-3 bg-[#1c1c1e] border border-[#38383a] rounded-xl">🦀 鮑魚/藍貽貝/螃蟹/三文魚/金槍魚</div>
+        </div>
+      </div>
+
+      <!-- Tab C: 🟢 安全/正常 (綠色) -->
+      <div id="content-green" class="hidden space-y-4">
+        <div class="p-3.5 bg-green-500/10 border border-green-500/30 rounded-2xl text-xs text-green-300">
+          ✅ <strong>正常耐受項目：</strong> 檢測處於健康平衡狀態，可安全纳入 Hazel 的日常飲食與生活中。
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5 text-xs text-green-200">
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🍎 蘋果 Apples</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🍌 香蕉 Bananas</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🫐 藍莓 Blueberries</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🍓 草莓 Strawberries</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🍉 西瓜 Watermelon</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🌾 糙米 Brown Rice</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🍚 白大米 Rice</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🥔 土豆 Potato</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🍠 紅薯 Sweet Potato</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🥕 胡蘿蔔 Carrots</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🎃 南瓜 Pumpkin</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🥦 西蘭花 Broccoli</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🍯 蜂蜜 Honey</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🫒 橄欖油 Olive Oil</div>
+          <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl">🐟 鮭魚 / 三文魚 Salmon</div>
+        </div>
+      </div>
+
     </div>
 
   </div>
 
   <script>
-    const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
+    // 分頁 Tab 切換邏輯
+    function switchTab(type) {
+      const redBtn = document.getElementById('tab-red');
+      const yellowBtn = document.getElementById('tab-yellow');
+      const greenBtn = document.getElementById('tab-green');
 
-    // 從 Supabase 載入醫療歷史
-    async function loadCloudMedical() {
-      try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones?select=*&order=created_at.desc`, {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-        });
-        const data = await res.json();
-        
-        // 過濾只屬於醫療紀錄的資料
-        const medicalRecords = (data && data.length > 0) ? data.filter(d => d.description && d.description.includes('MOP')) : [];
+      const redContent = document.getElementById('content-red');
+      const yellowContent = document.getElementById('content-yellow');
+      const greenContent = document.getElementById('content-green');
 
-        const container = document.getElementById('medical-list');
-        if (medicalRecords.length === 0) {
-          container.innerHTML = `<p class="text-[#86868b] text-center py-4">目前還沒有醫療紀錄，請在上方新增！</p>`;
-          return;
-        }
-
-        container.innerHTML = medicalRecords.map(m => {
-          const parts = m.description ? m.description.split(' | ') : ['📍 未標示地點', ''];
-          const loc = parts[0] || '📍 未標示地點';
-          const cost = parts[1] || '';
-
-          return `
-            <div id="med-item-${m.id}" class="p-4 bg-[#1c1c1e] rounded-2xl border border-[#38383a] flex justify-between items-center gap-3">
-              <div class="flex-1">
-                <p class="font-semibold text-white text-sm">${m.title}</p>
-                <div class="flex items-center gap-2 mt-1.5 text-[11px] text-[#86868b]">
-                  <span class="text-amber-400 font-medium">${loc}</span>
-                  <span>•</span>
-                  <span>${m.event_date}</span>
-                </div>
-              </div>
-              <div class="flex items-center gap-3">
-                <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">${cost}</span>
-                <button type="button" onclick="deleteMedical(${m.id})" class="text-[11px] text-red-400/80 hover:text-red-400 bg-red-500/10 hover:bg-red-500/20 px-2.5 py-1.5 rounded-xl border border-red-500/20 transition-all cursor-pointer">
-                  🗑️ 刪除
-                </button>
-              </div>
-            </div>
-          `;
-        }).join('');
-      } catch(e) { console.log('Load medical logs error', e); }
-    }
-
-    // 刪除醫療紀錄 (畫面即時移除)
-    async function deleteMedical(id) {
-      if (!confirm("確定要刪除這筆看診紀錄嗎？")) return;
-
-      const itemElem = document.getElementById(`med-item-${id}`);
-      if (itemElem) itemElem.style.opacity = '0.3';
-
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones?id=eq.${id}`, {
-        method: 'DELETE',
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      // 重置樣式
+      [redBtn, yellowBtn, greenBtn].forEach(btn => {
+        btn.className = "px-4 py-2 rounded-xl bg-[#2c2c2e] text-[#86868b] border border-transparent transition-all flex items-center gap-1.5 cursor-pointer";
       });
 
-      if (res.ok) {
-        if (itemElem) itemElem.remove();
-      } else {
-        alert("刪除失敗，請重試！");
-        if (itemElem) itemElem.style.opacity = '1';
+      redContent.classList.add('hidden');
+      yellowContent.classList.add('hidden');
+      greenContent.classList.add('hidden');
+
+      // 激活目標 Tab
+      if (type === 'red') {
+        redBtn.className = "px-4 py-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 transition-all flex items-center gap-1.5 cursor-pointer font-bold";
+        redContent.classList.remove('hidden');
+      } else if (type === 'yellow') {
+        yellowBtn.className = "px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all flex items-center gap-1.5 cursor-pointer font-bold";
+        yellowContent.classList.remove('hidden');
+      } else if (type === 'green') {
+        greenBtn.className = "px-4 py-2 rounded-xl bg-green-500/20 text-green-300 border border-green-500/30 transition-all flex items-center gap-1.5 cursor-pointer font-bold";
+        greenContent.classList.remove('hidden');
       }
     }
-
-    // 新增醫療紀錄 (即時刷出畫面 + 背景寫入 Supabase)
-    document.getElementById('save-medical').onclick = async function() {
-      const date = document.getElementById('med-date').value.trim();
-      const title = document.getElementById('med-title').value.trim();
-      const location = document.getElementById('med-location').value.trim();
-      const cost = document.getElementById('med-cost').value.trim();
-
-      if (!date || !title || !cost) { alert("請填寫日期、診療原因與費用！"); return; }
-
-      const locationText = location ? (location.startsWith('📍') ? location : '📍 ' + location) : '📍 未標示地點';
-      const fullDesc = `${locationText} | ${cost}`;
-
-      // 1. 即時插入列表頂部 (零延遲展示)
-      const container = document.getElementById('medical-list');
-      const tempId = Date.now();
-      const newCardHTML = `
-        <div id="med-item-${tempId}" class="p-4 bg-[#1c1c1e] rounded-2xl border border-amber-500/40 flex justify-between items-center gap-3 transition-all">
-          <div class="flex-1">
-            <p class="font-semibold text-white text-sm">${title}</p>
-            <div class="flex items-center gap-2 mt-1.5 text-[11px] text-[#86868b]">
-              <span class="text-amber-400 font-medium">${locationText}</span>
-              <span>•</span>
-              <span>${date}</span>
-            </div>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">${cost}</span>
-            <button type="button" onclick="deleteMedical(${tempId})" class="text-[11px] text-red-400/80 hover:text-red-400 bg-red-500/10 hover:bg-red-500/20 px-2.5 py-1.5 rounded-xl border border-red-500/20 transition-all cursor-pointer">
-              🗑️ 刪除
-            </button>
-          </div>
-        </div>
-      `;
-
-      if (container.innerHTML.includes('目前還沒有醫療紀錄') || container.innerHTML.includes('載入醫療紀錄中')) {
-        container.innerHTML = newCardHTML;
-      } else {
-        container.insertAdjacentHTML('afterbegin', newCardHTML);
-      }
-
-      // 清空輸入框
-      document.getElementById('med-date').value = '';
-      document.getElementById('med-title').value = '';
-      document.getElementById('med-location').value = '';
-      document.getElementById('med-cost').value = '';
-
-      // 2. 傳送到 Supabase 雲端
-      try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Prefer': 'return=representation'
-          },
-          body: JSON.stringify({ event_date: date, title: title, description: fullDesc })
-        });
-
-        if (res.ok) {
-          const insertedData = await res.json();
-          if (insertedData && insertedData[0] && insertedData[0].id) {
-            const tempElem = document.getElementById(`med-item-${tempId}`);
-            if (tempElem) {
-              tempElem.id = `med-item-${insertedData[0].id}`;
-              tempElem.classList.remove('border-amber-500/40');
-              tempElem.classList.add('border-[#38383a]');
-              const btn = tempElem.querySelector('button');
-              if (btn) btn.setAttribute('onclick', `deleteMedical(${insertedData[0].id})`);
-            }
-          }
-        }
-      } catch(e) {
-        console.log('Background save error', e);
-      }
-    };
-
-    window.onload = loadCloudMedical;
   </script>
 </body>
 </html>
