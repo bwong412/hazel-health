@@ -30,15 +30,16 @@
     <div class="bg-[#161617] border border-[#333336] rounded-3xl p-6 shadow-2xl space-y-6">
       <div>
         <h2 class="text-2xl font-bold text-white">⚖️ 體重追蹤</h2>
-        <p class="text-xs text-[#86868b] mt-1">手動紀錄 Hazel 體重變化，雙人雲端即時同步</p>
+        <p class="text-xs text-[#86868b] mt-1">紀錄 Hazel 體重變化，雙人雲端即時同步</p>
       </div>
 
+      <!-- 新增體重表單 -->
       <div class="bg-[#1c1c1e] p-4 rounded-2xl border border-[#38383a]">
         <h3 class="text-xs font-semibold text-amber-300 mb-3 flex items-center gap-1.5">📝 新增體重紀錄</h3>
         <div class="grid grid-cols-2 gap-3 mb-3">
           <div>
             <label class="text-[10px] text-[#86868b] mb-1 block">日期 / 時間點：</label>
-            <input type="text" id="weight-date" placeholder="例如: 7月 或 09/22" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            <input type="text" id="weight-date" placeholder="例如: 2026.09.22" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
           </div>
           <div>
             <label class="text-[10px] text-[#86868b] mb-1 block">體重 (kg)：</label>
@@ -50,12 +51,14 @@
         </button>
       </div>
 
+      <!-- Chart.js 趨勢折線圖 -->
       <div class="bg-[#000000] p-4 rounded-2xl border border-[#333336]">
         <canvas id="weightChart" height="200"></canvas>
       </div>
 
+      <!-- 體重列表 -->
       <div>
-        <p class="text-xs text-[#86868b] mb-2">📋 雲端歷史體重數據：</p>
+        <p class="text-xs text-[#86868b] mb-3">📋 雲端歷史體重數據：</p>
         <div id="weight-history-list" class="space-y-2 text-xs">載入雲端數據中...</div>
       </div>
     </div>
@@ -67,28 +70,35 @@
 
     let weightChart = null;
 
-    // 從 Supabase 雲端載入體重
+    // 從 Supabase 雲端載入體重數據
     async function loadCloudWeight() {
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/weight_logs?select=*&order=created_at.asc`, {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
         });
         const data = await res.json();
+        const records = (data && Array.isArray(data)) ? data : [];
 
-        let records = (data && data.length > 0) ? data : [
-          { date_label: '一個月前', weight: 22.5 },
-          { date_label: '現在', weight: 22.0 }
-        ];
+        const listContainer = document.getElementById('weight-history-list');
 
-        // 渲染列表
-        document.getElementById('weight-history-list').innerHTML = records.map(r => `
-          <div class="bg-[#1c1c1e] p-2.5 rounded-xl border border-[#38383a] flex justify-between items-center">
-            <span class="text-white font-medium">${r.date_label}</span>
-            <span class="text-amber-400 font-bold">${r.weight} kg</span>
+        if (records.length === 0) {
+          listContainer.innerHTML = `<p class="text-[#86868b] text-center py-2">目前還沒有體重紀錄，請在上方新增！</p>`;
+          if (weightChart) weightChart.destroy();
+          return;
+        }
+
+        // 渲染歷史列表 (含 🗑️ 刪除按鈕)
+        listContainer.innerHTML = records.slice().reverse().map(r => `
+          <div class="bg-[#1c1c1e] p-3 rounded-xl border border-[#38383a] flex justify-between items-center">
+            <div>
+              <span class="text-white font-medium">${r.date_label}</span>
+              <span class="text-amber-400 font-bold ml-3">${r.weight} kg</span>
+            </div>
+            <button type="button" onclick="deleteWeight(${r.id})" class="text-[11px] text-red-400 bg-red-500/10 px-2.5 py-1 rounded-lg border border-red-500/20 cursor-pointer">🗑️ 刪除</button>
           </div>
         `).join('');
 
-        // 渲染圖表
+        // 渲染折線圖
         const ctx = document.getElementById('weightChart').getContext('2d');
         if (weightChart) weightChart.destroy();
         weightChart = new Chart(ctx, {
@@ -119,13 +129,23 @@
       } catch(e) { console.log('Load weight error', e); }
     }
 
-    // 儲存至 Supabase 雲端
+    // 刪除體重紀錄
+    async function deleteWeight(id) {
+      if (!confirm("確定要刪除這筆體重紀錄嗎？")) return;
+      await fetch(`${SUPABASE_URL}/rest/v1/weight_logs?id=eq.${id}`, {
+        method: 'DELETE',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      loadCloudWeight();
+    }
+
+    // 上傳並儲存體重至 Supabase
     document.getElementById('save-weight').onclick = async function() {
       const dateInput = document.getElementById('weight-date').value.trim();
       const valueInput = parseFloat(document.getElementById('weight-value').value);
 
       if (!dateInput || isNaN(valueInput)) {
-        alert("請輸入有效的日期與體重數值！");
+        alert("請填寫正確的日期與體重數值！");
         return;
       }
 
@@ -140,12 +160,12 @@
       });
 
       if (res.ok) {
-        alert("✨ 體重紀錄已成功儲存至 Supabase 雲端！");
+        alert("✨ 體重紀錄已成功 Save 入雲端！");
         document.getElementById('weight-date').value = '';
         document.getElementById('weight-value').value = '';
         loadCloudWeight();
       } else {
-        alert("儲存失敗！請確認 Supabase SQL 已經成功 Run 過。");
+        alert("⚠️ 上傳失敗，請確定已經在 Supabase 執行解鎖 SQL！");
       }
     };
 
