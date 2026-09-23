@@ -12,7 +12,6 @@
 </head>
 <body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
 
-  <!-- 頂部獨立分頁導覽列 -->
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
     <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] overflow-x-auto">
       <div class="flex items-center gap-5 min-w-max">
@@ -33,7 +32,6 @@
         <p class="text-xs text-[#86868b] mt-1">紀錄 Hazel 的成長難忘時刻，雙人雲端同步</p>
       </div>
 
-      <!-- 新增里程碑表單 -->
       <div class="bg-[#1c1c1e] p-4 rounded-2xl border border-[#38383a]">
         <h3 class="text-xs font-semibold text-amber-300 mb-3 flex items-center gap-1.5">✨ 新增里程碑時刻</h3>
         <div class="space-y-3 mb-3">
@@ -49,16 +47,92 @@
           </div>
           <div>
             <label class="text-[10px] text-[#86868b] mb-1 block">故事細節：</label>
-            <input type="text" id="ms-desc" placeholder="例如: 玩水超開心，回家睡了大半天！" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            <input type="text" id="ms-desc" placeholder="例如: 玩水超開心！" class="w-full bg-[#2c2c2e] border border-[#38383a] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
           </div>
         </div>
-        <button type="button" id="save-milestone" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 active:scale-98 text-black font-bold rounded-xl text-xs transition-all shadow-md cursor-pointer">
+        <button type="button" id="save-milestone" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all cursor-pointer">
           新增里程碑至雲端
         </button>
       </div>
 
-      <!-- 時間軸展示區塊 -->
       <div class="relative pl-6 border-l-2 border-amber-500/40 space-y-8 text-xs" id="milestone-timeline">
+        載入里程碑中...
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
+
+    async function loadCloudMilestones() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones?select=*&order=created_at.asc`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const data = await res.json();
+        const records = (data && Array.isArray(data)) ? data.filter(d => !d.description || !d.description.includes('MOP')) : [];
+
+        if (records.length === 0) {
+          document.getElementById('milestone-timeline').innerHTML = `<p class="text-[#86868b]">目前沒有里程碑，快在上方新增第一個吧！</p>`;
+          return;
+        }
+
+        document.getElementById('milestone-timeline').innerHTML = records.map(m => `
+          <div class="relative group flex justify-between items-start gap-4">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 border-4 border-[#161617]"></div>
+            <div>
+              <p class="font-bold text-amber-400 text-sm">${m.event_date}</p>
+              <p class="text-white font-semibold text-sm mt-1">${m.title}</p>
+              <p class="text-[#86868b] mt-0.5">${m.description || ''}</p>
+            </div>
+            <button type="button" onclick="deleteMilestone(${m.id})" class="text-[11px] text-red-400 bg-red-500/10 px-2.5 py-1 rounded-lg border border-red-500/20 cursor-pointer">🗑️ 刪除</button>
+          </div>
+        `).join('');
+      } catch(e) { console.log('Load error', e); }
+    }
+
+    async function deleteMilestone(id) {
+      if (!confirm("確定要刪除這條里程碑嗎？")) return;
+      await fetch(`${SUPABASE_URL}/rest/v1/milestones?id=eq.${id}`, {
+        method: 'DELETE',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      loadCloudMilestones();
+    }
+
+    document.getElementById('save-milestone').onclick = async function() {
+      const date = document.getElementById('ms-date').value.trim();
+      const title = document.getElementById('ms-title').value.trim();
+      const desc = document.getElementById('ms-desc').value.trim();
+
+      if (!date || !title) { alert("請填寫日期與標題！"); return; }
+
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        },
+        body: JSON.stringify({ event_date: date, title: title, description: desc })
+      });
+
+      if (res.ok) {
+        alert("✨ 成功 Save 入雲端！");
+        document.getElementById('ms-date').value = '';
+        document.getElementById('ms-title').value = '';
+        document.getElementById('ms-desc').value = '';
+        loadCloudMilestones();
+      } else {
+        alert("⚠️ 上傳失敗！請確定您已執行第一步最新的 SQL 指令！");
+      }
+    };
+
+    window.onload = loadCloudMilestones;
+  </script>
+</body>
+</html>
         載入里程碑中...
       </div>
     </div>
