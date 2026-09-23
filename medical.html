@@ -158,16 +158,20 @@
     const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
     const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
 
-    // 從 Supabase 載入醫療歷史 (純讀取，不產生預設值)
+    // 載入醫療紀錄
     async function loadCloudMedical() {
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones?select=*&order=created_at.desc`, {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+          headers: { 
+            'apikey': SUPABASE_KEY, 
+            'Authorization': `Bearer ${SUPABASE_KEY}` 
+          }
         });
         const data = await res.json();
         
-        // 過濾屬於醫療紀錄的資料
-        const medicalRecords = (data && data.length > 0) ? data.filter(d => d.description && d.description.includes('MOP')) : [];
+        const medicalRecords = (data && Array.isArray(data)) 
+          ? data.filter(d => d.description && d.description.includes('MOP')) 
+          : [];
 
         const container = document.getElementById('medical-list');
         if (medicalRecords.length === 0) {
@@ -199,80 +203,47 @@
             </div>
           `;
         }).join('');
-      } catch(e) { console.log('Load medical logs error', e); }
+      } catch(e) { console.log('Load medical error', e); }
     }
 
     // 刪除醫療紀錄
     async function deleteMedical(id) {
       if (!confirm("確定要刪除這筆看診紀錄嗎？")) return;
 
-      const itemElem = document.getElementById(`med-item-${id}`);
-      if (itemElem) itemElem.style.opacity = '0.3';
-
       const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones?id=eq.${id}`, {
         method: 'DELETE',
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        headers: { 
+          'apikey': SUPABASE_KEY, 
+          'Authorization': `Bearer ${SUPABASE_KEY}` 
+        }
       });
 
       if (res.ok) {
-        if (itemElem) itemElem.remove();
-        const container = document.getElementById('medical-list');
-        if (container.children.length === 0) {
-          container.innerHTML = `<p class="text-[#86868b] text-center py-4">目前還沒有醫療紀錄，請在上方新增！</p>`;
-        }
+        loadCloudMedical();
       } else {
         alert("刪除失敗，請重試！");
-        if (itemElem) itemElem.style.opacity = '1';
       }
     }
 
-    // 新增醫療紀錄
+    // 新增醫療紀錄 (嚴格驗證雲端 Response)
     document.getElementById('save-medical').onclick = async function() {
+      const btn = document.getElementById('save-medical');
       const date = document.getElementById('med-date').value.trim();
       const title = document.getElementById('med-title').value.trim();
       const location = document.getElementById('med-location').value.trim();
       const cost = document.getElementById('med-cost').value.trim();
 
-      if (!date || !title || !cost) { alert("請填寫日期、診療原因與費用！"); return; }
+      if (!date || !title || !cost) { 
+        alert("請填寫日期、診療原因與費用！"); 
+        return; 
+      }
+
+      btn.innerText = "上傳中...";
+      btn.disabled = true;
 
       const locationText = location ? (location.startsWith('📍') ? location : '📍 ' + location) : '📍 未標示地點';
       const fullDesc = `${locationText} | ${cost}`;
 
-      // 即時插入列表頂部
-      const container = document.getElementById('medical-list');
-      const tempId = Date.now();
-      const newCardHTML = `
-        <div id="med-item-${tempId}" class="p-4 bg-[#1c1c1e] rounded-2xl border border-amber-500/40 flex justify-between items-center gap-3 transition-all">
-          <div class="flex-1">
-            <p class="font-semibold text-white text-sm">${title}</p>
-            <div class="flex items-center gap-2 mt-1.5 text-[11px] text-[#86868b]">
-              <span class="text-amber-400 font-medium">${locationText}</span>
-              <span>•</span>
-              <span>${date}</span>
-            </div>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="text-amber-400 font-bold bg-amber-400/10 px-3 py-1.5 rounded-xl border border-amber-400/20">${cost}</span>
-            <button type="button" onclick="deleteMedical(${tempId})" class="text-[11px] text-red-400/80 hover:text-red-400 bg-red-500/10 hover:bg-red-500/20 px-2.5 py-1.5 rounded-xl border border-red-500/20 transition-all cursor-pointer">
-              🗑️ 刪除
-            </button>
-          </div>
-        </div>
-      `;
-
-      if (container.innerHTML.includes('目前還沒有醫療紀錄') || container.innerHTML.includes('載入醫療紀錄中')) {
-        container.innerHTML = newCardHTML;
-      } else {
-        container.insertAdjacentHTML('afterbegin', newCardHTML);
-      }
-
-      // 清空輸入框
-      document.getElementById('med-date').value = '';
-      document.getElementById('med-title').value = '';
-      document.getElementById('med-location').value = '';
-      document.getElementById('med-cost').value = '';
-
-      // 傳送到 Supabase
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/milestones`, {
           method: 'POST',
@@ -282,24 +253,29 @@
             'Authorization': `Bearer ${SUPABASE_KEY}`,
             'Prefer': 'return=representation'
           },
-          body: JSON.stringify({ event_date: date, title: title, description: fullDesc })
+          body: JSON.stringify({ 
+            event_date: date, 
+            title: title, 
+            description: fullDesc 
+          })
         });
 
         if (res.ok) {
-          const insertedData = await res.json();
-          if (insertedData && insertedData[0] && insertedData[0].id) {
-            const tempElem = document.getElementById(`med-item-${tempId}`);
-            if (tempElem) {
-              tempElem.id = `med-item-${insertedData[0].id}`;
-              tempElem.classList.remove('border-amber-500/40');
-              tempElem.classList.add('border-[#38383a]');
-              const btn = tempElem.querySelector('button');
-              if (btn) btn.setAttribute('onclick', `deleteMedical(${insertedData[0].id})`);
-            }
-          }
+          alert("✨ 成功 Save 入雲端！現在重整 (Refresh) 網頁或女朋友手機睇都絕對不會消失！");
+          document.getElementById('med-date').value = '';
+          document.getElementById('med-title').value = '';
+          document.getElementById('med-location').value = '';
+          document.getElementById('med-cost').value = '';
+          await loadCloudMedical();
+        } else {
+          const errData = await res.json();
+          alert("⚠️ 儲存失敗：" + (errData.message || "請檢查 Supabase SQL 權限！"));
         }
-      } catch(e) {
-        console.log('Background save error', e);
+      } catch (err) {
+        alert("網路傳送失敗，請稍後再試！");
+      } finally {
+        btn.innerText = "上傳並儲存看診紀錄至雲端";
+        btn.disabled = false;
       }
     };
 
