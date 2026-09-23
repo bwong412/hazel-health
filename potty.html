@@ -36,42 +36,29 @@
           <h2 class="text-2xl font-bold text-white">💩 散步與排泄打卡</h2>
           <p class="text-xs text-[#86868b] mt-1">雙人雲端即時同步機制</p>
         </div>
-        <button type="button" id="reset-counter" class="text-xs bg-[#2c2c2e] hover:bg-[#3c3c3e] text-[#ceced2] px-3 py-1 rounded-full border border-[#424245] transition-all">
+        <button type="button" id="reset-counter" class="text-xs bg-[#2c2c2e] hover:bg-[#3c3c3e] text-[#ceced2] px-3 py-1 rounded-full border border-[#424245]">
           🔄 清零重置
         </button>
       </div>
 
-      <!-- 可微調次數的加減按鈕區塊 -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        
-        <!-- 小便控制卡片 -->
         <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-4 flex flex-col items-center justify-between gap-3">
           <span class="text-xs text-[#86868b]">💧 小便計數</span>
           <span class="text-4xl font-bold text-blue-400"><span id="pee-count">0</span> <span class="text-sm font-normal text-[#86868b]">次</span></span>
           <div class="flex items-center gap-3 w-full pt-1">
-            <button type="button" id="sub-pee" class="flex-1 py-2 bg-[#2c2c2e] hover:bg-[#3c3c3e] active:scale-95 text-blue-400 font-bold text-lg rounded-xl border border-[#38383a] transition-all flex items-center justify-center cursor-pointer">
-              ➖
-            </button>
-            <button type="button" id="add-pee" class="flex-1 py-2 bg-blue-500/20 hover:bg-blue-500/30 active:scale-95 text-blue-400 font-bold text-lg rounded-xl border border-blue-500/30 transition-all flex items-center justify-center cursor-pointer">
-              ➕
-            </button>
+            <button type="button" id="sub-pee" class="flex-1 py-2 bg-[#2c2c2e] text-blue-400 font-bold text-lg rounded-xl border border-[#38383a]">➖</button>
+            <button type="button" id="add-pee" class="flex-1 py-2 bg-blue-500/20 text-blue-400 font-bold text-lg rounded-xl border border-blue-500/30">➕</button>
           </div>
         </div>
 
-        <!-- 便便控制卡片 -->
         <div class="bg-[#1c1c1e] border border-[#38383a] rounded-2xl p-4 flex flex-col items-center justify-between gap-3">
           <span class="text-xs text-[#86868b]">💩 便便計數</span>
           <span class="text-4xl font-bold text-amber-400"><span id="poop-count">0</span> <span class="text-sm font-normal text-[#86868b]">次</span></span>
           <div class="flex items-center gap-3 w-full pt-1">
-            <button type="button" id="sub-poop" class="flex-1 py-2 bg-[#2c2c2e] hover:bg-[#3c3c3e] active:scale-95 text-amber-400 font-bold text-lg rounded-xl border border-[#38383a] transition-all flex items-center justify-center cursor-pointer">
-              ➖
-            </button>
-            <button type="button" id="add-poop" class="flex-1 py-2 bg-amber-500/20 hover:bg-amber-500/30 active:scale-95 text-amber-400 font-bold text-lg rounded-xl border border-amber-500/30 transition-all flex items-center justify-center cursor-pointer">
-              ➕
-            </button>
+            <button type="button" id="sub-poop" class="flex-1 py-2 bg-[#2c2c2e] text-amber-400 font-bold text-lg rounded-xl border border-[#38383a]">➖</button>
+            <button type="button" id="add-poop" class="flex-1 py-2 bg-amber-500/20 text-amber-400 font-bold text-lg rounded-xl border border-amber-500/30">➕</button>
           </div>
         </div>
-
       </div>
 
       <div class="mb-4">
@@ -83,7 +70,7 @@
         </select>
       </div>
 
-      <button type="button" id="save-log" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 active:scale-98 text-black font-bold rounded-xl text-xs transition-all shadow-lg cursor-pointer">
+      <button type="button" id="save-log" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-xs transition-all shadow-lg cursor-pointer">
         上傳並儲存本次散步紀錄
       </button>
 
@@ -98,8 +85,7 @@
     const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
     const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
 
-    let peeCount = 0;
-    let poopCount = 0;
+    let peeCount = 0, poopCount = 0;
 
     function updateCounts() {
       if (peeCount < 0) peeCount = 0;
@@ -110,16 +96,10 @@
 
     document.getElementById('add-pee').onclick = () => { peeCount++; updateCounts(); };
     document.getElementById('sub-pee').onclick = () => { peeCount--; updateCounts(); };
-
     document.getElementById('add-poop').onclick = () => { poopCount++; updateCounts(); };
     document.getElementById('sub-poop').onclick = () => { poopCount--; updateCounts(); };
+    document.getElementById('reset-counter').onclick = () => { peeCount = 0; poopCount = 0; updateCounts(); };
 
-    document.getElementById('reset-counter').onclick = () => {
-      peeCount = 0; poopCount = 0;
-      updateCounts();
-    };
-
-    // 載入雲端紀錄列表（附帶 🗑️ 刪除按鈕）
     async function loadCloudLogs() {
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/walk_poop_logs?select=*&order=created_at.desc&limit=15`, {
@@ -140,37 +120,23 @@
               <span class="text-[#ceced2] ml-2">💧 ${item.pee_count} 次 | 💩 ${item.poop_count} 次 (${item.poop_status})</span>
               <span class="text-[10px] text-[#86868b] ml-2">${new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
             </div>
-            <button type="button" onclick="deleteLog(${item.id})" class="text-[11px] text-red-400/80 hover:text-red-400 bg-red-500/10 hover:bg-red-500/20 px-2.5 py-1 rounded-lg border border-red-500/20 transition-all cursor-pointer">
-              🗑️ 刪除
-            </button>
+            <button type="button" onclick="deleteLog(${item.id})" class="text-[11px] text-red-400 bg-red-500/10 px-2.5 py-1 rounded-lg border border-red-500/20 cursor-pointer">🗑️ 刪除</button>
           </div>
         `).join('');
-      } catch(e) { console.log('Load logs error', e); }
+      } catch(e) { console.log('Load error', e); }
     }
 
-    // 刪除指定打卡紀錄
     async function deleteLog(id) {
-      if (!confirm("確定要刪除這筆打卡紀錄嗎？")) return;
-
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/walk_poop_logs?id=eq.${id}`, {
+      if (!confirm("確定要刪除這筆紀錄嗎？")) return;
+      await fetch(`${SUPABASE_URL}/rest/v1/walk_poop_logs?id=eq.${id}`, {
         method: 'DELETE',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`
-        }
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
       });
-
-      if (res.ok) {
-        loadCloudLogs();
-      } else {
-        alert("刪除失敗，請重試！");
-      }
+      loadCloudLogs();
     }
 
-    // 儲存紀錄至雲端
     document.getElementById('save-log').onclick = async function() {
       if (peeCount === 0 && poopCount === 0) { alert("請先點擊小便或便便計數！"); return; }
-
       const user = document.getElementById('user-selector').value;
       const status = document.getElementById('poop-status').value;
 
@@ -190,7 +156,7 @@
         updateCounts();
         loadCloudLogs();
       } else {
-        alert("儲存失敗，請重試！");
+        alert("⚠️ 上傳失敗！請先在 Supabase 執行解鎖 SQL！");
       }
     };
 
