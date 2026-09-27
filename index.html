@@ -8,6 +8,19 @@
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
     .apple-glass { background: rgba(22, 22, 23, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    
+    /* 3D 翻轉卡片效果 */
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+
+    /* Nothing Phone 點陣微亮效果 */
+    @keyframes dotGlow {
+      0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 2px rgba(255,255,255,0.4)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(255,255,255,0.9)); }
+    }
+    .dot-matrix { animation: dotGlow 3s ease-in-out infinite; }
   </style>
 </head>
 <body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
@@ -26,30 +39,150 @@
   </nav>
 
   <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-8">
+    
+    <!-- Hero 封面區塊 (可拖拉調整相片焦點) -->
     <div class="relative overflow-hidden rounded-3xl bg-[#161617] border border-[#333336] shadow-2xl">
-      
-      <!-- 相片容器 (支援自由拖拉) -->
       <div id="photo-container" class="w-full h-72 md:h-96 bg-gradient-to-tr from-amber-500/20 via-slate-900 to-black flex items-center justify-center bg-cover cursor-grab active:cursor-grabbing select-none relative" style="background-position: 50% 50%;">
-        
         <div id="default-avatar" class="text-center p-6 pointer-events-none">
           <div class="w-24 h-24 mx-auto mb-3 rounded-full bg-amber-500/20 border-2 border-amber-400/50 flex items-center justify-center text-5xl">🐶</div>
           <span class="text-xs uppercase tracking-widest text-amber-400 font-semibold">Macau Labrador Retriever</span>
         </div>
-
-        <!-- 拖拉提示浮標 -->
         <div id="drag-hint" class="hidden absolute bottom-4 left-4 bg-black/60 backdrop-blur-md text-amber-300 text-[11px] px-3 py-1 rounded-full border border-amber-400/30 pointer-events-none">
           🖐️ 可以在照片上直接按住拖動位置
         </div>
       </div>
-
-      <!-- 右上角上傳按鈕 -->
       <div class="absolute top-4 right-4 flex items-center gap-2">
         <label for="photo-upload" class="bg-black/70 hover:bg-black/90 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full border border-white/20 cursor-pointer flex items-center gap-1.5 shadow-lg">
           📷 <span id="upload-status">更換相片</span>
           <input type="file" id="photo-upload" accept="image/*" class="hidden">
         </label>
       </div>
+    </div>
 
+    <!-- 🌟 4大狀態翻轉卡片 (流體磨砂玻璃 + Nothing Phone 點陣風格 + 雲端 Auto Save) -->
+    <div>
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <span>⚡</span> Hazel 今日狀態速查
+        </h2>
+        <span class="text-[10px] text-amber-400/80 bg-amber-400/10 px-2.5 py-1 rounded-full border border-amber-400/20 font-mono">CLOUD SYNC</span>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        
+        <!-- 1. 便便卡片 -->
+        <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('poop')">
+          <div id="card-inner-poop" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
+            <!-- 未拉 (正面: 深灰冷感流體) -->
+            <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
+              <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
+                <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="10" y="4" width="4" height="2"/><rect x="8" y="7" width="8" height="2"/><rect x="6" y="10" width="12" height="2"/><rect x="4" y="13" width="16" height="5"/></svg>
+              </div>
+              <div class="space-y-1">
+                <span class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">POOP STATUS</span>
+                <p class="text-lg font-bold text-slate-300">❌ 未拉屎屎</p>
+                <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下更新狀態</div>
+              </div>
+            </div>
+            <!-- 已拉 (背面: 翡翠青綠流體光暈) -->
+            <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0d3b2e] via-[#08241c] to-[#04120e] border border-emerald-500/30">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center dot-matrix">
+                <svg class="w-6 h-6 text-emerald-400 fill-current" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              <div class="space-y-1">
+                <span class="text-[11px] font-mono tracking-widest text-emerald-400 uppercase">COMPLETED</span>
+                <p class="text-lg font-bold text-emerald-300">💩 已順利拉屎</p>
+                <div class="w-full py-1.5 bg-emerald-500/20 backdrop-blur-md rounded-xl text-center text-[10px] text-emerald-300 border border-emerald-500/30">雙端已同步</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 尿尿卡片 -->
+        <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('pee')">
+          <div id="card-inner-pee" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
+            <!-- 未拉 (正面) -->
+            <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
+              <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
+                <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="11" y="4" width="2" height="4"/><rect x="9" y="9" width="6" height="4"/><rect x="7" y="14" width="10" height="5"/></svg>
+              </div>
+              <div class="space-y-1">
+                <span class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">PEE STATUS</span>
+                <p class="text-lg font-bold text-slate-300">❌ 未拉尿尿</p>
+                <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下更新狀態</div>
+              </div>
+            </div>
+            <!-- 已拉 (背面: 冰藍流體光暈) -->
+            <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0c2f4a] via-[#071d2e] to-[#030e17] border border-sky-500/30">
+              <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center dot-matrix">
+                <svg class="w-6 h-6 text-sky-400 fill-current" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+              </div>
+              <div class="space-y-1">
+                <span class="text-[11px] font-mono tracking-widest text-sky-400 uppercase">COMPLETED</span>
+                <p class="text-lg font-bold text-sky-300">💧 已拉尿尿</p>
+                <div class="w-full py-1.5 bg-sky-500/20 backdrop-blur-md rounded-xl text-center text-[10px] text-sky-300 border border-sky-500/30">雙端已同步</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 飯飯卡片 -->
+        <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('food')">
+          <div id="card-inner-food" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
+            <!-- 未食 (正面) -->
+            <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
+              <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
+                <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="2"/><rect x="7" y="13" width="10" height="5"/></svg>
+              </div>
+              <div class="space-y-1">
+                <span class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">MEAL STATUS</span>
+                <p class="text-lg font-bold text-slate-300">❌ 未食正餐</p>
+                <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下更新狀態</div>
+              </div>
+            </div>
+            <!-- 已食 (背面: 琥珀金橘流體光暈) -->
+            <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#4a2e0c] via-[#2e1d07] to-[#170e03] border border-amber-500/30">
+              <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center dot-matrix">
+                <svg class="w-6 h-6 text-amber-400 fill-current" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="2"/><rect x="6" y="11" width="14" height="8"/></svg>
+              </div>
+              <div class="space-y-1">
+                <span class="text-[11px] font-mono tracking-widest text-amber-400 uppercase">COMPLETED</span>
+                <p class="text-lg font-bold text-amber-300">🥣 已食飽飯飯</p>
+                <div class="w-full py-1.5 bg-amber-500/20 backdrop-blur-md rounded-xl text-center text-[10px] text-amber-300 border border-amber-500/30">雙端已同步</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 藥藥卡片 -->
+        <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('med')">
+          <div id="card-inner-med" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
+            <!-- 未食 (正面) -->
+            <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
+              <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
+                <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10"/></svg>
+              </div>
+              <div class="space-y-1">
+                <span class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">MEDS STATUS</span>
+                <p class="text-lg font-bold text-slate-300">❌ 未食保健藥</p>
+                <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下更新狀態</div>
+              </div>
+            </div>
+            <!-- 已食 (背面: 紫羅蘭流體光暈) -->
+            <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#3b124d] via-[#240a30] to-[#120419] border border-purple-500/30">
+              <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-400/30 flex items-center justify-center dot-matrix">
+                <svg class="w-6 h-6 text-purple-400 fill-current" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="3"/></svg>
+              </div>
+              <div class="space-y-1">
+                <span class="text-[11px] font-mono tracking-widest text-purple-400 uppercase">COMPLETED</span>
+                <p class="text-lg font-bold text-purple-300">💊 已按時食藥</p>
+                <div class="w-full py-1.5 bg-purple-500/20 backdrop-blur-md rounded-xl text-center text-[10px] text-purple-300 border border-purple-500/30">雙端已同步</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
     <div>
@@ -69,126 +202,138 @@
 
     let isDragging = false;
     let startX = 0, startY = 0;
-    let posX = 50, posY = 50; // 預設 50% 50%
+    let posX = 50, posY = 50;
     let saveTimeout = null;
 
-    // 載入相片與位置
-    async function loadCloudPhoto() {
+    // 狀態管理物件
+    const cardStates = {
+      poop: false,
+      pee: false,
+      food: false,
+      med: false
+    };
+
+    // 載入雲端相片與 4 大卡片狀態
+    async function loadCloudData() {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?key=in.(hazel_hero_photo,hazel_hero_pos)`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?select=*`, {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
         });
         const data = await res.json();
         
-        let photoData = null, posData = '50% 50%';
-        if (data && data.length > 0) {
+        if (data && Array.isArray(data)) {
           data.forEach(item => {
-            if (item.key === 'hazel_hero_photo') photoData = item.value;
-            if (item.key === 'hazel_hero_pos') posData = item.value;
+            if (item.key === 'hazel_hero_photo' && item.value) {
+              container.style.backgroundImage = `url(${item.value})`;
+              document.getElementById('default-avatar').classList.add('hidden');
+              dragHint.classList.remove('hidden');
+            }
+            if (item.key === 'hazel_hero_pos' && item.value) {
+              container.style.backgroundPosition = item.value;
+            }
+
+            // 讀取 4 大卡片雲端狀態
+            if (item.key.startsWith('hazel_status_')) {
+              const cardType = item.key.replace('hazel_status_', '');
+              try {
+                const statusObj = JSON.parse(item.value);
+                const todayStr = new Date().toISOString().split('T')[0];
+                // 如果是今天的紀錄則載入，否則隔天自動重置
+                if (statusObj.date === todayStr) {
+                  cardStates[cardType] = statusObj.state;
+                  updateCardUI(cardType);
+                }
+              } catch(e){}
+            }
           });
         }
-
-        if (photoData) {
-          container.style.backgroundImage = `url(${photoData})`;
-          container.style.backgroundPosition = posData;
-          document.getElementById('default-avatar').classList.add('hidden');
-          dragHint.classList.remove('hidden');
-
-          // 解析預設座標 (如 "35% 60%")
-          const parts = posData.replace(/%/g, '').split(' ');
-          if (parts.length === 2) {
-            posX = parseFloat(parts[0]) || 50;
-            posY = parseFloat(parts[1]) || 50;
-          }
-        }
-      } catch(e) { console.log('Load photo error', e); }
+      } catch(e) { console.log('Load cloud data error', e); }
     }
 
-    // --- 滑鼠 & 手指觸控 自由拖拉邏輯 ---
-    function startDrag(clientX, clientY) {
-      isDragging = true;
-      startX = clientX;
-      startY = clientY;
-    }
-
-    function moveDrag(clientX, clientY) {
-      if (!isDragging) return;
-      const deltaX = (clientX - startX) * 0.15; // 拖動敏感度
-      const deltaY = (clientY - startY) * 0.15;
-
-      // 限制 0% ~ 100% 範圍
-      posX = Math.min(100, Math.max(0, posX - deltaX));
-      posY = Math.min(100, Math.max(0, posY - deltaY));
-
-      const newPos = `${posX.toFixed(1)}% ${posY.toFixed(1)}%`;
-      container.style.backgroundPosition = newPos;
-
-      startX = clientX;
-      startY = clientY;
-
-      // 防抖儲存至 Supabase 雲端 (停止拖拉 1 秒後寫入)
-      clearTimeout(saveTimeout);
-      saveTimeout = setTimeout(savePositionToCloud, 1000);
-    }
-
-    function stopDrag() {
-      if (isDragging) {
-        isDragging = false;
-        savePositionToCloud();
+    // 更新卡片 3D 翻轉 UI
+    function updateCardUI(type) {
+      const cardInner = document.getElementById(`card-inner-${type}`);
+      if (!cardInner) return;
+      if (cardStates[type]) {
+        cardInner.classList.add('rotate-y-180');
+      } else {
+        cardInner.classList.remove('rotate-y-180');
       }
     }
 
-    // 滑鼠事件
+    // 點擊翻牌 ＋ Auto Save 至 Supabase
+    async function toggleCard(type) {
+      cardStates[type] = !cardStates[type];
+      updateCardUI(type);
+
+      const todayStr = new Date().toISOString().split('T')[0];
+      const payload = JSON.stringify({ state: cardStates[type], date: todayStr });
+
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/site_settings`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Prefer': 'resolution=merge-duplicates'
+          },
+          body: JSON.stringify({ key: `hazel_status_${type}`, value: payload })
+        });
+      } catch(e) { console.log('Save card status error', e); }
+    }
+
+    // 拖拉照片邏輯
+    function startDrag(clientX, clientY) { isDragging = true; startX = clientX; startY = clientY; }
+    function moveDrag(clientX, clientY) {
+      if (!isDragging) return;
+      const deltaX = (clientX - startX) * 0.15;
+      const deltaY = (clientY - startY) * 0.15;
+      posX = Math.min(100, Math.max(0, posX - deltaX));
+      posY = Math.min(100, Math.max(0, posY - deltaY));
+      const newPos = `${posX.toFixed(1)}% ${posY.toFixed(1)}%`;
+      container.style.backgroundPosition = newPos;
+      startX = clientX; startY = clientY;
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        fetch(`${SUPABASE_URL}/rest/v1/site_settings`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Prefer': 'resolution=merge-duplicates'
+          },
+          body: JSON.stringify({ key: 'hazel_hero_pos', value: newPos })
+        });
+      }, 1000);
+    }
+    function stopDrag() { isDragging = false; }
+
     container.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
     window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
     window.addEventListener('mouseup', stopDrag);
-
-    // 手指觸控事件 (Mobile Touch)
-    container.addEventListener('touchstart', (e) => {
-      if (e.touches.length === 1) startDrag(e.touches[0].clientX, e.touches[0].clientY);
-    });
-    window.addEventListener('touchmove', (e) => {
-      if (e.touches.length === 1) moveDrag(e.touches[0].clientX, e.touches[0].clientY);
-    });
+    container.addEventListener('touchstart', (e) => { if (e.touches.length === 1) startDrag(e.touches[0].clientX, e.touches[0].clientY); });
+    window.addEventListener('touchmove', (e) => { if (e.touches.length === 1) moveDrag(e.touches[0].clientX, e.touches[0].clientY); });
     window.addEventListener('touchend', stopDrag);
 
-    // 將位置儲存至 Supabase
-    async function savePositionToCloud() {
-      const posStr = `${posX.toFixed(1)}% ${posY.toFixed(1)}%`;
-      await fetch(`${SUPABASE_URL}/rest/v1/site_settings`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Prefer': 'resolution=merge-duplicates'
-        },
-        body: JSON.stringify({ key: 'hazel_hero_pos', value: posStr })
-      });
-    }
-
-    // 上傳相片（正向 Canvas 渲染）
+    // 上傳照片
     document.getElementById('photo-upload').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
-
       document.getElementById('upload-status').innerText = '處理中...';
-
       const img = new Image();
       img.onload = function() {
         const canvas = document.createElement('canvas');
         const max_size = 800;
         let width = img.width, height = img.height;
-
         if (width > height) { if (width > max_size) { height *= max_size / width; width = max_size; } }
         else { if (height > max_size) { width *= max_size / height; height = max_size; } }
-
         canvas.width = width; canvas.height = height;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
         const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
 
-        // 寫入 Supabase
         fetch(`${SUPABASE_URL}/rest/v1/site_settings`, {
           method: 'POST',
           headers: {
@@ -200,25 +345,19 @@
           body: JSON.stringify({ key: 'hazel_hero_photo', value: compressedBase64 })
         }).then(res => {
           if(res.ok) {
-            alert('✨ 相片上傳成功！現在你可以直接用手指或滑鼠在照片上【按住拖動】，微調到最佳位置。');
             container.style.backgroundImage = `url(${compressedBase64})`;
-            posX = 50; posY = 50;
-            container.style.backgroundPosition = '50% 50%';
             document.getElementById('default-avatar').classList.add('hidden');
             dragHint.classList.remove('hidden');
-          } else {
-            alert('上傳失敗，請重試！');
           }
           document.getElementById('upload-status').innerText = '更換相片';
         });
       };
-
       const reader = new FileReader();
       reader.onload = (event) => { img.src = event.target.result; };
       reader.readAsDataURL(file);
     });
 
-    window.onload = loadCloudPhoto;
+    window.onload = loadCloudData;
   </script>
 </body>
 </html>
