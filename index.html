@@ -26,75 +26,89 @@
     .card-matrix-transition {
       transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .card-matrix-exit {
-      opacity: 0;
-      transform: scale(0.92);
-    }
-    .card-matrix-enter {
-      opacity: 1;
-      transform: scale(1);
-    }
+    .card-matrix-exit { opacity: 0; transform: scale(0.92); }
+    .card-matrix-enter { opacity: 1; transform: scale(1); }
 
-    /* 🎬 開場 3D 裂開開門 Splash 特效 CSS */
+    /* 🔐 門鎖 Split Door 特效 */
     .splash-overlay {
       position: fixed;
       inset: 0;
       z-index: 200;
       pointer-events: none;
       display: flex;
+      overflow: hidden;
     }
     .splash-door-left, .splash-door-right {
-      width: 50%;
-      height: 100%;
+      width: 50vw;
+      height: 100vh;
       background: #000000;
-      transition: transform 1.1s cubic-bezier(0.77, 0, 0.175, 1);
+      position: relative;
+      display: flex;
+      align-items: center;
+      transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
     }
-    .splash-door-left { border-r: 1px solid rgba(255, 255, 255, 0.1); }
-    .splash-door-right { border-l: 1px solid rgba(255, 255, 255, 0.1); }
-    
-    /* 門開動作 */
+    .splash-door-left { justify-content: flex-end; border-right: 1px solid rgba(245, 158, 11, 0.3); }
+    .splash-door-right { justify-content: flex-start; border-left: 1px solid rgba(245, 158, 11, 0.3); }
+
+    /* 門鎖半圓形卡扣 */
+    .lock-half-left, .lock-half-right {
+      width: 120px;
+      height: 240px;
+      background: #161617;
+      border: 2px solid rgba(245, 158, 11, 0.5);
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    }
+    .lock-half-left {
+      right: 0;
+      border-radius: 120px 0 0 120px;
+      border-right: none;
+    }
+    .lock-half-right {
+      left: 0;
+      border-radius: 0 120px 120px 0;
+      border-left: none;
+    }
+
+    /* 門鎖圖片半邊渲染 */
+    .lock-img-left, .lock-img-right {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      position: absolute;
+      max-width: none;
+    }
+    .lock-img-left { right: -100px; }
+    .lock-img-right { left: -100px; }
+
+    /* 門解鎖滑開動畫 */
     .splash-split .splash-door-left { transform: translateX(-100%); }
     .splash-split .splash-door-right { transform: translateX(100%); }
-
-    /* 中間拉布拉多 Icon 3D 動畫 */
-    .splash-icon-wrapper {
-      position: fixed;
-      inset: 0;
-      z-index: 210;
-      display: flex;
-      flex-direction: column;
-      items-center: center;
-      justify-content: center;
-      pointer-events: none;
-      transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    @keyframes iconSpin3D {
-      0% { transform: scale(0.3) rotateY(-180deg); opacity: 0; }
-      60% { transform: scale(1.15) rotateY(20deg); opacity: 1; }
-      100% { transform: scale(1) rotateY(0deg); opacity: 1; }
-    }
-    .splash-icon-anim {
-      animation: iconSpin3D 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-    }
-    .splash-icon-out {
-      opacity: 0 !important;
-      transform: scale(1.8) rotateY(90deg) !important;
-    }
   </style>
 </head>
 <body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
 
-  <!-- 🎬 影片風格：3D 拉布拉多開門 Splash 遮罩 -->
+  <!-- 🔐 機構門鎖 Split Door Splash 開場遮罩 -->
   <div id="splash-doors" class="splash-overlay">
-    <div class="splash-door-left"></div>
-    <div class="splash-door-right"></div>
-  </div>
-  
-  <div id="splash-icon-container" class="splash-icon-wrapper">
-    <div class="w-28 h-28 rounded-3xl bg-[#161617] border-2 border-amber-400/50 flex items-center justify-center text-6xl shadow-[0_0_50px_rgba(245,158,11,0.3)] splash-icon-anim">
-      🐕
+    <!-- 左門扉 ＋ 左半門鎖 -->
+    <div class="splash-door-left">
+      <div class="lock-half-left">
+        <!-- 讀取你 GitHub 上傳的 hazel-logo.png -->
+        <img src="./hazel-logo.png" alt="Hazel Left Lock" class="lock-img-left" onerror="this.src='https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=300&q=80'">
+      </div>
     </div>
-    <span class="mt-4 text-xs font-mono tracking-widest text-amber-400 font-bold uppercase">HAZEL WELCOME</span>
+    <!-- 右門扉 ＋ 右半門鎖 -->
+    <div class="splash-door-right">
+      <div class="lock-half-right">
+        <img src="./hazel-logo.png" alt="Hazel Right Lock" class="lock-img-right" onerror="this.src='https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=300&q=80'">
+      </div>
+    </div>
   </div>
 
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
@@ -292,30 +306,24 @@
       lastUpdated: '--:--'
     };
 
-    // 🎬 開門 Splash 特效觸發腳本
+    // 🔐 機構門鎖對半裂開動畫腳本
     function triggerSplashEntrance() {
       const splashDoors = document.getElementById('splash-doors');
-      const splashIconContainer = document.getElementById('splash-icon-container');
 
-      // 檢查本次 Session 是否已播放過
       if (sessionStorage.getItem('hazel_splash_played') === 'true') {
         splashDoors.style.display = 'none';
-        splashIconContainer.style.display = 'none';
         return;
       }
 
-      // 1.2 秒後 3D 拉布拉多 Icon 退場，雙門對半裂開
+      // 1.2 秒後門鎖分開滑向兩側
       setTimeout(() => {
-        splashIconContainer.classList.add('splash-icon-out');
         splashDoors.classList.add('splash-split');
         sessionStorage.setItem('hazel_splash_played', 'true');
 
-        // 1.2 秒後隱藏開門遮罩 DOM
         setTimeout(() => {
           splashDoors.style.display = 'none';
-          splashIconContainer.style.display = 'none';
         }, 1200);
-      }, 1300);
+      }, 1000);
     }
 
     function getLogicalDate() {
