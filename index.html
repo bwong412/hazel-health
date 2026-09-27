@@ -38,9 +38,9 @@
     </div>
   </nav>
 
-  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-8">
+  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-10">
     
-    <!-- Hero 封面區塊 (可拖拉調整相片焦點) -->
+    <!-- 1. 頂部：Hero 封面區塊 (可拖拉調整相片焦點) -->
     <div class="relative overflow-hidden rounded-3xl bg-[#161617] border border-[#333336] shadow-2xl">
       <div id="photo-container" class="w-full h-72 md:h-96 bg-gradient-to-tr from-amber-500/20 via-slate-900 to-black flex items-center justify-center bg-cover cursor-grab active:cursor-grabbing select-none relative" style="background-position: 50% 50%;">
         <div id="default-avatar" class="text-center p-6 pointer-events-none">
@@ -59,32 +59,56 @@
       </div>
     </div>
 
-    <!-- 🌟 4大狀態翻轉卡片 (流體磨砂玻璃 + Nothing Phone 點陣風格 + 雲端 Auto Save) -->
-    <div>
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-white flex items-center gap-2">
-          <span>⚡</span> Hazel 今日狀態速查
-        </h2>
-        <span class="text-[10px] text-amber-400/80 bg-amber-400/10 px-2.5 py-1 rounded-full border border-amber-400/20 font-mono">CLOUD SYNC</span>
+    <!-- 2. 中部：Hazel’s Website 陳述簡介 -->
+    <div class="space-y-4">
+      <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-white">Hazel’s Website</h1>
+      <p class="text-base md:text-lg text-[#86868b] leading-relaxed">
+        這裡是一個充滿愛心的小角落，專屬於我們的狗狗 Hazel 🐶。她在 2025 年正式加入我們的家庭，本來以為是一隻金毛，結果卻是可愛的拉布拉多，帶來了更多驚喜與歡笑。在這個網站，你可以找到 Hazel 的所有生活點滴：她的故事、照片、健康記錄，還有我們每天的溫馨分享。希望大家能一起陪伴她、喜歡她，送上滿滿的祝福，願 Hazel 永遠健康快樂 💖。
+      </p>
+    </div>
+
+    <hr class="border-[#262628]">
+
+    <!-- 3. 底部：4大狀態雙核翻轉卡片 (早晚自動切換 + 凌晨04:00清零 + 最後更新時間) -->
+    <div class="space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <span>⚡</span> Hazel 今日狀態速查
+          </h2>
+          <p id="mode-hint-text" class="text-xs text-[#86868b] mt-0.5">自動模式載入中...</p>
+        </div>
+
+        <!-- 切換與更新時間資訊 -->
+        <div class="flex items-center gap-3">
+          <span id="last-updated-tag" class="text-[10px] text-[#86868b] bg-[#1c1c1e] px-2.5 py-1 rounded-full border border-[#333336] font-mono">最後更新: --:--</span>
+          
+          <!-- 手動早/晚切換按鈕 -->
+          <div class="flex bg-[#1c1c1e] p-1 rounded-xl border border-[#333336] text-xs">
+            <button id="btn-day" onclick="switchShift('day')" class="px-3 py-1 rounded-lg transition-all text-amber-300 font-bold bg-[#2c2c2e]">☀️ 早上</button>
+            <button id="btn-night" onclick="switchShift('night')" class="px-3 py-1 rounded-lg transition-all text-[#86868b]">🌙 夜晚</button>
+          </div>
+        </div>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <!-- 4 大卡片矩陣 -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
         
         <!-- 1. 便便卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('poop')">
           <div id="card-inner-poop" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
-            <!-- 未拉 (正面: 深灰冷感流體) -->
+            <!-- 未拉 (正面: 深灰冷感) -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="10" y="4" width="4" height="2"/><rect x="8" y="7" width="8" height="2"/><rect x="6" y="10" width="12" height="2"/><rect x="4" y="13" width="16" height="5"/></svg>
               </div>
               <div class="space-y-1">
-                <span class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">POOP STATUS</span>
+                <span id="poop-shift-label" class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">POOP • ☀️ 早上</span>
                 <p class="text-lg font-bold text-slate-300">❌ 未拉屎屎</p>
-                <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下更新狀態</div>
+                <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
-            <!-- 已拉 (背面: 翡翠青綠流體光暈) -->
+            <!-- 已拉 (背面: 翡翠綠流體光暈) -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0d3b2e] via-[#08241c] to-[#04120e] border border-emerald-500/30">
               <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-emerald-400 fill-current" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
@@ -107,9 +131,9 @@
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="11" y="4" width="2" height="4"/><rect x="9" y="9" width="6" height="4"/><rect x="7" y="14" width="10" height="5"/></svg>
               </div>
               <div class="space-y-1">
-                <span class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">PEE STATUS</span>
+                <span id="pee-shift-label" class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">PEE • ☀️ 早上</span>
                 <p class="text-lg font-bold text-slate-300">❌ 未拉尿尿</p>
-                <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下更新狀態</div>
+                <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
             <!-- 已拉 (背面: 冰藍流體光暈) -->
@@ -135,9 +159,9 @@
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="2"/><rect x="7" y="13" width="10" height="5"/></svg>
               </div>
               <div class="space-y-1">
-                <span class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">MEAL STATUS</span>
+                <span id="food-shift-label" class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">MEAL • ☀️ 早上</span>
                 <p class="text-lg font-bold text-slate-300">❌ 未食正餐</p>
-                <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下更新狀態</div>
+                <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
             <!-- 已食 (背面: 琥珀金橘流體光暈) -->
@@ -163,9 +187,9 @@
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10"/></svg>
               </div>
               <div class="space-y-1">
-                <span class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">MEDS STATUS</span>
+                <span id="med-shift-label" class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">MEDS • ☀️ 早上</span>
                 <p class="text-lg font-bold text-slate-300">❌ 未食保健藥</p>
-                <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下更新狀態</div>
+                <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
             <!-- 已食 (背面: 紫羅蘭流體光暈) -->
@@ -185,12 +209,6 @@
       </div>
     </div>
 
-    <div>
-      <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-4 text-white">Hazel’s Website</h1>
-      <p class="text-base md:text-lg text-[#86868b] leading-relaxed">
-        這裡是一個充滿愛心的小角落，專屬於我們的狗狗 Hazel 🐶。她在 2025 年正式加入我們的家庭，本來以為是一隻金毛，結果卻是可愛的拉布拉多，帶來了更多驚喜與歡笑。在這個網站，你可以找到 Hazel 的所有生活點滴：她的故事、照片、健康記錄，還有我們每天的溫馨分享。希望大家能一起陪伴她、喜歡她，送上滿滿的祝福，願 Hazel 永遠健康快樂 💖。
-      </p>
-    </div>
   </div>
 
   <script>
@@ -200,21 +218,45 @@
     const container = document.getElementById('photo-container');
     const dragHint = document.getElementById('drag-hint');
 
+    let currentShift = 'day'; // 'day' 或 'night'
     let isDragging = false;
     let startX = 0, startY = 0;
     let posX = 50, posY = 50;
     let saveTimeout = null;
 
-    // 狀態管理物件
-    const cardStates = {
-      poop: false,
-      pee: false,
-      food: false,
-      med: false
+    // 早晚雙核狀態管理結構
+    const cardData = {
+      day: { poop: false, pee: false, food: false, med: false },
+      night: { poop: false, pee: false, food: false, med: false },
+      lastUpdated: '--:--'
     };
 
-    // 載入雲端相片與 4 大卡片狀態
+    // 計算凌晨 04:00 界線的邏輯日期 (YYYY-MM-DD)
+    function getLogicalDate() {
+      const now = new Date();
+      // 如果時間小於凌晨 4 點，算作前一天的日期
+      if (now.getHours() < 4) {
+        now.setDate(now.getDate() - 1);
+      }
+      return now.toISOString().split('T')[0];
+    }
+
+    // 自動判斷目前時間點屬於 ☀️ 早上 (06:00-16:59) 還是 🌙 夜晚 (17:00-05:59)
+    function autoDetectShift() {
+      const hour = new Date().getHours();
+      if (hour >= 6 && hour < 17) {
+        return 'day';
+      } else {
+        return 'night';
+      }
+    }
+
+    // 載入 Supabase 雲端資料
     async function loadCloudData() {
+      // 1. 自動設置當前模式
+      currentShift = autoDetectShift();
+      updateShiftUI();
+
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?select=*`, {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
@@ -223,6 +265,7 @@
         
         if (data && Array.isArray(data)) {
           data.forEach(item => {
+            // 讀取相片與位置
             if (item.key === 'hazel_hero_photo' && item.value) {
               container.style.backgroundImage = `url(${item.value})`;
               document.getElementById('default-avatar').classList.add('hidden');
@@ -232,42 +275,96 @@
               container.style.backgroundPosition = item.value;
             }
 
-            // 讀取 4 大卡片雲端狀態
-            if (item.key.startsWith('hazel_status_')) {
-              const cardType = item.key.replace('hazel_status_', '');
+            // 讀取全新 v2 早晚狀態數據
+            if (item.key === 'hazel_status_v2' && item.value) {
               try {
-                const statusObj = JSON.parse(item.value);
-                const todayStr = new Date().toISOString().split('T')[0];
-                // 如果是今天的紀錄則載入，否則隔天自動重置
-                if (statusObj.date === todayStr) {
-                  cardStates[cardType] = statusObj.state;
-                  updateCardUI(cardType);
+                const cloudObj = JSON.parse(item.value);
+                const currentLogicalDate = getLogicalDate();
+
+                // 只有日期符合今天（凌晨4點後自動新的一天）才載入，否則自動清零
+                if (cloudObj.date === currentLogicalDate) {
+                  if (cloudObj.day) cardData.day = cloudObj.day;
+                  if (cloudObj.night) cardData.night = cloudObj.night;
+                  if (cloudObj.lastUpdated) cardData.lastUpdated = cloudObj.lastUpdated;
                 }
               } catch(e){}
             }
           });
         }
-      } catch(e) { console.log('Load cloud data error', e); }
+
+        renderAllCards();
+      } catch(e) { console.log('Load error', e); }
     }
 
-    // 更新卡片 3D 翻轉 UI
-    function updateCardUI(type) {
-      const cardInner = document.getElementById(`card-inner-${type}`);
-      if (!cardInner) return;
-      if (cardStates[type]) {
-        cardInner.classList.add('rotate-y-180');
+    // 手動切換「☀️ 早上」/「🌙 夜晚」分頁
+    function switchShift(shift) {
+      currentShift = shift;
+      updateShiftUI();
+      renderAllCards();
+    }
+
+    // 更新 Tab 按鈕與提示文字
+    function updateShiftUI() {
+      const btnDay = document.getElementById('btn-day');
+      const btnNight = document.getElementById('btn-night');
+      const hintText = document.getElementById('mode-hint-text');
+
+      if (currentShift === 'day') {
+        btnDay.className = "px-3 py-1 rounded-lg transition-all text-amber-300 font-bold bg-[#2c2c2e]";
+        btnNight.className = "px-3 py-1 rounded-lg transition-all text-[#86868b]";
+        hintText.innerText = "☀️ 目前為早上模式 (06:00 - 16:59)";
       } else {
-        cardInner.classList.remove('rotate-y-180');
+        btnNight.className = "px-3 py-1 rounded-lg transition-all text-sky-300 font-bold bg-[#2c2c2e]";
+        btnDay.className = "px-3 py-1 rounded-lg transition-all text-[#86868b]";
+        hintText.innerText = "🌙 目前為夜晚模式 (17:00 - 05:59)";
       }
+
+      // 更新卡片上的標籤文字
+      ['poop', 'pee', 'food', 'med'].forEach(type => {
+        const label = document.getElementById(`${type}-shift-label`);
+        if (label) {
+          const typeName = type.toUpperCase();
+          label.innerText = `${typeName} • ${currentShift === 'day' ? '☀️ 早上' : '🌙 夜晚'}`;
+        }
+      });
     }
 
-    // 點擊翻牌 ＋ Auto Save 至 Supabase
-    async function toggleCard(type) {
-      cardStates[type] = !cardStates[type];
-      updateCardUI(type);
+    // 渲染當前模式下的 4 張卡片狀態
+    function renderAllCards() {
+      const shiftData = cardData[currentShift];
+      ['poop', 'pee', 'food', 'med'].forEach(type => {
+        const cardInner = document.getElementById(`card-inner-${type}`);
+        if (cardInner) {
+          if (shiftData[type]) {
+            cardInner.classList.add('rotate-y-180');
+          } else {
+            cardInner.classList.remove('rotate-y-180');
+          }
+        }
+      });
 
-      const todayStr = new Date().toISOString().split('T')[0];
-      const payload = JSON.stringify({ state: cardStates[type], date: todayStr });
+      document.getElementById('last-updated-tag').innerText = `最後更新: ${cardData.lastUpdated}`;
+    }
+
+    // 點擊卡片翻牌 ＋ 儲存狀態與時間至 Supabase 雲端
+    async function toggleCard(type) {
+      // 切換狀態
+      cardData[currentShift][type] = !cardData[currentShift][type];
+      
+      // 更新最後編輯時間 (HH:mm)
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      cardData.lastUpdated = timeStr;
+
+      renderAllCards();
+
+      // 構建上傳雲端的封包
+      const payload = JSON.stringify({
+        date: getLogicalDate(),
+        day: cardData.day,
+        night: cardData.night,
+        lastUpdated: cardData.lastUpdated
+      });
 
       try {
         await fetch(`${SUPABASE_URL}/rest/v1/site_settings`, {
@@ -278,12 +375,12 @@
             'Authorization': `Bearer ${SUPABASE_KEY}`,
             'Prefer': 'resolution=merge-duplicates'
           },
-          body: JSON.stringify({ key: `hazel_status_${type}`, value: payload })
+          body: JSON.stringify({ key: 'hazel_status_v2', value: payload })
         });
-      } catch(e) { console.log('Save card status error', e); }
+      } catch(e) { console.log('Save card error', e); }
     }
 
-    // 拖拉照片邏輯
+    // 照片拖拉邏輯
     function startDrag(clientX, clientY) { isDragging = true; startX = clientX; startY = clientY; }
     function moveDrag(clientX, clientY) {
       if (!isDragging) return;
@@ -317,7 +414,7 @@
     window.addEventListener('touchmove', (e) => { if (e.touches.length === 1) moveDrag(e.touches[0].clientX, e.touches[0].clientY); });
     window.addEventListener('touchend', stopDrag);
 
-    // 上傳照片
+    // 相片上傳
     document.getElementById('photo-upload').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
