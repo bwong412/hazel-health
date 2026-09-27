@@ -21,6 +21,19 @@
       50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(255,255,255,0.9)); }
     }
     .dot-matrix { animation: dotGlow 3s ease-in-out infinite; }
+
+    /* 高級感：切換模式時的左右縮小淡入淡出動畫 */
+    .card-matrix-transition {
+      transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-matrix-exit {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+    .card-matrix-enter {
+      opacity: 1;
+      transform: scale(1);
+    }
   </style>
 </head>
 <body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
@@ -69,7 +82,7 @@
 
     <hr class="border-[#262628]">
 
-    <!-- 3. 底部：4大狀態雙核翻轉卡片 (早晚自動切換 + 凌晨04:00清零 + 最後更新時間) -->
+    <!-- 3. 底部：4大狀態雙核卡片 (平滑退場進場動畫 + 早晚自動切換) -->
     <div class="space-y-4">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
@@ -79,11 +92,9 @@
           <p id="mode-hint-text" class="text-xs text-[#86868b] mt-0.5">自動模式載入中...</p>
         </div>
 
-        <!-- 切換與更新時間資訊 -->
         <div class="flex items-center gap-3">
           <span id="last-updated-tag" class="text-[10px] text-[#86868b] bg-[#1c1c1e] px-2.5 py-1 rounded-full border border-[#333336] font-mono">最後更新: --:--</span>
           
-          <!-- 手動早/晚切換按鈕 -->
           <div class="flex bg-[#1c1c1e] p-1 rounded-xl border border-[#333336] text-xs">
             <button id="btn-day" onclick="switchShift('day')" class="px-3 py-1 rounded-lg transition-all text-amber-300 font-bold bg-[#2c2c2e]">☀️ 早上</button>
             <button id="btn-night" onclick="switchShift('night')" class="px-3 py-1 rounded-lg transition-all text-[#86868b]">🌙 夜晚</button>
@@ -91,13 +102,12 @@
         </div>
       </div>
 
-      <!-- 4 大卡片矩陣 -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
+      <!-- 4 大卡片矩陣外殼 (含 card-matrix-transition 特效類別) -->
+      <div id="cards-wrapper" class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2 card-matrix-transition card-matrix-enter">
         
         <!-- 1. 便便卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('poop')">
           <div id="card-inner-poop" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
-            <!-- 未拉 (正面: 深灰冷感) -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="10" y="4" width="4" height="2"/><rect x="8" y="7" width="8" height="2"/><rect x="6" y="10" width="12" height="2"/><rect x="4" y="13" width="16" height="5"/></svg>
@@ -108,7 +118,6 @@
                 <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
-            <!-- 已拉 (背面: 翡翠綠流體光暈) -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0d3b2e] via-[#08241c] to-[#04120e] border border-emerald-500/30">
               <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-emerald-400 fill-current" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
@@ -125,7 +134,6 @@
         <!-- 2. 尿尿卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('pee')">
           <div id="card-inner-pee" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
-            <!-- 未拉 (正面) -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="11" y="4" width="2" height="4"/><rect x="9" y="9" width="6" height="4"/><rect x="7" y="14" width="10" height="5"/></svg>
@@ -136,7 +144,6 @@
                 <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
-            <!-- 已拉 (背面: 冰藍流體光暈) -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0c2f4a] via-[#071d2e] to-[#030e17] border border-sky-500/30">
               <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-sky-400 fill-current" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
@@ -153,7 +160,6 @@
         <!-- 3. 飯飯卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('food')">
           <div id="card-inner-food" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
-            <!-- 未食 (正面) -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="2"/><rect x="7" y="13" width="10" height="5"/></svg>
@@ -164,7 +170,6 @@
                 <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
-            <!-- 已食 (背面: 琥珀金橘流體光暈) -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#4a2e0c] via-[#2e1d07] to-[#170e03] border border-amber-500/30">
               <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-amber-400 fill-current" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="2"/><rect x="6" y="11" width="14" height="8"/></svg>
@@ -181,7 +186,6 @@
         <!-- 4. 藥藥卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('med')">
           <div id="card-inner-med" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
-            <!-- 未食 (正面) -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10"/></svg>
@@ -192,7 +196,6 @@
                 <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
-            <!-- 已食 (背面: 紫羅蘭流體光暈) -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#3b124d] via-[#240a30] to-[#120419] border border-purple-500/30">
               <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-purple-400 fill-current" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="3"/></svg>
@@ -217,43 +220,32 @@
 
     const container = document.getElementById('photo-container');
     const dragHint = document.getElementById('drag-hint');
+    const cardsWrapper = document.getElementById('cards-wrapper');
 
-    let currentShift = 'day'; // 'day' 或 'night'
+    let currentShift = 'day';
     let isDragging = false;
     let startX = 0, startY = 0;
     let posX = 50, posY = 50;
     let saveTimeout = null;
 
-    // 早晚雙核狀態管理結構
     const cardData = {
       day: { poop: false, pee: false, food: false, med: false },
       night: { poop: false, pee: false, food: false, med: false },
       lastUpdated: '--:--'
     };
 
-    // 計算凌晨 04:00 界線的邏輯日期 (YYYY-MM-DD)
     function getLogicalDate() {
       const now = new Date();
-      // 如果時間小於凌晨 4 點，算作前一天的日期
-      if (now.getHours() < 4) {
-        now.setDate(now.getDate() - 1);
-      }
+      if (now.getHours() < 4) now.setDate(now.getDate() - 1);
       return now.toISOString().split('T')[0];
     }
 
-    // 自動判斷目前時間點屬於 ☀️ 早上 (06:00-16:59) 還是 🌙 夜晚 (17:00-05:59)
     function autoDetectShift() {
       const hour = new Date().getHours();
-      if (hour >= 6 && hour < 17) {
-        return 'day';
-      } else {
-        return 'night';
-      }
+      return (hour >= 6 && hour < 17) ? 'day' : 'night';
     }
 
-    // 載入 Supabase 雲端資料
     async function loadCloudData() {
-      // 1. 自動設置當前模式
       currentShift = autoDetectShift();
       updateShiftUI();
 
@@ -265,7 +257,6 @@
         
         if (data && Array.isArray(data)) {
           data.forEach(item => {
-            // 讀取相片與位置
             if (item.key === 'hazel_hero_photo' && item.value) {
               container.style.backgroundImage = `url(${item.value})`;
               document.getElementById('default-avatar').classList.add('hidden');
@@ -275,14 +266,10 @@
               container.style.backgroundPosition = item.value;
             }
 
-            // 讀取全新 v2 早晚狀態數據
             if (item.key === 'hazel_status_v2' && item.value) {
               try {
                 const cloudObj = JSON.parse(item.value);
-                const currentLogicalDate = getLogicalDate();
-
-                // 只有日期符合今天（凌晨4點後自動新的一天）才載入，否則自動清零
-                if (cloudObj.date === currentLogicalDate) {
+                if (cloudObj.date === getLogicalDate()) {
                   if (cloudObj.day) cardData.day = cloudObj.day;
                   if (cloudObj.night) cardData.night = cloudObj.night;
                   if (cloudObj.lastUpdated) cardData.lastUpdated = cloudObj.lastUpdated;
@@ -296,14 +283,26 @@
       } catch(e) { console.log('Load error', e); }
     }
 
-    // 手動切換「☀️ 早上」/「🌙 夜晚」分頁
+    // ⭐ 平滑縮小淡出退場 ➔ 切換資料 ➔ 微放大淡入進場
     function switchShift(shift) {
-      currentShift = shift;
-      updateShiftUI();
-      renderAllCards();
+      if (currentShift === shift) return;
+
+      // 1. 退場動畫（縮小 + 透明）
+      cardsWrapper.classList.remove('card-matrix-enter');
+      cardsWrapper.classList.add('card-matrix-exit');
+
+      setTimeout(() => {
+        // 2. 切換數據與文字 UI
+        currentShift = shift;
+        updateShiftUI();
+        renderAllCards();
+
+        // 3. 進場動畫（恢復大小 + 不透明）
+        cardsWrapper.classList.remove('card-matrix-exit');
+        cardsWrapper.classList.add('card-matrix-enter');
+      }, 250); // 與 CSS 動畫 0.25s 完美匹配
     }
 
-    // 更新 Tab 按鈕與提示文字
     function updateShiftUI() {
       const btnDay = document.getElementById('btn-day');
       const btnNight = document.getElementById('btn-night');
@@ -319,17 +318,14 @@
         hintText.innerText = "🌙 目前為夜晚模式 (17:00 - 05:59)";
       }
 
-      // 更新卡片上的標籤文字
       ['poop', 'pee', 'food', 'med'].forEach(type => {
         const label = document.getElementById(`${type}-shift-label`);
         if (label) {
-          const typeName = type.toUpperCase();
-          label.innerText = `${typeName} • ${currentShift === 'day' ? '☀️ 早上' : '🌙 夜晚'}`;
+          label.innerText = `${type.toUpperCase()} • ${currentShift === 'day' ? '☀️ 早上' : '🌙 夜晚'}`;
         }
       });
     }
 
-    // 渲染當前模式下的 4 張卡片狀態
     function renderAllCards() {
       const shiftData = cardData[currentShift];
       ['poop', 'pee', 'food', 'med'].forEach(type => {
@@ -346,19 +342,15 @@
       document.getElementById('last-updated-tag').innerText = `最後更新: ${cardData.lastUpdated}`;
     }
 
-    // 點擊卡片翻牌 ＋ 儲存狀態與時間至 Supabase 雲端
     async function toggleCard(type) {
-      // 切換狀態
       cardData[currentShift][type] = !cardData[currentShift][type];
       
-      // 更新最後編輯時間 (HH:mm)
       const now = new Date();
       const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
       cardData.lastUpdated = timeStr;
 
       renderAllCards();
 
-      // 構建上傳雲端的封包
       const payload = JSON.stringify({
         date: getLogicalDate(),
         day: cardData.day,
@@ -380,7 +372,7 @@
       } catch(e) { console.log('Save card error', e); }
     }
 
-    // 照片拖拉邏輯
+    // 手勢拖拉照片邏輯
     function startDrag(clientX, clientY) { isDragging = true; startX = clientX; startY = clientY; }
     function moveDrag(clientX, clientY) {
       if (!isDragging) return;
@@ -414,7 +406,7 @@
     window.addEventListener('touchmove', (e) => { if (e.touches.length === 1) moveDrag(e.touches[0].clientX, e.touches[0].clientY); });
     window.addEventListener('touchend', stopDrag);
 
-    // 相片上傳
+    // 上傳相片
     document.getElementById('photo-upload').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
