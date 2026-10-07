@@ -22,37 +22,56 @@
     }
     .dot-matrix { animation: dotGlow 3s ease-in-out infinite; }
 
-    /* 🐶 Hazel 吉祥物動畫 */
-    #hazel-dog-img {
-      animation: hazelIdle 3s ease-in-out infinite;
+    /* 🐶 Hazel 左右走動與擺動動畫 */
+    @keyframes hazelPatrol {
+      0% { left: 5%; transform: scaleX(1); }
+      48% { left: 75%; transform: scaleX(1); }
+      50% { left: 75%; transform: scaleX(-1); }
+      98% { left: 5%; transform: scaleX(-1); }
+      100% { left: 5%; transform: scaleX(1); }
     }
-    @keyframes hazelIdle {
+
+    /* 走動時身體小幅踏步搖晃 */
+    @keyframes hazelWalkStep {
       0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-6px) rotate(2deg); }
+      25% { transform: translateY(-4px) rotate(3deg); }
+      50% { transform: translateY(0) rotate(0deg); }
+      75% { transform: translateY(-4px) rotate(-3deg); }
     }
+
+    .hazel-patrolling {
+      animation: hazelPatrol 20s linear infinite;
+    }
+    .hazel-walking-body {
+      animation: hazelWalkStep 0.6s ease-in-out infinite;
+    }
+
+    /* 點擊跳躍動畫 */
     .hazel-jump {
       animation: hazelJump 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     }
     @keyframes hazelJump {
       0% { transform: translateY(0) scale(1); }
-      30% { transform: translateY(-25px) scale(1.1) rotate(-5deg); }
+      30% { transform: translateY(-30px) scale(1.15) rotate(-5deg); }
       60% { transform: translateY(0) scale(0.95); }
       100% { transform: translateY(0) scale(1); }
     }
+
+    /* 漂浮愛心粒子 */
     .floating-heart {
       position: fixed;
       pointer-events: none;
-      font-size: 18px;
+      font-size: 20px;
       animation: heartFloat 1s ease-out forwards;
       z-index: 60;
     }
     @keyframes heartFloat {
       0% { opacity: 1; transform: translateY(0) scale(0.8); }
-      100% { opacity: 0; transform: translateY(-60px) scale(1.4); }
+      100% { opacity: 0; transform: translateY(-70px) scale(1.5); }
     }
   </style>
 </head>
-<body class="bg-[#000000] text-[#f5f5f7] min-h-screen relative">
+<body class="bg-[#000000] text-[#f5f5f7] min-h-screen relative overflow-x-hidden">
 
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
     <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] overflow-x-auto">
@@ -67,7 +86,7 @@
     </div>
   </nav>
 
-  <div class="pt-20 pb-28 px-4 max-w-4xl mx-auto space-y-8">
+  <div class="pt-20 pb-36 px-4 max-w-4xl mx-auto space-y-8">
     
     <!-- 預留：最上層飲食紀錄區塊 -->
     <div id="diet-record-section" class="w-full"></div>
@@ -231,14 +250,17 @@
     </div>
   </div>
 
-  <!-- 🐶 頁尾右下角 Hazel 吉祥物 (已套用 hazel-cartoon.png) -->
-  <div id="hazel-mascot-container" class="fixed bottom-4 right-4 z-50 flex flex-col items-end select-none pointer-events-auto">
-    <div id="hazel-bubble" class="hidden mb-2 bg-[#1c1c1e] text-white text-xs px-3 py-2 rounded-2xl border border-[#38383a] shadow-2xl relative max-w-[180px] animate-bounce">
+  <!-- 🐶 放大版 + 底部巡邏走動的 Hazel 吉祥物 -->
+  <div id="hazel-mascot-container" class="fixed bottom-2 z-50 flex flex-col items-center select-none pointer-events-auto hazel-patrolling">
+    <!-- 對話氣泡 -->
+    <div id="hazel-bubble" class="hidden mb-2 bg-[#1c1c1e] text-white text-xs px-3 py-2 rounded-2xl border border-[#38383a] shadow-2xl relative max-w-[180px] animate-bounce text-center">
       <span id="hazel-speech-text">汪！我是 Hazel 🐾</span>
-      <div class="absolute -bottom-1.5 right-6 w-3 h-3 bg-[#1c1c1e] border-r border-b border-[#38383a] rotate-45"></div>
+      <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#1c1c1e] border-r border-b border-[#38383a] rotate-45"></div>
     </div>
-    <div id="hazel-dog-img-wrapper" class="relative cursor-pointer group transition-transform duration-300 hover:scale-110 active:scale-95" onclick="interactWithHazel(event)">
-      <img id="hazel-dog-img" src="hazel-cartoon.png" alt="Hazel Mascot" class="w-20 md:w-24 h-auto drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)] transition-all duration-300">
+    
+    <!-- 狗主體 (放大至 w-28 md:w-36) -->
+    <div id="hazel-dog-img-wrapper" class="relative cursor-pointer group transition-transform duration-300 hover:scale-110 active:scale-95 hazel-walking-body" onclick="interactWithHazel(event)">
+      <img id="hazel-dog-img" src="hazel-cartoon.png" alt="Hazel Mascot" class="w-28 md:w-36 h-auto drop-shadow-[0_12px_20px_rgba(0,0,0,0.6)]">
     </div>
   </div>
 
@@ -384,9 +406,9 @@
       });
     }
 
-    // 🐾 吉祥物互動邏輯
+    // 🐾 吉祥物互動與巡邏控制邏輯
     const hazelQuotes = [
-      "汪！Hazel 想去散步了 🐾",
+      "汪！Hazel 正在巡邏中 🐾",
       "汪！今天有乖乖食飽飯 🥣",
       "汪！爸爸媽媽最愛我 💖",
       "汪！好想食芝士呀 🧀",
@@ -396,21 +418,34 @@
     let speechTimeout = null;
 
     function interactWithHazel(e) {
+      const mascotContainer = document.getElementById('hazel-mascot-container');
       const wrapper = document.getElementById('hazel-dog-img-wrapper');
       const bubble = document.getElementById('hazel-bubble');
       const speechText = document.getElementById('hazel-speech-text');
 
+      // 1. 暫停走動與踏步動畫
+      mascotContainer.style.animationPlayState = 'paused';
+      wrapper.style.animationPlayState = 'paused';
+
+      // 2. 觸發跳躍動畫
       wrapper.classList.remove('hazel-jump');
       void wrapper.offsetWidth;
       wrapper.classList.add('hazel-jump');
 
+      // 3. 顯示隨機氣泡
       const randomQuote = hazelQuotes[Math.floor(Math.random() * hazelQuotes.length)];
       speechText.innerText = randomQuote;
       bubble.classList.remove('hidden');
 
       clearTimeout(speechTimeout);
-      speechTimeout = setTimeout(() => { bubble.classList.add('hidden'); }, 3000);
+      speechTimeout = setTimeout(() => {
+        bubble.classList.add('hidden');
+        // 恢復走動
+        mascotContainer.style.animationPlayState = 'running';
+        wrapper.style.animationPlayState = 'running';
+      }, 3000);
 
+      // 4. 生成愛心特效
       const clientX = e.clientX || (e.touches && e.touches[0].clientX);
       const clientY = e.clientY || (e.touches && e.touches[0].clientY);
       for (let i = 0; i < 3; i++) { createHeart(clientX, clientY); }
@@ -421,8 +456,8 @@
       heart.className = 'floating-heart';
       heart.innerText = ['💖', '🐾', '✨', '🦴'][Math.floor(Math.random() * 4)];
       const offsetX = (Math.random() - 0.5) * 40;
-      heart.style.left = `${(x || window.innerWidth - 60) + offsetX}px`;
-      heart.style.top = `${(y || window.innerHeight - 60)}px`;
+      heart.style.left = `${(x || window.innerWidth / 2) + offsetX}px`;
+      heart.style.top = `${(y || window.innerHeight - 80)}px`;
       document.body.appendChild(heart);
       setTimeout(() => { heart.remove(); }, 1000);
     }
