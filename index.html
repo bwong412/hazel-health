@@ -15,101 +15,15 @@
     .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
     .rotate-y-180 { transform: rotateY(180deg); }
 
-    /* Nothing Phone 點陣微亮效果 */
+    /* Dot Matrix 發光效果 */
     @keyframes dotGlow {
       0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 2px rgba(255,255,255,0.4)); }
       50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(255,255,255,0.9)); }
     }
     .dot-matrix { animation: dotGlow 3s ease-in-out infinite; }
-
-    /* 切換模式時的左右縮小淡入淡出動畫 */
-    .card-matrix-transition {
-      transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .card-matrix-exit { opacity: 0; transform: scale(0.92); }
-    .card-matrix-enter { opacity: 1; transform: scale(1); }
-
-    /* 🔐 門鎖 Split Door 特效 */
-    .splash-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 200;
-      pointer-events: none;
-      display: flex;
-      overflow: hidden;
-    }
-    .splash-door-left, .splash-door-right {
-      width: 50vw;
-      height: 100vh;
-      background: #000000;
-      position: relative;
-      display: flex;
-      align-items: center;
-      transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-    }
-    .splash-door-left { justify-content: flex-end; border-right: 1px solid rgba(245, 158, 11, 0.3); }
-    .splash-door-right { justify-content: flex-start; border-left: 1px solid rgba(245, 158, 11, 0.3); }
-
-    /* 門鎖半圓形卡扣 */
-    .lock-half-left, .lock-half-right {
-      width: 120px;
-      height: 240px;
-      background: #161617;
-      border: 2px solid rgba(245, 158, 11, 0.5);
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      box-shadow: 0 0 30px rgba(0,0,0,0.8);
-    }
-    .lock-half-left {
-      right: 0;
-      border-radius: 120px 0 0 120px;
-      border-right: none;
-    }
-    .lock-half-right {
-      left: 0;
-      border-radius: 0 120px 120px 0;
-      border-left: none;
-    }
-
-    /* 門鎖圖片半邊渲染 */
-    .lock-img-left, .lock-img-right {
-      width: 200px;
-      height: 200px;
-      object-fit: contain;
-      position: absolute;
-      max-width: none;
-    }
-    .lock-img-left { right: -100px; }
-    .lock-img-right { left: -100px; }
-
-    /* 門解鎖滑開動畫 */
-    .splash-split .splash-door-left { transform: translateX(-100%); }
-    .splash-split .splash-door-right { transform: translateX(100%); }
   </style>
 </head>
 <body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
-
-  <!-- 🔐 機構門鎖 Split Door Splash 開場遮罩 -->
-  <div id="splash-doors" class="splash-overlay">
-    <!-- 左門扉 ＋ 左半門鎖 -->
-    <div class="splash-door-left">
-      <div class="lock-half-left">
-        <!-- 讀取你 GitHub 上傳的 hazel-logo.png -->
-        <img src="./hazel-logo.png" alt="Hazel Left Lock" class="lock-img-left" onerror="this.src='https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=300&q=80'">
-      </div>
-    </div>
-    <!-- 右門扉 ＋ 右半門鎖 -->
-    <div class="splash-door-right">
-      <div class="lock-half-right">
-        <img src="./hazel-logo.png" alt="Hazel Right Lock" class="lock-img-right" onerror="this.src='https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=300&q=80'">
-      </div>
-    </div>
-  </div>
 
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
     <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] overflow-x-auto">
@@ -124,9 +38,14 @@
     </div>
   </nav>
 
-  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-10">
+  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-8">
     
-    <!-- 1. 頂部：Hero 封面區塊 (可拖拉調整相片焦點) -->
+    <!-- 預留：最上層飲食紀錄區塊 (預留 position 供之後放入新的 HTML) -->
+    <div id="diet-record-section" class="w-full">
+      <!-- 待會可以在這裡放入飲食紀錄代碼 -->
+    </div>
+
+    <!-- Hero 封面區塊 (可拖拉調整相片焦點) -->
     <div class="relative overflow-hidden rounded-3xl bg-[#161617] border border-[#333336] shadow-2xl">
       <div id="photo-container" class="w-full h-72 md:h-96 bg-gradient-to-tr from-amber-500/20 via-slate-900 to-black flex items-center justify-center bg-cover cursor-grab active:cursor-grabbing select-none relative" style="background-position: 50% 50%;">
         <div id="default-avatar" class="text-center p-6 pointer-events-none">
@@ -145,51 +64,41 @@
       </div>
     </div>
 
-    <!-- 2. 中部：Hazel’s Website 陳述簡介 -->
-    <div class="space-y-4">
-      <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-white">Hazel’s Website</h1>
-      <p class="text-base md:text-lg text-[#86868b] leading-relaxed">
-        這裡是一個充滿愛心的小角落，專屬於我們的狗狗 Hazel 🐶。她在 2025 年正式加入我們的家庭，本來以為是一隻金毛，結果卻是可愛的拉布拉多，帶來了更多驚喜與歡笑。在這個網站，你可以找到 Hazel 的所有生活點滴：她的故事、照片、健康記錄，還有我們每天的溫馨分享。希望大家能一起陪伴她、喜歡她，送上滿滿的祝福，願 Hazel 永遠健康快樂 💖。
-      </p>
-    </div>
-
-    <hr class="border-[#262628]">
-
-    <!-- 3. 底部：4大狀態雙核卡片 (平滑退場進場動畫 + 早晚自動切換) -->
-    <div class="space-y-4">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+    <!-- 🌟 4大狀態翻轉卡片 -->
+    <div>
+      <div class="flex justify-between items-center mb-4">
         <div>
           <h2 class="text-xl font-bold text-white flex items-center gap-2">
             <span>⚡</span> Hazel 今日狀態速查
           </h2>
-          <p id="mode-hint-text" class="text-xs text-[#86868b] mt-0.5">自動模式載入中...</p>
+          <p class="text-[11px] text-[#86868b] mt-0.5" id="mode-desc">目前為夜晚模式 (17:00 - 05:59)</p>
         </div>
-
-        <div class="flex items-center gap-3">
-          <span id="last-updated-tag" class="text-[10px] text-[#86868b] bg-[#1c1c1e] px-2.5 py-1 rounded-full border border-[#333336] font-mono">最後更新: --:--</span>
-          
-          <div class="flex bg-[#1c1c1e] p-1 rounded-xl border border-[#333336] text-xs">
-            <button id="btn-day" onclick="switchShift('day')" class="px-3 py-1 rounded-lg transition-all text-amber-300 font-bold bg-[#2c2c2e]">☀️ 早上</button>
-            <button id="btn-night" onclick="switchShift('night')" class="px-3 py-1 rounded-lg transition-all text-[#86868b]">🌙 夜晚</button>
+        <div class="flex items-center gap-2">
+          <span id="last-update-time" class="text-[10px] text-[#86868b] font-mono bg-[#1c1c1e] px-2.5 py-1 rounded-lg border border-[#38383a]">最後更新: --:--</span>
+          <div class="bg-[#1c1c1e] border border-[#38383a] p-1 rounded-xl flex items-center gap-1 text-xs">
+            <button type="button" id="btn-mode-day" onclick="setDayNightMode('day')" class="px-2.5 py-1 rounded-lg text-[#86868b] hover:text-white transition-all">☀️ 早上</button>
+            <button type="button" id="btn-mode-night" onclick="setDayNightMode('night')" class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">🌙 夜晚</button>
           </div>
         </div>
       </div>
 
-      <div id="cards-wrapper" class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2 card-matrix-transition card-matrix-enter">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
         
         <!-- 1. 便便卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('poop')">
           <div id="card-inner-poop" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
+            <!-- 未拉 -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="10" y="4" width="4" height="2"/><rect x="8" y="7" width="8" height="2"/><rect x="6" y="10" width="12" height="2"/><rect x="4" y="13" width="16" height="5"/></svg>
               </div>
               <div class="space-y-1">
-                <span id="poop-shift-label" class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">POOP • ☀️ 早上</span>
+                <span class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">POOP STATUS</span>
                 <p class="text-lg font-bold text-slate-300">❌ 未拉屎屎</p>
                 <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
+            <!-- 已拉 -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0d3b2e] via-[#08241c] to-[#04120e] border border-emerald-500/30">
               <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-emerald-400 fill-current" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
@@ -206,16 +115,18 @@
         <!-- 2. 尿尿卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('pee')">
           <div id="card-inner-pee" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
+            <!-- 未拉 -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="11" y="4" width="2" height="4"/><rect x="9" y="9" width="6" height="4"/><rect x="7" y="14" width="10" height="5"/></svg>
               </div>
               <div class="space-y-1">
-                <span id="pee-shift-label" class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">PEE • ☀️ 早上</span>
+                <span class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">PEE STATUS</span>
                 <p class="text-lg font-bold text-slate-300">❌ 未拉尿尿</p>
                 <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
+            <!-- 已拉 -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0c2f4a] via-[#071d2e] to-[#030e17] border border-sky-500/30">
               <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-sky-400 fill-current" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
@@ -232,16 +143,18 @@
         <!-- 3. 飯飯卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('food')">
           <div id="card-inner-food" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
+            <!-- 未食 -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="2"/><rect x="7" y="13" width="10" height="5"/></svg>
               </div>
               <div class="space-y-1">
-                <span id="food-shift-label" class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">MEAL • ☀️ 早上</span>
+                <span class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">MEAL STATUS</span>
                 <p class="text-lg font-bold text-slate-300">❌ 未食正餐</p>
                 <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
+            <!-- 已食 -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#4a2e0c] via-[#2e1d07] to-[#170e03] border border-amber-500/30">
               <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-amber-400 fill-current" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="2"/><rect x="6" y="11" width="14" height="8"/></svg>
@@ -258,16 +171,18 @@
         <!-- 4. 藥藥卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('med')">
           <div id="card-inner-med" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
+            <!-- 未食 -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10"/></svg>
               </div>
               <div class="space-y-1">
-                <span id="med-shift-label" class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">MEDS • ☀️ 早上</span>
+                <span class="text-[11px] font-mono tracking-widest text-slate-400 uppercase">MEDS STATUS</span>
                 <p class="text-lg font-bold text-slate-300">❌ 未食保健藥</p>
                 <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
+            <!-- 已食 -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#3b124d] via-[#240a30] to-[#120419] border border-purple-500/30">
               <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-purple-400 fill-current" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="3"/></svg>
@@ -282,8 +197,19 @@
         </div>
 
       </div>
+
+      <!-- 📋 新增功能：一鍵 Copy 文字發給女朋友 -->
+      <button type="button" id="copy-status-btn" onclick="copyStatusToClipboard()" class="w-full py-3 bg-[#1c1c1e] hover:bg-[#2c2c2e] active:scale-98 text-amber-300 font-bold rounded-2xl border border-[#38383a] text-xs transition-all flex items-center justify-center gap-2 shadow-lg cursor-pointer">
+        📋 <span>複製 Hazel 今日狀態文字 (發送給女朋友)</span>
+      </button>
     </div>
 
+    <div>
+      <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-4 text-white">Hazel’s Website</h1>
+      <p class="text-base md:text-lg text-[#86868b] leading-relaxed">
+        這裡是一個充滿愛心的小角落，專屬於我們的狗狗 Hazel 🐶。她在 2025 年正式加入我們的家庭，本來以為是一隻金毛，結果卻是可愛的拉布拉多，帶來了更多驚喜與歡笑。在這個網站，你可以找到 Hazel 的所有生活點滴：她的故事、照片、健康記錄，還有我們每天的溫馨分享。希望大家能一起陪伴她、喜歡她，送上滿滿的祝福，願 Hazel 永遠健康快樂 💖。
+      </p>
+    </div>
   </div>
 
   <script>
@@ -292,56 +218,17 @@
 
     const container = document.getElementById('photo-container');
     const dragHint = document.getElementById('drag-hint');
-    const cardsWrapper = document.getElementById('cards-wrapper');
 
-    let currentShift = 'day';
+    let currentMode = 'night'; //預設模式
     let isDragging = false;
     let startX = 0, startY = 0;
     let posX = 50, posY = 50;
     let saveTimeout = null;
 
-    const cardData = {
-      day: { poop: false, pee: false, food: false, med: false },
-      night: { poop: false, pee: false, food: false, med: false },
-      lastUpdated: '--:--'
-    };
+    const cardStates = { poop: false, pee: false, food: false, med: false };
 
-    // 🔐 機構門鎖對半裂開動畫腳本
-    function triggerSplashEntrance() {
-      const splashDoors = document.getElementById('splash-doors');
-
-      if (sessionStorage.getItem('hazel_splash_played') === 'true') {
-        splashDoors.style.display = 'none';
-        return;
-      }
-
-      // 1.2 秒後門鎖分開滑向兩側
-      setTimeout(() => {
-        splashDoors.classList.add('splash-split');
-        sessionStorage.setItem('hazel_splash_played', 'true');
-
-        setTimeout(() => {
-          splashDoors.style.display = 'none';
-        }, 1200);
-      }, 1000);
-    }
-
-    function getLogicalDate() {
-      const now = new Date();
-      if (now.getHours() < 4) now.setDate(now.getDate() - 1);
-      return now.toISOString().split('T')[0];
-    }
-
-    function autoDetectShift() {
-      const hour = new Date().getHours();
-      return (hour >= 6 && hour < 17) ? 'day' : 'night';
-    }
-
+    // 載入雲端相片與狀態
     async function loadCloudData() {
-      triggerSplashEntrance();
-      currentShift = autoDetectShift();
-      updateShiftUI();
-
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?select=*`, {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
@@ -358,92 +245,49 @@
             if (item.key === 'hazel_hero_pos' && item.value) {
               container.style.backgroundPosition = item.value;
             }
+            if (item.key === 'hazel_time_mode' && item.value) {
+              currentMode = item.value;
+              updateModeUI();
+            }
 
-            if (item.key === 'hazel_status_v2' && item.value) {
+            if (item.key.startsWith('hazel_status_')) {
+              const cardType = item.key.replace('hazel_status_', '');
               try {
-                const cloudObj = JSON.parse(item.value);
-                if (cloudObj.date === getLogicalDate()) {
-                  if (cloudObj.day) cardData.day = cloudObj.day;
-                  if (cloudObj.night) cardData.night = cloudObj.night;
-                  if (cloudObj.lastUpdated) cardData.lastUpdated = cloudObj.lastUpdated;
+                const statusObj = JSON.parse(item.value);
+                const todayStr = new Date().toISOString().split('T')[0];
+                if (statusObj.date === todayStr) {
+                  cardStates[cardType] = statusObj.state;
+                  updateCardUI(cardType);
                 }
               } catch(e){}
             }
           });
         }
-
-        renderAllCards();
-      } catch(e) { console.log('Load error', e); }
+      } catch(e) { console.log('Load cloud error', e); }
     }
 
-    function switchShift(shift) {
-      if (currentShift === shift) return;
-      cardsWrapper.classList.remove('card-matrix-enter');
-      cardsWrapper.classList.add('card-matrix-exit');
-
-      setTimeout(() => {
-        currentShift = shift;
-        updateShiftUI();
-        renderAllCards();
-        cardsWrapper.classList.remove('card-matrix-exit');
-        cardsWrapper.classList.add('card-matrix-enter');
-      }, 250);
-    }
-
-    function updateShiftUI() {
-      const btnDay = document.getElementById('btn-day');
-      const btnNight = document.getElementById('btn-night');
-      const hintText = document.getElementById('mode-hint-text');
-
-      if (currentShift === 'day') {
-        btnDay.className = "px-3 py-1 rounded-lg transition-all text-amber-300 font-bold bg-[#2c2c2e]";
-        btnNight.className = "px-3 py-1 rounded-lg transition-all text-[#86868b]";
-        hintText.innerText = "☀️ 目前為早上模式 (06:00 - 16:59)";
+    // 更新卡片 UI
+    function updateCardUI(type) {
+      const cardInner = document.getElementById(`card-inner-${type}`);
+      if (!cardInner) return;
+      if (cardStates[type]) {
+        cardInner.classList.add('rotate-y-180');
       } else {
-        btnNight.className = "px-3 py-1 rounded-lg transition-all text-sky-300 font-bold bg-[#2c2c2e]";
-        btnDay.className = "px-3 py-1 rounded-lg transition-all text-[#86868b]";
-        hintText.innerText = "🌙 目前為夜晚模式 (17:00 - 05:59)";
+        cardInner.classList.remove('rotate-y-180');
       }
-
-      ['poop', 'pee', 'food', 'med'].forEach(type => {
-        const label = document.getElementById(`${type}-shift-label`);
-        if (label) {
-          label.innerText = `${type.toUpperCase()} • ${currentShift === 'day' ? '☀️ 早上' : '🌙 夜晚'}`;
-        }
-      });
     }
 
-    function renderAllCards() {
-      const shiftData = cardData[currentShift];
-      ['poop', 'pee', 'food', 'med'].forEach(type => {
-        const cardInner = document.getElementById(`card-inner-${type}`);
-        if (cardInner) {
-          if (shiftData[type]) {
-            cardInner.classList.add('rotate-y-180');
-          } else {
-            cardInner.classList.remove('rotate-y-180');
-          }
-        }
-      });
-
-      document.getElementById('last-updated-tag').innerText = `最後更新: ${cardData.lastUpdated}`;
-    }
-
+    // 切換狀態與 Auto Save
     async function toggleCard(type) {
-      cardData[currentShift][type] = !cardData[currentShift][type];
-      
+      cardStates[type] = !cardStates[type];
+      updateCardUI(type);
+
       const now = new Date();
-      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-      cardData.lastUpdated = timeStr;
+      const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+      document.getElementById('last-update-time').innerText = `最後更新: ${timeStr}`;
 
-      renderAllCards();
-
-      const payload = JSON.stringify({
-        date: getLogicalDate(),
-        day: cardData.day,
-        night: cardData.night,
-        lastUpdated: cardData.lastUpdated
-      });
+      const todayStr = now.toISOString().split('T')[0];
+      const payload = JSON.stringify({ state: cardStates[type], date: todayStr });
 
       try {
         await fetch(`${SUPABASE_URL}/rest/v1/site_settings`, {
@@ -454,12 +298,67 @@
             'Authorization': `Bearer ${SUPABASE_KEY}`,
             'Prefer': 'resolution=merge-duplicates'
           },
-          body: JSON.stringify({ key: 'hazel_status_v2', value: payload })
+          body: JSON.stringify({ key: `hazel_status_${type}`, value: payload })
         });
-      } catch(e) { console.log('Save card error', e); }
+      } catch(e) { console.log('Save status error', e); }
     }
 
-    // 手勢拖拉照片邏輯
+    // 切換早上 / 夜晚模式
+    async function setDayNightMode(mode) {
+      currentMode = mode;
+      updateModeUI();
+
+      await fetch(`${SUPABASE_URL}/rest/v1/site_settings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify({ key: 'hazel_time_mode', value: mode })
+      });
+    }
+
+    function updateModeUI() {
+      const btnDay = document.getElementById('btn-mode-day');
+      const btnNight = document.getElementById('btn-mode-night');
+      const desc = document.getElementById('mode-desc');
+
+      if (currentMode === 'day') {
+        btnDay.className = "px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30";
+        btnNight.className = "px-2.5 py-1 rounded-lg text-[#86868b] hover:text-white transition-all border border-transparent";
+        desc.innerText = "目前為早上模式 (06:00 - 16:59)";
+      } else {
+        btnNight.className = "px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30";
+        btnDay.className = "px-2.5 py-1 rounded-lg text-[#86868b] hover:text-white transition-all border border-transparent";
+        desc.innerText = "目前為夜晚模式 (17:00 - 05:59)";
+      }
+    }
+
+    // 📋 新增：一鍵複製動態文字至剪貼簿
+    function copyStatusToClipboard() {
+      const timeLabel = currentMode === 'day' ? '早上' : '夜晚';
+      const poopText = cardStates.poop ? '✅ 已拉屎' : '❌ 未拉屎';
+      const peeText = cardStates.pee ? '✅ 已拉尿' : '❌ 未拉尿';
+      const foodText = cardStates.food ? '✅ 已食飽' : '❌ 未食糧';
+      const medText = cardStates.med ? '✅ 已食藥' : '❌ 未食藥';
+
+      const fullMessage = `Hazel 今日狀態（時段：${timeLabel}）:\n${poopText} | ${peeText} | ${foodText} | ${medText}`;
+
+      navigator.clipboard.writeText(fullMessage).then(() => {
+        const btn = document.getElementById('copy-status-btn');
+        btn.innerHTML = `✅ <span>已複製狀態文字！快貼上發給女朋友！</span>`;
+        btn.classList.add('border-amber-400', 'bg-amber-500/10');
+
+        setTimeout(() => {
+          btn.innerHTML = `📋 <span>複製 Hazel 今日狀態文字 (發送給女朋友)</span>`;
+          btn.classList.remove('border-amber-400', 'bg-amber-500/10');
+        }, 2500);
+      });
+    }
+
+    // 拖拉照片邏輯
     function startDrag(clientX, clientY) { isDragging = true; startX = clientX; startY = clientY; }
     function moveDrag(clientX, clientY) {
       if (!isDragging) return;
@@ -493,7 +392,7 @@
     window.addEventListener('touchmove', (e) => { if (e.touches.length === 1) moveDrag(e.touches[0].clientX, e.touches[0].clientY); });
     window.addEventListener('touchend', stopDrag);
 
-    // 上傳相片
+    // 上傳照片
     document.getElementById('photo-upload').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
