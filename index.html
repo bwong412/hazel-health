@@ -21,9 +21,38 @@
       50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(255,255,255,0.9)); }
     }
     .dot-matrix { animation: dotGlow 3s ease-in-out infinite; }
+
+    /* 🐶 Hazel 吉祥物動畫 */
+    #hazel-dog-img {
+      animation: hazelIdle 3s ease-in-out infinite;
+    }
+    @keyframes hazelIdle {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(2deg); }
+    }
+    .hazel-jump {
+      animation: hazelJump 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+    @keyframes hazelJump {
+      0% { transform: translateY(0) scale(1); }
+      30% { transform: translateY(-25px) scale(1.1) rotate(-5deg); }
+      60% { transform: translateY(0) scale(0.95); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    .floating-heart {
+      position: fixed;
+      pointer-events: none;
+      font-size: 18px;
+      animation: heartFloat 1s ease-out forwards;
+      z-index: 60;
+    }
+    @keyframes heartFloat {
+      0% { opacity: 1; transform: translateY(0) scale(0.8); }
+      100% { opacity: 0; transform: translateY(-60px) scale(1.4); }
+    }
   </style>
 </head>
-<body class="bg-[#000000] text-[#f5f5f7] min-h-screen">
+<body class="bg-[#000000] text-[#f5f5f7] min-h-screen relative">
 
   <nav class="fixed top-0 left-0 w-full z-50 apple-glass border-b border-[#424245]/50">
     <div class="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between text-xs text-[#ceced2] overflow-x-auto">
@@ -38,14 +67,12 @@
     </div>
   </nav>
 
-  <div class="pt-20 pb-16 px-4 max-w-4xl mx-auto space-y-8">
+  <div class="pt-20 pb-28 px-4 max-w-4xl mx-auto space-y-8">
     
-    <!-- 預留：最上層飲食紀錄區塊 (預留 position 供之後放入新的 HTML) -->
-    <div id="diet-record-section" class="w-full">
-      <!-- 待會可以在這裡放入飲食紀錄代碼 -->
-    </div>
+    <!-- 預留：最上層飲食紀錄區塊 -->
+    <div id="diet-record-section" class="w-full"></div>
 
-    <!-- Hero 封面區塊 (可拖拉調整相片焦點) -->
+    <!-- Hero 封面區塊 -->
     <div class="relative overflow-hidden rounded-3xl bg-[#161617] border border-[#333336] shadow-2xl">
       <div id="photo-container" class="w-full h-72 md:h-96 bg-gradient-to-tr from-amber-500/20 via-slate-900 to-black flex items-center justify-center bg-cover cursor-grab active:cursor-grabbing select-none relative" style="background-position: 50% 50%;">
         <div id="default-avatar" class="text-center p-6 pointer-events-none">
@@ -87,7 +114,6 @@
         <!-- 1. 便便卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('poop')">
           <div id="card-inner-poop" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
-            <!-- 未拉 -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="10" y="4" width="4" height="2"/><rect x="8" y="7" width="8" height="2"/><rect x="6" y="10" width="12" height="2"/><rect x="4" y="13" width="16" height="5"/></svg>
@@ -98,7 +124,6 @@
                 <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
-            <!-- 已拉 -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0d3b2e] via-[#08241c] to-[#04120e] border border-emerald-500/30">
               <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-emerald-400 fill-current" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
@@ -115,7 +140,6 @@
         <!-- 2. 尿尿卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('pee')">
           <div id="card-inner-pee" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
-            <!-- 未拉 -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="11" y="4" width="2" height="4"/><rect x="9" y="9" width="6" height="4"/><rect x="7" y="14" width="10" height="5"/></svg>
@@ -126,7 +150,6 @@
                 <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
-            <!-- 已拉 -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0c2f4a] via-[#071d2e] to-[#030e17] border border-sky-500/30">
               <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-sky-400 fill-current" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
@@ -143,7 +166,6 @@
         <!-- 3. 飯飯卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('food')">
           <div id="card-inner-food" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
-            <!-- 未食 -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="2"/><rect x="7" y="13" width="10" height="5"/></svg>
@@ -154,7 +176,6 @@
                 <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
-            <!-- 已食 -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#4a2e0c] via-[#2e1d07] to-[#170e03] border border-amber-500/30">
               <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-amber-400 fill-current" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="2"/><rect x="6" y="11" width="14" height="8"/></svg>
@@ -171,7 +192,6 @@
         <!-- 4. 藥藥卡片 -->
         <div class="perspective-1000 h-56 cursor-pointer group" onclick="toggleCard('med')">
           <div id="card-inner-med" class="relative w-full h-full transform-style-3d transition-transform duration-700 rounded-3xl shadow-2xl">
-            <!-- 未食 -->
             <div class="absolute inset-0 backface-hidden rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1a1c24] via-[#121318] to-[#0a0a0d] border border-white/10">
               <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-slate-400 fill-current" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10"/></svg>
@@ -182,7 +202,6 @@
                 <div class="w-full py-1.5 bg-white/5 backdrop-blur-md rounded-xl text-center text-[10px] text-slate-400 border border-white/5">按一下打卡</div>
               </div>
             </div>
-            <!-- 已食 -->
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#3b124d] via-[#240a30] to-[#120419] border border-purple-500/30">
               <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-400/30 flex items-center justify-center dot-matrix">
                 <svg class="w-6 h-6 text-purple-400 fill-current" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="3"/></svg>
@@ -198,7 +217,7 @@
 
       </div>
 
-      <!-- 📋 新增功能：一鍵 Copy 文字發給女朋友 -->
+      <!-- 📋 一鍵 Copy 文字發給女朋友 -->
       <button type="button" id="copy-status-btn" onclick="copyStatusToClipboard()" class="w-full py-3 bg-[#1c1c1e] hover:bg-[#2c2c2e] active:scale-98 text-amber-300 font-bold rounded-2xl border border-[#38383a] text-xs transition-all flex items-center justify-center gap-2 shadow-lg cursor-pointer">
         📋 <span>複製 Hazel 今日狀態文字 (發送給女朋友)</span>
       </button>
@@ -212,6 +231,17 @@
     </div>
   </div>
 
+  <!-- 🐶 頁尾右下角 Hazel 吉祥物 (對話框 + 跳躍 + 愛心粒子) -->
+  <div id="hazel-mascot-container" class="fixed bottom-4 right-4 z-50 flex flex-col items-end select-none pointer-events-auto">
+    <div id="hazel-bubble" class="hidden mb-2 bg-[#1c1c1e] text-white text-xs px-3 py-2 rounded-2xl border border-[#38383a] shadow-2xl relative max-w-[180px] animate-bounce">
+      <span id="hazel-speech-text">汪！我是 Hazel 🐾</span>
+      <div class="absolute -bottom-1.5 right-6 w-3 h-3 bg-[#1c1c1e] border-r border-b border-[#38383a] rotate-45"></div>
+    </div>
+    <div id="hazel-dog-img-wrapper" class="relative cursor-pointer group transition-transform duration-300 hover:scale-110 active:scale-95" onclick="interactWithHazel(event)">
+      <img id="hazel-dog-img" src="Hazel cartoon.png" alt="Hazel Mascot" class="w-20 md:w-24 h-auto drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)] transition-all duration-300">
+    </div>
+  </div>
+
   <script>
     const SUPABASE_URL = "https://mggufqacuwelmrnneiyp.supabase.co";
     const SUPABASE_KEY = "sb_publishable_o7QQb_8b9pP1rOXJoyIOLQ_r4mzoSJh";
@@ -219,7 +249,7 @@
     const container = document.getElementById('photo-container');
     const dragHint = document.getElementById('drag-hint');
 
-    let currentMode = 'night'; //預設模式
+    let currentMode = 'night';
     let isDragging = false;
     let startX = 0, startY = 0;
     let posX = 50, posY = 50;
@@ -266,7 +296,6 @@
       } catch(e) { console.log('Load cloud error', e); }
     }
 
-    // 更新卡片 UI
     function updateCardUI(type) {
       const cardInner = document.getElementById(`card-inner-${type}`);
       if (!cardInner) return;
@@ -277,7 +306,6 @@
       }
     }
 
-    // 切換狀態與 Auto Save
     async function toggleCard(type) {
       cardStates[type] = !cardStates[type];
       updateCardUI(type);
@@ -303,7 +331,6 @@
       } catch(e) { console.log('Save status error', e); }
     }
 
-    // 切換早上 / 夜晚模式
     async function setDayNightMode(mode) {
       currentMode = mode;
       updateModeUI();
@@ -336,7 +363,6 @@
       }
     }
 
-    // 📋 新增：一鍵複製動態文字至剪貼簿
     function copyStatusToClipboard() {
       const timeLabel = currentMode === 'day' ? '早上' : '夜晚';
       const poopText = cardStates.poop ? '✅ 已拉屎' : '❌ 未拉屎';
@@ -356,6 +382,49 @@
           btn.classList.remove('border-amber-400', 'bg-amber-500/10');
         }, 2500);
       });
+    }
+
+    // 🐾 吉祥物互動邏輯
+    const hazelQuotes = [
+      "汪！Hazel 想去散步了 🐾",
+      "汪！今天有乖乖食飽飯 🥣",
+      "汪！爸爸媽媽最愛我 💖",
+      "汪！好想食芝士呀 🧀",
+      "汪汪！我有按時拉屎屎 💩",
+      "汪！想出去跑跑玩水 🌊"
+    ];
+    let speechTimeout = null;
+
+    function interactWithHazel(e) {
+      const wrapper = document.getElementById('hazel-dog-img-wrapper');
+      const bubble = document.getElementById('hazel-bubble');
+      const speechText = document.getElementById('hazel-speech-text');
+
+      wrapper.classList.remove('hazel-jump');
+      void wrapper.offsetWidth;
+      wrapper.classList.add('hazel-jump');
+
+      const randomQuote = hazelQuotes[Math.floor(Math.random() * hazelQuotes.length)];
+      speechText.innerText = randomQuote;
+      bubble.classList.remove('hidden');
+
+      clearTimeout(speechTimeout);
+      speechTimeout = setTimeout(() => { bubble.classList.add('hidden'); }, 3000);
+
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+      for (let i = 0; i < 3; i++) { createHeart(clientX, clientY); }
+    }
+
+    function createHeart(x, y) {
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.innerText = ['💖', '🐾', '✨', '🦴'][Math.floor(Math.random() * 4)];
+      const offsetX = (Math.random() - 0.5) * 40;
+      heart.style.left = `${(x || window.innerWidth - 60) + offsetX}px`;
+      heart.style.top = `${(y || window.innerHeight - 60)}px`;
+      document.body.appendChild(heart);
+      setTimeout(() => { heart.remove(); }, 1000);
     }
 
     // 拖拉照片邏輯
